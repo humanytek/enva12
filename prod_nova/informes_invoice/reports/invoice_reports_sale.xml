@@ -63,9 +63,9 @@
             </div>
            </div>
 
-            <div style="position:absolute;text-align:center;z-index:-1;border:0;opacity:0.1;margin-top:350px;">
+            <!-- <div style="position:absolute;text-align:center;z-index:-1;border:0;opacity:0.1;margin-top:350px;">
                 <img src="/informes_invoice/static/src/img/marca.jpg" />
-            </div>
+            </div> -->
             <div class="Rotate-90">LA REPRODUCCIÓN NO AUTORIZADA DE ESTE COMPROBANTE CONSTITUYE UN DELITO EN LOS TERMINOS DE LA DISPOSICIONES FISCALES.</div>
 
         </div>
