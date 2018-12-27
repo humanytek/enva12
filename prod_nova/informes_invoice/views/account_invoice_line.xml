@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="account_invoice_line_view_tree" model="ir.ui.view">
+    <field name="name">Account invoice line</field>
+    <field name="model">account.invoice.line</field>
+    <field name="arch" type="xml">
+      <tree string="Account Invoice Lines">
+        <field name="date_invoice"/>
+        <field name="partner_id"/>
+        <field name="invoice_id"/>
+        <field name="user_id"/>
+        <field name="product_id"/>
+        <field name="default_code"/>
+        <field name="name"/>
+        <field name="origin"/>
+        <field name="quantity"/>
+        <field name="weight"/>
+        <field name="total_weight" sum="Total"/>
+        <field name="price_unit"/>
+        <field name="uom_id"/>
+        <field name="currency_id"/>
+        <field name="price_subtotal_company" sum="Total"/>
+        <field name="price_total_company" sum="Total"/>
+        <field name="type_currency"/>
+        <field name="discount"/>
+        <field name="price_subtotal" sum="Total"/>
+        <field name="price_total" sum="Total"/>
+        <field name="state"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="account_invoice_line_view_search2" model="ir.ui.view">
+    <field name="name">account_invoice_line_search_nova</field>
+    <field name="model">account.invoice.line</field>
+    <field name="priority">2</field>
+    <field name="arch" type="xml">
+      <search string="Search invoice lines">
+        <field name="date_invoice"/>
+        <field name="invoice_id"/>
+         <filter name="invoice_line_search2" string="Reporte Socios" domain="['|',('state','=','paid'),('state','=','open')]"/>
+      </search>
+    </field>
+  </record>
+
+
+  <record id="account_invoice_line_action_form2" model="ir.actions.act_window" >
+    <field name="name">Account invoice line</field>
+    <field name="res_model">account.invoice.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree</field>
+    <field name="context" eval="{'search_default_invoice_line_search2':1}"/>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">Create the first account invoice line
+      </p>
+    </field>
+  </record>
+
+  <menuitem id="menu_action_account_invoice_line" name="Invoice Lines" parent="account.menu_finance_receivables" action="account_invoice_line_action_form2"/>
+</odoo>

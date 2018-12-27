@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Inherit Tree view -->
+  <record id="relations_invoices_tree_inherit" model="ir.ui.view">
+    <field name="name">relations_invoices.tree</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_tree"/>
+    <field name="arch" type="xml">
+      <field name="origin" position="replace">
+        <!-- Add new fields here -->
+        <field name="currency_id"/>
+        <field name="order_purchase_id"/>
+        <field name="amount_untaxed_signed" sum="Total"/>
+        <field name="tax_company" sum="Total"/>
+        <field name="amount_total_company_signed" sum="Total"/>
+        <field name="type_currency" widget="monetary"/>
+      </field>
+      <field name="user_id" position="after">
+        <field name="origin"/>
+      </field>
+      <field name="residual_signed" position="after">
+        <field name="payment_name"/>
+        <field name="payment_amount"/>
+        <field name="payment_date"/>
+        <field name="dias_transcurridos"/>
+      </field>
+    </field>
+  </record>
+
+  <!-- Inherit Form view -->
+  <record id="relations_invoices_form_inherit" model="ir.ui.view">
+    <field name="name">relations_invoices.form</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.invoice_form"/>
+    <field name="arch" type="xml">
+      <field name="user_id" position="after">
+        <!-- Add your fields or attributes here -->
+        <field name="order_purchase_id"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>
