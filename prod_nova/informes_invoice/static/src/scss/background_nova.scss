@@ -30,11 +30,11 @@
     }
 }
 .a_report_layout_background {
-    // background-image: url(/base/static/img/bg_background_template.jpg);
-    // background-size: cover;
-    // background-position: bottom center;
-    // background-repeat: no-repeat;
-    // min-height: 620px;
+    background-image: url(/informes_invoice/static/src/img/bg_background_template1.jpg);
+    background-size: 100% 80%;
+    background-position: bottom center;
+    background-repeat: repeat-y;
+    min-height: 620px;
     // thead tr th, h2 {
     //     color: $o-brand-odoo;
     // }

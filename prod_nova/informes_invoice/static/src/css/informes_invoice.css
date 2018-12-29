@@ -13,12 +13,20 @@
  transform-origin: 50% 50%;
 
  font-size: 8px;
+ text-align: center;
  width: 900px;
- position:absolute;
- top:490px;
- left:-446px;
+ height: 10px;
+ padding-left: 0px;
+ bottom: 100px;
+ left:0px;
+ border:1px blue solid;
+ position: absolute;
+ z-index: 1;
  }
 
+.leyend{
+   font-size: 8px;
+}
  .marcaagua
  {
    position:absolute;
@@ -28,8 +36,6 @@
    opacity:0.1;
    padding-top:200px;
  }
-
-
 
 
  .encabezado_derecho{
@@ -45,6 +51,7 @@
   width: 230px;
   height: 150px;
 }
+
 
 
 /* .table {
@@ -68,5 +75,8 @@ h2 {
   border: 1px blue solid;
 }
 .info{
-  font-size: 10px;
+  font-size: 9px;
+}
+.datoscoorp{
+  font-size: 11px;
 }

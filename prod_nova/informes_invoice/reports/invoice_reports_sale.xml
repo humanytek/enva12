@@ -23,7 +23,7 @@
             </t>
         </t>
         <t t-if="company.external_report_layout_id" t-call="informes_invoice.external_layout_background_nova"><t t-raw="0"/></t>
-        <t t-else="else" t-raw="0"/> -->
+        <t t-else="else" t-raw="0"/>
      </template>
 
    <template id="external_layout_background_nova">
@@ -54,7 +54,9 @@
                 <div>
                     <span class="pintar" t-field="company.partner_id.name"/>
                 </div>
-                <span t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}"/>
+                <span class="datoscoorp" t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}"/>
+                <span class="datoscoorp">Corporativo Bosques de Duraznos 65-902 Col. Bosques de las lomas C.P.11700 México.</span> <br/>
+                <span class="datoscoorp">Tel. (0155) 5596-1038 Fax:(0155) 5251-6383</span>
             </div>
             <div class="info">
               FR-FC-04<br />
@@ -62,12 +64,6 @@
               Fecha de emisión 01/08/2009<br />
             </div>
            </div>
-
-            <!-- <div style="position:absolute;text-align:center;z-index:-1;border:0;opacity:0.1;margin-top:350px;">
-                <img src="/informes_invoice/static/src/img/marca.jpg" />
-            </div> -->
-            <div class="Rotate-90">LA REPRODUCCIÓN NO AUTORIZADA DE ESTE COMPROBANTE CONSTITUYE UN DELITO EN LOS TERMINOS DE LA DISPOSICIONES FISCALES.</div>
-
         </div>
 
         <div class="article a_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
@@ -75,7 +71,8 @@
             <t t-raw="0"/>
         </div>
 
-        <div class="footer a_background_footer">
+        <div class="footer o_background_footer">
+            <div class="leyend text-center"><p>LA REPRODUCCIÓN NO AUTORIZADA DE ESTE COMPROBANTE CONSTITUYE UN DELITO EN LOS TERMINOS DE LA DISPOSICIONES FISCALES.</p></div>
             <div class="text-center">
                 <ul class="list-inline">
                     <li t-if="company.phone" class="list-inline-item"><i class="fa fa-phone" role="img" aria-label="Phone" title="Phone"/> <span t-field="company.phone"/></li>
@@ -99,7 +96,11 @@
 
 
 
-       <xpath expr="//div[@name='reference']" position="after">
+       <xpath expr="//div[@name='reference']" position="replace">
+         <div name="order" class="col-auto" t-if="o.order_purchase_id">
+             <strong>Orden de Compra:</strong>
+             <p t-field="o.order_purchase_id"/>
+         </div>
         <div name="agente" class="col-auto" t-if="o.user_id">
             <strong>Agente:</strong>
             <p t-field="o.user_id"/>
@@ -107,6 +108,10 @@
         <div name="currency" class="col-auto" t-if="o.currency_id">
             <strong>Moneda:</strong>
             <p t-field="o.currency_id"/>
+        </div>
+        <div name="type_currency" class="col-auto" t-if="o.type_currency">
+            <strong>T.C:</strong>
+            <p t-field="o.type_currency"/>
         </div>
       </xpath>
 
@@ -232,6 +237,8 @@
                     <span t-field="line.price_tax"/>
                   </td>
                 </tr>
+
+
                 <tr t-if="o.partner_id.name == 'VF SOURCING LATIN AMERICA SARL'">
                   <td colspan="7" class="text-center"><span>EXPORT 18 28 3506 8009376</span><br/><span>IMPORT 18 28 7042 8000106</span></td>
                 </tr>
@@ -257,6 +264,14 @@
                 </t>
             </t>
         </tbody>
+      </table>
+      <table name="cfdi_origen" t-attf-class="table table-sm" t-if="o.l10n_mx_edi_origin" >
+        <tr>
+          <td><span>CDFI Relacionado: </span><span t-esc="o.l10n_mx_edi_origin[3:] if o.l10n_mx_edi_origin else ''"/></td>
+        </tr>
+        <tr>
+          <td><span>Tipo de Relación:</span> <span t-esc="o.l10n_mx_edi_origin[:2] if o.l10n_mx_edi_origin else ''"/></td>
+        </tr>
       </table>
       </xpath>
 
