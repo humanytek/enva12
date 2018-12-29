@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<report
+      id="id_report_orden"
+      string="Reporte orden"
+      model="purchase.order"
+      report_type="qweb-pdf"
+      name="purchase_complement.purchase_order_form"
+      file="purchase_complement.purchase_order_form"
+      menu="True"
+      />
+
+      <template id="purchase_order_form">
+      	<t t-call="web.html_container">
+	      <t t-foreach="docs" t-as="doc">
+	        <t t-call="web.external_layout">
+	          <div class="page">
+
+
+
+<div class="row">
+	<div class="col-6">
+		<b>Dirección de Envío: </b> <span t-field="doc.picking_type_id.warehouse_id.partner_id"/>
+									<span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>
+									<span t-field="doc.picking_type_id.warehouse_id.partner_id.city"/>,
+									<span t-field="doc.picking_type_id.warehouse_id.partner_id.state_id"/>
+									<span t-field="doc.picking_type_id.warehouse_id.partner_id.zip"/>,
+									<span t-field="doc.picking_type_id.warehouse_id.partner_id.country_id"/>
+	</div>
+	<div class="col-6">
+		<b>Proveedor: </b> <span t-field="doc.partner_id"/>,
+						   <span t-field="doc.partner_id.street"/>,
+						   <span t-field="doc.partner_id.city"/>,
+						   <span t-field="doc.partner_id.state_id"/>,
+						   <span t-field="doc.partner_id.country_id"/>,
+						   <span t-field="doc.partner_id.phone"/>,
+						   RFC: <span t-field="doc.partner_id.vat"/>.
+	</div>
+</div>
+
+
+<br />
+
+
+<h5>Confirmación pedido de compra #<span t-field="doc.name"/></h5>
+
+<br />
+
+<div class="row">
+	<div class="col-2">
+	  <b>Ref. de nuestra orden: </b> <span t-field="doc.partner_ref"/>
+	</div>
+
+	<div class="col-2">
+	  <b>Ref. de su Requisición: </b> <span t-field="doc.requisition_id"/>
+	</div>
+
+	<div class="col-2">
+	  <b>Tipo de Requisición: </b> <span t-field="doc.requisition_id.type_id"/>
+	</div>
+
+	<div class="col-2">
+	  <b>Fecha orden: </b> <span t-field="doc.date_order"/>
+	</div>
+
+	<div class="col-2">
+	  <b>Modena: </b> <span t-field="doc.currency_id"/>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
+	<table style="width:100%" class="table table-condensed">
+					<thead class="thead-dark">
+					<tr>
+            <th>Descripción</th>
+            <th>Impuestos</th>
+            <th>Fecha req.</th>
+            <th>Cant /U med.</th>
+            <th>Precio Unidad</th>
+            <th>Precio neto</th>
+          </tr>
+					</thead>
+          <t t-if="doc.order_line">
+
+            <t t-foreach="doc.order_line" t-as="product">
+						<tbody>
+						<tr>
+
+                <td><span t-field="product.product_id"/></td>
+                <td><span t-field="product.name"/></td>
+                <td><span t-field="product.date_order"/></td>
+                <td><span t-field="product.product_uom"/></td>
+                <td><span t-field="product.price_unit"/></td>
+                <td><span t-field="product.price_subtotal"/></td>
+            </tr>
+						</tbody>
+            </t>
+          </t>
+    </table>
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-6">
+		<b>Elaboró: </b> <span t-field="doc.user_id"/>
+		<br />
+		<b>Solicita: </b> <span t-field="doc.petitioner"/>
+		<br />
+		<b>Autoriza: </b> <span t-field="doc.requisition_id.validator"/>
+		<br />
+		<b>Terminos de pago: </b> <span t-field="doc.payment_term_id"/>
+		<br />
+		<span t-field="doc.notes"/>
+	</div>
+	<div class="col-6">
+		<table class="table table-sm">
+			<tr class="border-black" style="">
+          <td><strong>Total base</strong></td>
+          <td class="text-right">
+              <span t-field="doc.amount_untaxed"/>
+          </td>
+			</tr>
+
+
+			<tr>
+				<td>Impuestos</td>
+				<td class="text-right">
+						<span t-field="doc.amount_tax"/>
+				</td>
+			</tr>
+
+
+
+			<tr class="border-black">
+          <td><strong>Total</strong></td>
+          <td class="text-right">
+              <span t-field="doc.amount_total"/>
+          </td>
+			</tr>
+			<!-- <tr>
+				<td><span t-field="doc.amount_untaxed"/></td>
+				<td><span t-field="doc.amount_tax"/></td>
+				<td><span t-field="doc.amount_total"/></td>
+			</tr> -->
+		</table>
+		<!-- <b>Total base: </b> <span t-field="doc.amount_untaxed"/><br />
+		   Impuestos <span t-field="doc.amount_tax"/><br />
+		<b>Total: </b> <span t-field="doc.amount_total"/><br /> -->
+	</div>
+</div>
+
+
+<br />
+
+<p>
+	Favor de entregar en la <b>"Dirección de envío"</b> descrita en la parte superior de este documento, en un horario de 8:00AM a 6:00PM con la documentación requerida en el archivo adjunto <b>"Lineamientos de recepción de materiales"</b>.
+	Todas las facturas deben incluir como referencia el folio de la <b>"O.C."</b>.
+</p>
+
+
+	          </div>
+	        </t>
+	      </t>
+	    </t>
+      </template>
+</odoo>
