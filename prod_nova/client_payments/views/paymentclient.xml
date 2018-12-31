@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Inherit Form view -->
+  <record id="clien_payments_form_inherit" model="ir.ui.view">
+    <field name="name">client_payments.form</field>
+    <field name="model">account.payment</field>
+    <field name="inherit_id" ref="account.view_account_payment_form"/>
+    <field name="arch" type="xml">
+      <field name="l10n_mx_edi_payment_method_id" position="after">
+        <!-- Add your fields or attributes here -->
+        <field name="tipocambio"/>
+      </field>
+    </field>
+  </record>
+</odoo>
