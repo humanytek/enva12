@@ -76,7 +76,8 @@
 					<tr>
             <th>Descripción</th>
             <th>Impuestos</th>
-            <th>Fecha req.</th>
+						<th>Fecha req.</th>
+            <th>Cantidad</th>
             <th>Cant /U med.</th>
             <th>Precio Unidad</th>
             <th>Precio neto</th>
@@ -91,6 +92,7 @@
                 <td><span t-field="product.product_id"/></td>
                 <td><span t-field="product.name"/></td>
                 <td><span t-field="product.date_order"/></td>
+								<td><span t-field="product.product_qty"/></td>
                 <td><span t-field="product.product_uom"/></td>
                 <td><span t-field="product.price_unit"/></td>
                 <td><span t-field="product.price_subtotal"/></td>
@@ -109,7 +111,7 @@
 		<br />
 		<b>Solicita: </b> <span t-field="doc.petitioner"/>
 		<br />
-		<b>Autoriza: </b> <span t-field="doc.requisition_id.validator"/>
+		<b>Autoriza: </b> <span t-field="doc.approver"/>
 		<br />
 		<b>Terminos de pago: </b> <span t-field="doc.payment_term_id"/>
 		<br />

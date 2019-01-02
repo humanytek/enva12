@@ -5,7 +5,7 @@
     <field name="name">requisition.tree</field>
     <field name="model">purchase.requisition.line</field>
     <field name="arch" type="xml">
-        <tree string="Análisis de Requisiciones">
+      <tree string="Purchase Requisition Analysis">
         <field name="requisition_id"/>
         <field name="responsable"/>
         <field name="estado"/>

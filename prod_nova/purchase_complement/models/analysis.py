@@ -12,7 +12,7 @@ class PurchaseAnalysis(models.Model):
 
     origin = fields.Char(
         related='order_id.origin',
-        string='Referencia del proveedor',
+        string='Vendor Reference',
     )
 
     responsable = fields.Many2one(

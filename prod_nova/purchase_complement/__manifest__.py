@@ -16,6 +16,5 @@
         'views/analysis.xml',
         'views/requisition.xml',
         'views/agreement.xml',
-        'reports/licitacion.xml',
     ],
 }

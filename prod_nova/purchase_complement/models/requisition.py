@@ -13,15 +13,12 @@ class PurchaseAnalysis(models.Model):
 
     estado = fields.Selection(
         related='requisition_id.state',
-        string='Estado',
     )
 
     descripcion = fields.Text(
         related='requisition_id.description',
-        string='Descripción',
     )
 
     fecha = fields.Datetime(
         related='requisition_id.purchase_ids.date_order',
-        string='Fecha de orden',
     )
