@@ -12,6 +12,7 @@
     ],
     'data': [
         'reports/orden.xml',
+        'reports/licitacion.xml'
         'views/to_receive.xml',
         'views/analysis.xml',
         'views/requisition.xml',
