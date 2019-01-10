@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
-
-from datetime import datetime, date, time, timedelta
+import datetime
 
 class Customers(models.Model):
 
@@ -12,7 +11,6 @@ class Customers(models.Model):
         string='Condiciones de pago',
     )
 
-    @api.depends('property_payment_term_id')
     def _get_conditions(self):
         for t in self:
             if t.property_payment_term_id:
@@ -27,25 +25,25 @@ class Customers(models.Model):
         compute='_get_creditdays',
      )
 
-    @api.depends('property_payment_term_id')
     def _get_creditdays(self):
         for d in self:
             if d.property_payment_term_id:
-                d.credit_days = d.property_payment_term_id.line_ids.days
-
+                lista_tp = d.property_payment_term_id.line_ids
+                for z in lista_tp:
+                    d.credit_days = z.days
 
     aux = fields.Date(
         compute='_get_aux',
-        string='Ultima venta',
+        string='Ultima venta'
     )
 
+    # @api.one
+    # @api.depends('invoice_ids')
     def _get_aux(self):
-
+        alfa = datetime.date(2004,1,21)
         for a in self:
-            alfa = date(2000, 12, 25)
             lista = a.invoice_ids
-            for l in lista:
-                if l.date_invoice:
-                    if l.date_invoice > alfa:
-                        alfa = l.date_invoice
+            for aa in lista:
+                if aa.date_invoice > alfa:
+                    alfa = aa.date_invoice
                 a.aux = alfa
