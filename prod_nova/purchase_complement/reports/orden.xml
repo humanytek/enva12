@@ -20,21 +20,20 @@
 
 <div class="row">
 	<div class="col-6">
-		<b>Dirección de Envío: </b> <span t-field="doc.picking_type_id.warehouse_id.partner_id"/>
-									<span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>
-									<span t-field="doc.picking_type_id.warehouse_id.partner_id.city"/>,
-									<span t-field="doc.picking_type_id.warehouse_id.partner_id.state_id"/>
-									<span t-field="doc.picking_type_id.warehouse_id.partner_id.zip"/>,
-									<span t-field="doc.picking_type_id.warehouse_id.partner_id.country_id"/>
+		<b>Dirección de Envío: </b>
+		<span t-field="doc.picking_type_id.warehouse_id.partner_id"/><br />
+		<span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/> <span t-field="doc.picking_type_id.warehouse_id.partner_id.city"/><br />
+		<span t-field="doc.picking_type_id.warehouse_id.partner_id.state_id"/> <span t-field="doc.picking_type_id.warehouse_id.partner_id.zip"/><br />
+		<span t-field="doc.picking_type_id.warehouse_id.partner_id.country_id"/>
 	</div>
 	<div class="col-6">
-		<b>Proveedor: </b> <span t-field="doc.partner_id"/>,
-						   <span t-field="doc.partner_id.street"/>,
-						   <span t-field="doc.partner_id.city"/>,
-						   <span t-field="doc.partner_id.state_id"/>,
-						   <span t-field="doc.partner_id.country_id"/>,
-						   <span t-field="doc.partner_id.phone"/>,
-						   RFC: <span t-field="doc.partner_id.vat"/>.
+		<b>Proveedor: </b>
+		<span t-field="doc.partner_id"/><br />
+	    <span t-field="doc.partner_id.street"/><br />
+	    <span t-field="doc.partner_id.city"/><br />
+	    <span t-field="doc.partner_id.state_id"/> <span t-field="doc.partner_id.country_id"/><br />
+	    <span t-field="doc.partner_id.phone"/><br />
+	    RFC: <span t-field="doc.partner_id.vat"/>
 	</div>
 </div>
 
@@ -42,13 +41,13 @@
 <br />
 
 
-<h5>Confirmación pedido de compra #<span t-field="doc.name"/></h5>
+<h6>Confirmación pedido de compra #<span t-field="doc.name"/></h6>
 
 <br />
 
 <div class="row">
 	<div class="col-2">
-	  <b>Ref. de nuestra orden: </b> <span t-field="doc.partner_ref"/>
+	  <b>Ref. de Proveedor: </b> <span t-field="doc.partner_ref"/>
 	</div>
 
 	<div class="col-2">
@@ -71,33 +70,30 @@
 <br />
 
 <div class="row">
-	<table style="width:100%" class="table table-condensed">
-					<thead class="thead-dark">
-					<tr>
-            <th>Descripción</th>
-            <th>Impuestos</th>
-						<th>Fecha req.</th>
-            <th>Cantidad</th>
-            <th>Cant /U med.</th>
-            <th>Precio Unidad</th>
-            <th>Precio neto</th>
-          </tr>
-					</thead>
+	<table style="width:100%" class="table table-sm table-condensed">
+		<thead class="thead-dark">
+			<tr>
+	            <th>Descripción</th>
+	            <th>Fecha req.</th>
+	            <th>Cant/U med.</th>
+	            <th>Precio Unidad</th>
+	            <th>Impuestos</th>
+	            <th>Precio neto</th>
+	      	</tr>
+		</thead>
           <t t-if="doc.order_line">
 
             <t t-foreach="doc.order_line" t-as="product">
-						<tbody>
-						<tr>
-
-                <td><span t-field="product.product_id"/></td>
-                <td><span t-field="product.name"/></td>
-                <td><span t-field="product.date_order"/></td>
-								<td><span t-field="product.product_qty"/></td>
-                <td><span t-field="product.product_uom"/></td>
-                <td><span t-field="product.price_unit"/></td>
-                <td><span t-field="product.price_subtotal"/></td>
-            </tr>
-						</tbody>
+				<tbody>
+					<tr>
+		                <td><span t-field="product.product_id"/> - <span t-field="product.name"/></td>
+		                <td><span t-field="product.date_order"/></td>
+		                <td><span t-field="product.product_uom"/></td>
+		                <td><span t-field="product.price_unit"/></td>
+		                <td><span t-field="product.taxes_id"/></td>
+		                <td><span t-field="product.price_subtotal"/></td>
+		            </tr>
+				</tbody>
             </t>
           </t>
     </table>
@@ -109,9 +105,11 @@
 	<div class="col-6">
 		<b>Elaboró: </b> <span t-field="doc.user_id"/>
 		<br />
+		<b>Autoriza OC: </b> <span t-field="doc.approver"/>
+		<br />
 		<b>Solicita: </b> <span t-field="doc.petitioner"/>
 		<br />
-		<b>Autoriza: </b> <span t-field="doc.approver"/>
+		<b>Autoriza: </b> <span t-field="doc.requisition_id.validator"/>
 		<br />
 		<b>Terminos de pago: </b> <span t-field="doc.payment_term_id"/>
 		<br />
@@ -120,12 +118,11 @@
 	<div class="col-6">
 		<table class="table table-sm">
 			<tr class="border-black" style="">
-          <td><strong>Total base</strong></td>
-          <td class="text-right">
-              <span t-field="doc.amount_untaxed"/>
-          </td>
+	          <td><strong>Total base</strong></td>
+	          <td class="text-right">
+	              <span t-field="doc.amount_untaxed"/>
+	          </td>
 			</tr>
-
 
 			<tr>
 				<td>Impuestos</td>
@@ -134,13 +131,11 @@
 				</td>
 			</tr>
 
-
-
 			<tr class="border-black">
-          <td><strong>Total</strong></td>
-          <td class="text-right">
-              <span t-field="doc.amount_total"/>
-          </td>
+	          <td><strong>Total</strong></td>
+	          <td class="text-right">
+	              <span t-field="doc.amount_total"/>
+	          </td>
 			</tr>
 			<!-- <tr>
 				<td><span t-field="doc.amount_untaxed"/></td>
@@ -158,8 +153,7 @@
 <br />
 
 <p>
-	Favor de entregar en la <b>"Dirección de envío"</b> descrita en la parte superior de este documento, en un horario de 8:00AM a 6:00PM con la documentación requerida en el archivo adjunto <b>"Lineamientos de recepción de materiales"</b>.
-	Todas las facturas deben incluir como referencia el folio de la <b>"O.C."</b>.
+	**Favor de entregar en la <b>"Dirección de envío"</b> descrita en la parte superior de este documento, en horario de 8:00AM a 6:00PM con la documentación requerida en el archivo adjunto <b>"Lineamientos de recepción de materiales"</b>.** Todas las facturas deben incluir como referencia el folio de la <b>"O.C."</b>.**Todos los embarques deberán traer copia impresa de la <b>O.C.</b> y 3 copias de la <b>Factura/Remisión</b>** Los embarques sin <b>O.C.</b> No podrán ser recibidos en Almacén.
 </p>
 
 
