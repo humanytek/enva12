@@ -36,9 +36,9 @@
     <field name="priority">2</field>
     <field name="arch" type="xml">
       <search string="Search invoice lines">
-        <field name="date_invoice"/>
+        <!-- <field name="date_invoice"/> -->
         <field name="invoice_id"/>
-         <filter name="invoice_line_search2" string="Reporte Socios" domain="['|',('state','=','paid'),('state','=','open')]"/>
+         <filter name="invoice_line_search2" string="Reporte Socios" domain="['|','|',('state','=','paid'),('state','=','open'),('invoice_type','=','out_invoice')]"/>
       </search>
     </field>
   </record>

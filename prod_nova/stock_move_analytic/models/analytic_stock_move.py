@@ -12,7 +12,8 @@ class AsmtockLocation(models.Model):
 
     valuation_analytic_account_id = fields.Many2one(
         'account.analytic.account',
-        string='Analytic Account')
+        string='Analytic Account',
+        )
 
 
 class ASMStockPicking(models.Model):
@@ -28,10 +29,11 @@ class ASMStockPicking(models.Model):
         self.ensure_one()
         product=self.move_ids_without_package
         if self.picking_type_code == 'outgoing':
-            for r in product:
-                if not r.analytic_account_id:
-                    msg = 'No tiene Cuentas analiticas '
-                    raise UserError(_('Cuentas analiticas !\n' + msg))
+            if self.location_id.id != 21:
+                for r in product:
+                    if not r.analytic_account_id:
+                        msg = 'No tiene Cuentas analiticas '
+                        raise UserError(_('Cuentas analiticas !\n' + msg))
 
 
 

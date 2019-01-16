@@ -13,6 +13,8 @@ class Account_invoice_nova(models.Model):
     type_currency = fields.Monetary(
         # string='Type Currency',
         compute='_get_type_currency',
+        store=True,
+        index=True,
     )
     payment_name=fields.Char(
         related='payment_ids.name',
@@ -45,10 +47,8 @@ class Account_invoice_nova(models.Model):
     @api.depends('amount_total_company_signed', 'amount_total_signed')
     def _get_type_currency(self):
         for r in self:
-            if r.amount_total_company_signed != 0 :
+            if r.amount_total_company_signed > 0 :
                 r.type_currency = r.amount_total_company_signed / r.amount_total_signed
-            else:
-                r.type_currency = 1
 
     tax_company = fields.Float(
         compute='_get_tax_company',
