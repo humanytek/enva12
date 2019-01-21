@@ -28,7 +28,7 @@ class Invoice_line(models.Model):
         string='Vendedor',
         store=True,
     )
-    type_currency = fields.Monetary(
+    type_currency = fields.Float(
         related='invoice_id.type_currency',
         store=True,
     )
