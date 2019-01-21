@@ -11,7 +11,7 @@ class Account_invoice_nova(models.Model):
         store=True,
     )
 
-    type_currency = fields.Monetary(
+    type_currency = fields.Float(
         # string='Type Currency',
         compute='_get_type_currency',
         digits=(8,6),
