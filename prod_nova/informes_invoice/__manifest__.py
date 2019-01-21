@@ -3,8 +3,8 @@
     'name': 'Informes Invoice',
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
-    'category': 'Uncategorized',
-    'version': '1.0.0',
+    'category': 'Account',
+    'version': '1.2.0',
     'depends': [
         'account',
         'sale',

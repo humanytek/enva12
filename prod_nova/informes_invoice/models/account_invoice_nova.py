@@ -8,11 +8,13 @@ class Account_invoice_nova(models.Model):
 
     order_purchase_id = fields.Char(
         string='Purchase Order Customer',
+        store=True,
     )
 
     type_currency = fields.Monetary(
         # string='Type Currency',
         compute='_get_type_currency',
+        digits=(8,6),
         store=True,
         index=True,
     )

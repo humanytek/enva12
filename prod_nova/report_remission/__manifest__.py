@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Report Remission',
-    'author': 'EMPAQUES NOVA isc_dcm',
+    'name': 'Reporte Remision',
+    'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Uncategorized',
     'version': '1.0.0',
