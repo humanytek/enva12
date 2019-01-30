@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Reporte Remision',
+    'name': 'Report Remission',
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Uncategorized',

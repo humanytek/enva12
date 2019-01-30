@@ -34,33 +34,37 @@
 
                   <div class="row">
                     <div class="col-6">
-                      <span t-field="doc.sale_id.partner_invoice_id"/>
-                      <span t-field="doc.sale_id.partner_invoice_id.street"/>,
-                      <span t-field="doc.sale_id.partner_invoice_id.l10n_mx_edi_colony"/>
-                      <span t-field="doc.sale_id.partner_invoice_id.city"/>
-                      <span t-field="doc.sale_id.partner_invoice_id.state_id"/>
-                      <span t-field="doc.sale_id.partner_invoice_id.zip"/>
-                      <span t-field="doc.sale_id.partner_invoice_id.country_id"/><br />
-                      Tel: <span t-field="doc.sale_id.partner_invoice_id.vat"/><br />
-                      R.F.C.: <span t-field="doc.sale_id.partner_invoice_id.phone"/>
+                      <span t-field="doc.partner_id.parent_id"/><br />
+                      <span t-field="doc.partner_id.parent_id.street"/>
+                      <span t-field="doc.partner_id.parent_id.city"/><br />
+                      <span t-field="doc.partner_id.parent_id.state_id"/>
+                      <span t-field="doc.partner_id.parent_id.zip"/><br />
+                      <span t-field="doc.partner_id.parent_id.country_id"/><br />
+                      Tel: <span t-field="doc.partner_id.parent_id.phone"/><br />
+                      R.F.C.: <span t-field="doc.partner_id.parent_id.vat"/><br />
                     </div>
                     <div class="col-6">
-                      <b>VENDEDOR  </b> <span t-field="doc.sale_id.user_id"/><br />
+                      <b>VENDEDOR: </b> <span t-field="doc.partner_id.parent_id.user_id"/><br />
                       <b>No. PEDIDO:  </b> <span t-field="doc.sale_id"/><br />
-                      <b>REF. CLIENTE:  </b> <span t-field="doc.sale_id.client_order_ref"/><br />
 
                     </div>
                   </div>
 
                   <div class="row">
                     <b>ENTREGAR EN: </b>
-                    <span t-field="doc.sale_id.partner_shipping_id"/>
-                    <span t-field="doc.sale_id.partner_shipping_id.street"/>,
-                    <span t-field="doc.sale_id.partner_shipping_id.l10n_mx_edi_colony"/>
-                    <span t-field="doc.sale_id.partner_shipping_id.city"/>
-                    <span t-field="doc.sale_id.partner_shipping_id.state_id"/>
-                    <span t-field="doc.sale_id.partner_shipping_id.zip"/>
-                    <span t-field="doc.sale_id.partner_shipping_id.country_id"/>
+                                          <span t-field="doc.partner_id.name"/>,
+                                          <span t-field="doc.partner_id.street"/>,
+                                          <span t-field="doc.partner_id.city"/>
+                                          <span t-field="doc.partner_id.state_id"/>
+                                          <span t-field="doc.partner_id.zip"/>,
+                                          <span t-field="doc.partner_id.country_id"/>
+                                          Tel: <span t-field="doc.partner_id.phone"/>
+                    <!-- <span t-field="doc.picking_type_id.warehouse_id.partner_id"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.city"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.state_id"/>
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.zip"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.country_id"/> -->
                   </div>
 
                   <div class="row">
