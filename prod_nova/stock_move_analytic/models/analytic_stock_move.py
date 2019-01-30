@@ -148,6 +148,5 @@ class ReturnPicking(models.TransientModel):
         if not returned_lines:
             raise UserError(_("Please specify at least one non-zero quantity."))
 
-        new_picking.action_assign()
         return new_picking.id, picking_type_id
         super(ReturnPicking, self)._create_returns()
