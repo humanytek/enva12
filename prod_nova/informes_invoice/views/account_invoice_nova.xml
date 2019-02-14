@@ -9,7 +9,7 @@
       <field name="origin" position="replace">
         <!-- Add new fields here -->
         <field name="currency_id"/>
-        <field name="order_purchase_id"/>
+        <field name="name"/>
         <field name="amount_untaxed_signed" sum="Total"/>
         <field name="tax_company" sum="Total"/>
         <field name="amount_total_company_signed" sum="Total"/>
