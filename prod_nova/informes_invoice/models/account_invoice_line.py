@@ -11,8 +11,19 @@ class Invoice_line(models.Model):
     default_code=fields.Char(
         related='product_id.default_code',
     )
+    standard_price=fields.Float(
+        related='product_id.standard_price',
+    )
     date_invoice=fields.Date(
         related='invoice_id.date_invoice',
+        store=True,
+    )
+    number=fields.Char(
+        related='invoice_id.number',
+        store=True,
+    )
+    name_invoice=fields.Char(
+        related='invoice_id.name',
         store=True,
     )
     state=fields.Selection(
@@ -28,7 +39,7 @@ class Invoice_line(models.Model):
         string='Vendedor',
         store=True,
     )
-    type_currency = fields.Float(
+    type_currency = fields.Monetary(
         related='invoice_id.type_currency',
         store=True,
     )

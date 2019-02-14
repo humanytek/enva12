@@ -11,7 +11,7 @@ class Account_invoice_nova(models.Model):
         store=True,
     )
 
-    type_currency = fields.Float(
+    type_currency = fields.Monetary(
         # string='Type Currency',
         compute='_get_type_currency',
         digits=(8,6),
@@ -33,6 +33,13 @@ class Account_invoice_nova(models.Model):
     dias_transcurridos=fields.Integer(
         compute='_diferencia',
         string='Dias Transcurridos',
+    )
+    transfer_ids=fields.Many2many(
+    comodel_name='stock.picking',
+    relation='invoice_transfer_rel',
+    column1='account_invoice_id',
+    column2='stock_picking_id',
+    store=True,
     )
 
     @api.depends('date_invoice','payment_date')

@@ -24,6 +24,9 @@
         <field name="payment_date"/>
         <field name="dias_transcurridos"/>
       </field>
+      <field name="state" position="after">
+        <field name="l10n_mx_edi_cfdi_uuid"/>
+      </field>
     </field>
   </record>
 
@@ -37,6 +40,11 @@
         <!-- Add your fields or attributes here -->
         <field name="order_purchase_id"/>
       </field>
+      <notebook position="inside">
+        <page string="Embarques">
+          
+        </page>
+      </notebook>
     </field>
   </record>
 

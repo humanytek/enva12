@@ -8,6 +8,8 @@
         <field name="date_invoice"/>
         <field name="partner_id"/>
         <field name="invoice_id"/>
+        <field name="number"/>
+        <field name="name_invoice"/>
         <field name="user_id"/>
         <field name="product_id"/>
         <field name="default_code"/>
@@ -17,6 +19,7 @@
         <field name="weight"/>
         <field name="total_weight" sum="Total"/>
         <field name="price_unit"/>
+        <field name="standard_price"/>
         <field name="uom_id"/>
         <field name="currency_id"/>
         <field name="price_subtotal_company" sum="Total"/>

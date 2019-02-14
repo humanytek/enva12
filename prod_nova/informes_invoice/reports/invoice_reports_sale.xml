@@ -56,7 +56,7 @@
                 </div>
                 <span class="datoscoorp" t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}"/>
                 <span class="datoscoorp">Corporativo Bosques de Duraznos 65-902 Col. Bosques de las lomas C.P.11700 México.</span> <br/>
-                <span class="datoscoorp">Tel. (0155) 5596-1038 Fax:(0155) 5251-6383</span>
+                 <span class="datoscoorp">Tel. (0155) 5596-1038 Fax:(0155) 5251-6383 R.F.C. ENO-000725-1B5</span>
             </div>
             <div class="info">
               FR-FC-04<br />
@@ -78,10 +78,9 @@
                     <li t-if="company.phone" class="list-inline-item"><i class="fa fa-phone" role="img" aria-label="Phone" title="Phone"/> <span t-field="company.phone"/></li>
                     <li t-if="company.email" class="list-inline-item"><i class="fa fa-at" role="img" aria-label="Email" title="Email"/> <span t-field="company.email"/></li>
                     <li t-if="company.website" class="list-inline-item"><i class="fa fa-globe" role="img" aria-label="Website" title="Website"/> <span t-field="company.website"/></li>
-                    <li t-if="company.vat" class="list-inline-item"><i class="fa fa-building-o" role="img" aria-label="Fiscal number"/><t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/></li>
                 </ul>
                 <div t-field="company.report_footer"/>
-                <div t-if="report_type == 'pdf'" class="text-muted">
+                <div class="text-muted">
                     Page:
                     <span class="page"/>
                     of
@@ -109,9 +108,9 @@
             <strong>Moneda:</strong>
             <p t-field="o.currency_id"/>
         </div>
-        <div name="type_currency" class="col-auto" t-if="o.type_currency">
+        <div name="type_currency" class="col-auto" t-if="o.type_currency and o.partner_id.id != 143">
             <strong>T.C:</strong>
-            <p t-field="o.type_currency"/>
+            <p t-esc="'%.4f'%(o.type_currency)"/>
         </div>
       </xpath>
 
@@ -239,21 +238,6 @@
                 </tr>
 
 
-                <tr t-if="o.partner_id.name == 'VF SOURCING LATIN AMERICA SARL'">
-                  <td colspan="7" class="text-center"><span>EXPORT 18 28 3506 8009376</span><br/><span>IMPORT 18 28 7042 8000106</span></td>
-                </tr>
-                <tr t-if="o.partner_id.name == 'ALIMENTOS Y BEBIDAS LA ESTANCIA'">
-                  <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO 57/2017 CON FECHA 20/10/2017</span></td>
-                </tr>
-                <tr t-if="o.partner_id.name == 'EMPRESA COMERCIALIZADORA DE ACEITE, ECASOL'">
-                  <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN SUPLEMENTO No.1 AL CONTRATO 529-0046-2017 CON FECHA 23/01/2018</span></td>
-                </tr>
-                <tr t-if="o.partner_id.name == 'LOS PORTALES S.A'">
-                  <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO NO. LP-52-019/17-E SUPLEMENTO 2 CON FECHA 14/03/2018</span></td>
-                </tr>
-                <tr t-if="o.partner_id.name == 'HAVANA CLUB INTERNATIONAL S.A.'">
-                  <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM CFR, PUERTO MARIEL, CUBA CODIGO ARANCELARIO: 4819.1001 SEGUN CONTRATO I-153-18 CON FECHA 13/NOVIEMBRE/2018</span></td>
-                </tr>
                 <t t-if="current_section and (line_last or o.invoice_line_ids[line_index+1].display_type == 'line_section')">
                     <tr class="is-subtotal text-right">
                         <td t-att-colspan="colspan">
@@ -265,7 +249,37 @@
             </t>
         </tbody>
       </table>
+      <table name="partner" t-attf-class="table table-sm">
+         <tr t-if="o.partner_id.name == 'VF SOURCING LATIN AMERICA SARL(PANAMA BRANCH)'">
+                 <td colspan="7" class="text-center"><span>EXPORT 19 28 3506 9000186</span><br/><span>IMPORT 19 28 7042 9000004</span></td>
+               </tr>
+               <tr t-if="o.partner_id.name == 'DELTA APPAREL, INC'">
+                 <td colspan="7" class="text-center"><span>666-2006</span></td>
+               </tr>
+               <tr t-if="o.partner_id.name == 'MOSHAY, INC.DBA A4'">
+                 <td colspan="7" class="text-center"><span>EXPORT 19 28 35 06 9000193</span><br/><span>IMPORT 3930-9000215</span><br/><span>IMMEX NOVA: 856-2006 / IMMEX MOSHAY: 1405-2006</span></td>
+               </tr>
+
+               <tr t-if="o.partner_id.name == 'ALIMENTOS Y BEBIDAS LA ESTANCIA'">
+                 <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO 57/2017 CON FECHA 20/10/2017</span></td>
+               </tr>
+               <tr t-if="o.partner_id.name == 'EMPRESA COMERCIALIZADORA DE ACEITE ECASOL'">
+                 <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO 529-0039-2018 CON FECHA 29/01/2019</span></td>
+               </tr>
+               <tr t-if="o.partner_id.name == 'LOS PORTALES S.A'">
+                 <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO NO. LP-52-019/17-E SUPLEMENTO 2 CON FECHA 14/03/2018</span></td>
+               </tr>
+               <tr t-if="o.partner_id.name == 'HAVANA CLUB INTERNATIONAL S.A.'">
+                 <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM CFR, PUERTO MARIEL, CUBA CODIGO ARANCELARIO: 4819.1001 SEGUN CONTRATO I-153-18 CON FECHA 13/NOVIEMBRE/2018</span></td>
+               </tr>
+     </table>
+      <table name="folio_fiscal" t-attf-class="table table-sm" t-if="o.l10n_mx_edi_cfdi_uuid" >
+        <tr>
+          <td><span>Folio Fiscal: </span><span t-field="o.l10n_mx_edi_cfdi_uuid"/></td>
+        </tr>
+      </table>
       <table name="cfdi_origen" t-attf-class="table table-sm" t-if="o.l10n_mx_edi_origin" >
+
         <tr>
           <td><span>CDFI Relacionado: </span><span t-esc="o.l10n_mx_edi_origin[3:] if o.l10n_mx_edi_origin else ''"/></td>
         </tr>
