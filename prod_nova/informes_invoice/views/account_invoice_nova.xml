@@ -42,7 +42,7 @@
       </field>
       <notebook position="inside">
         <page string="Embarques">
-          
+          <field name="transfer_ids" domain="[&quot;&amp;&quot;,[&quot;picking_type_id.code&quot;,&quot;=&quot;,&quot;outgoing&quot;],[&quot;state&quot;,&quot;=&quot;,&quot;done&quot;]]"/>
         </page>
       </notebook>
     </field>
