@@ -45,15 +45,17 @@
                     </div>
                     <div class="col-6">
                       <b>VENDEDOR: </b> <span t-field="doc.partner_id.parent_id.user_id"/><br />
-                      <b>No. PEDIDO:  </b> <span t-field="doc.sale_id"/><br />
+                      <b>NO. PEDIDO:  </b> <span t-field="doc.sale_id"/><br />
+                      <b>REFERENCIA CLIENTE: </b> <span t-field="doc.sale_id.client_order_ref"/><br />
 
                     </div>
                   </div>
 
                   <div class="row">
                     <b>ENTREGAR EN: </b>
-                                          <span t-field="doc.partner_id.name"/>,
+                                          <span t-field="doc.partner_id.name"/>
                                           <span t-field="doc.partner_id.street"/>,
+                                          <span t-field="doc.partner_id.l10n_mx_edi_colony"/>
                                           <span t-field="doc.partner_id.city"/>
                                           <span t-field="doc.partner_id.state_id"/>
                                           <span t-field="doc.partner_id.zip"/>,
@@ -72,7 +74,7 @@
                     <thead class="thead-dark">
                             <tr align="center">
                               <th>CLAVE</th>
-                              <th>DESCRIPCIÓM</th>
+                              <th>DESCRIPCIÓN</th>
                               <th>CANTIDAD</th>
                             </tr>
                     </thead>
@@ -89,6 +91,10 @@
                               </t>
                             </t>
                       </table>
+                  </div>
+
+                  <div class="row">
+                    <b>OBSERVACIONES: </b> <span t-field="doc.note"/><br />
                   </div>
 
                   <div class="row">
