@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="product_stock_tree_2_inherit" model="ir.ui.view">
+    <field name="name">move_stock_productproduct.tree</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="stock_account.view_stock_product_tree2"/>
+    <field name="arch" type="xml">
+      <field name="display_name" position="after">
+        <!-- Add new fields here -->
+        <field name="categ_id"/>
+      </field>
+      <field name="qty_at_date" position="after">
+        <!-- Add new fields here -->
+        <field name="standard_price"/>
+        <field name="weight"/>
+      </field>
+    </field>
+  </record>
+</odoo>
