@@ -12,7 +12,7 @@ class AccountInvoice(models.Model):
     date = fields.Date(string='Accounting Date',
         copy=False,
         help="Keep empty to use the invoice date.",
-        default=fields.Date.today(),
+        default=fields.Date.context_today,
         readonly=True, states={'draft': [('readonly', False)]},
         )
 
