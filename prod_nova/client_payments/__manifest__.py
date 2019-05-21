@@ -6,7 +6,7 @@
     'category': 'Uncategorized',
     'version': '1.0.0',
     'depends': [
-        'account',
+        'l10n_mx_edi',
     ],
     'data': [
         'reports/client_payment_report.xml',
