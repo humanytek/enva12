@@ -149,6 +149,62 @@ class Receipts(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('work.receipts') or '/'
         return super(Receipts, self).create(vals)
 
+
+    @api.multi
+    def action_wrq_send(self):
+        '''
+        This function opens a window to compose an email, with the edi purchase template message loaded by default
+        '''
+        self.ensure_one()
+        ir_model_data = self.env['ir.model.data']
+
+        try:
+            template_id = ir_model_data.get_object_reference('work_receipts', 'email_template_edi_work_receipts')[1]
+        except ValueError:
+            template_id = False
+        try:
+            compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
+        except ValueError:
+            compose_form_id = False
+
+        ctx = dict(self.env.context or {})
+        ctx.update({
+            'default_model': 'work.receipts',
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id,
+            'default_composition_mode': 'comment',
+            'custom_layout': "mail.mail_notification_paynow",
+            'force_email': True,
+            'mark_rfq_as_sent': True,
+        })
+
+
+        lang = self.env.context.get('lang')
+        if {'default_template_id', 'default_model', 'default_res_id'} <= ctx.keys():
+            template = self.env['mail.template'].browse(ctx['default_template_id'])
+            if template and template.lang:
+                lang = template._render_template(template.lang, ctx['default_model'], ctx['default_res_id'])
+
+        self = self.with_context(lang=lang)
+        if self.state in ['draft', 'sent']:
+            ctx['model_description'] = _('Request for Quotation')
+        else:
+            ctx['model_description'] = _('Purchase Order')
+
+        return {
+            'name': _('Compose Email'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form_id, 'form')],
+            'view_id': compose_form_id,
+            'target': 'new',
+            'context': ctx,
+        }
+
+
 class Account_invoice_nova(models.Model):
     _inherit = 'purchase.order'
 

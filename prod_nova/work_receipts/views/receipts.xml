@@ -10,6 +10,7 @@
           <button name="action_draft" states="cancel" string="Change to draft" type="object" class="btn-primary"/>
           <button name="action_in_progress" states="draft" string="Confirm" type="object" class="btn-primary"/>
           <button name="action_done" states="in_progress" string="Validate" type="object" class="btn-primary"/>
+          <button name="action_wrq_send" states="in_progress" string="Enviar Correo" type="object" class="btn-primary"/>
           <button name="action_cancel" states="in_progress" string="Cancel" type="object" class="btn-primary"/>
           <button name="action_in_progress" states="done" string="Cancel" type="object" class="btn-primary"/>
           <field name="state" widget="statusbar" statusbar_visible="cancel,draft,in_progress,done" />
