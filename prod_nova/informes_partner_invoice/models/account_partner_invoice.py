@@ -10,7 +10,6 @@ class AccountPartnerInvoice(models.Model):
     dias_vencidos=fields.Integer(
         compute='_diferencia',
         string='Dias Vencidos',
-        store=True,
     )
 
     user_autoriza= fields.Many2one(
@@ -44,7 +43,7 @@ class AccountPartnerInvoice(models.Model):
         track_visibility='onchange', copy=False,store=True)
 
 
-    @api.depends('date_invoice','date_due')
+
     def _diferencia(self):
         for r in self:
             today=fields.Date.context_today(self)
@@ -53,6 +52,7 @@ class AccountPartnerInvoice(models.Model):
                 r.dias_vencidos=r.dias.days
             else:
                 r.dias_vencidos=0
+
 
     @api.multi
     def action_autorizar_pago(self):
