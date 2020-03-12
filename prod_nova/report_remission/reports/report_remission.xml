@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <report
+      id="id_report_remission"
+      string="Remisión"
+      model="stock.picking"
+      report_type="qweb-pdf"
+      name="report_remission.view_picking_form"
+      file="report_remission.view_picking_form"
+      menu="True"
+      />
+
+      <template id="view_picking_form">
+          	<t t-call="web.html_container">
+    	      <t t-foreach="docs" t-as="doc">
+    	        <t t-call="web.external_layout">
+    	          <div class="page">
+
+                  <div class="row">
+                    <table style="width:100%" class="table table-condensed">
+                      <tr>
+                        <th>LUGAR</th>
+                        <th>FECHA</th>
+                        <th>REMISIÓN</th>
+                      </tr>
+
+                      <tr>
+                        <td>MÉRIDA, YUC.</td>
+                        <td><span t-field="doc.write_date"/></td>
+                        <td><span t-field="doc.name"/></td>
+                      </tr>
+                    </table>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6">
+                      <span t-field="doc.partner_id.parent_id"/><br />
+                      <span t-field="doc.partner_id.parent_id.street"/>
+                      <span t-field="doc.partner_id.parent_id.city"/><br />
+                      <span t-field="doc.partner_id.parent_id.state_id"/>
+                      <span t-field="doc.partner_id.parent_id.zip"/><br />
+                      <span t-field="doc.partner_id.parent_id.country_id"/><br />
+                      Tel: <span t-field="doc.partner_id.parent_id.phone"/><br />
+                      R.F.C.: <span t-field="doc.partner_id.parent_id.vat"/><br />
+                    </div>
+                    <div class="col-6">
+                      <b>VENDEDOR: </b> <span t-field="doc.partner_id.parent_id.user_id"/><br />
+                      <b>NO. PEDIDO:  </b> <span t-field="doc.sale_id"/><br />
+                      <b>REFERENCIA CLIENTE: </b> <span t-field="doc.sale_id.client_order_ref"/><br />
+
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <b>ENTREGAR EN: </b>
+                                          <span t-field="doc.partner_id.name"/>
+                                          <span t-field="doc.partner_id.street"/>,
+                                          <span t-field="doc.partner_id.l10n_mx_edi_colony"/>
+                                          <span t-field="doc.partner_id.city"/>
+                                          <span t-field="doc.partner_id.state_id"/>
+                                          <span t-field="doc.partner_id.zip"/>,
+                                          <span t-field="doc.partner_id.country_id"/>
+                                          Tel: <span t-field="doc.partner_id.phone"/>
+                    <!-- <span t-field="doc.picking_type_id.warehouse_id.partner_id"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.street"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.city"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.state_id"/>
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.zip"/>,
+                                         <span t-field="doc.picking_type_id.warehouse_id.partner_id.country_id"/> -->
+                  </div>
+
+                  <div class="row">
+                    <table style="width:100%" class="table table-condensed">
+                    <thead class="thead-dark">
+                            <tr align="center">
+                              <th>CLAVE</th>
+                              <th>DESCRIPCIÓN</th>
+                              <th>CANTIDAD</th>
+                            </tr>
+                    </thead>
+                            <t t-if="doc.move_ids_without_package">
+
+                              <t t-foreach="doc.move_ids_without_package" t-as="product">
+                  <tbody>
+                              <tr align="center">
+                                <td><span t-field="product.product_id"/></td>
+                                <td><span t-field="product.product_id.description"/></td>
+                                <td><span t-field="product.product_uom_qty"/></td>
+                              </tr>
+                  </tbody>
+                              </t>
+                            </t>
+                      </table>
+                  </div>
+
+                  <div class="row">
+                    <b>OBSERVACIONES: </b> <span t-field="doc.note"/><br />
+                  </div>
+
+                  <div class="row">
+                    <table style="width:100%" class="table table-bordered">
+                        <tr align="center">
+                          <td colspan="2"><b>TIPO DE MERCANCIA Y NÚMERO DE POLIZA</b><br /><b>Mercancía en venta</b></td>
+                        </tr>
+                        <tr>
+                          <td width="70%">
+                            <div class="row">
+                              <div class="col-6">
+                                <b>NOMBRE DE LA LINEA DE TRANSPORTE</b><br /><br />
+                                <b>TALON No.:</b><br /><br />
+                                <b>No. PLACAS DEL TRANSPORTISTA</b><br /><br />
+                                <b>Vo.Bo. E.No. :</b><br /><br />
+                              </div>
+                              <div class="col-6">
+                                <b>NOMBRE DEL CONDUCTOR:</b><br /><br />
+                                <b>VIA DE EMBARQUE:</b><br /><br />
+                                <b>CÓDIGO</b><br /><br />
+                                <b>NOMBRE Y FIRMA CONDUCTOR:</b><br /><br />
+                              </div>
+                            </div>
+                          </td>
+                          <td width="30%" align="center">
+                            <b>FIRMA Y SELLO</b><br />
+                            <b>DEL CLIENTE</b><br />
+                            <b>RECIBIDO</b>
+                          </td>
+                        </tr>
+                    </table>
+                  </div>
+
+  	          </div>
+  	        </t>
+  	      </t>
+  	    </t>
+      </template>
+
+</odoo>

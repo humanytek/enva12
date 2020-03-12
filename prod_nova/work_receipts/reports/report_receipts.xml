@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <report
+    id="work_receitps_report"
+    model="work.receipts"
+    string="Recepciones"
+    report_type="qweb-pdf"
+    name="work_receipts.work_report_receipts"
+    file="work_receipts.work_report_receipts"
+    attachment_use="True"
+    attachment="(object.state in ('open')) and
+        ('RS'+(object.name or '').replace('/','')+'.pdf')"
+/>
+      <template id="work_report_receipts">
+        <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+          <t t-call="web.external_layout">
+            <div class="page">
+              <div class="oe_structure"/>
+                <h2>Recepcion de Trabajo <span t-field="o.name"/></h2>
+
+                <div class="row mt32 mb32">
+                         <div class="col-2">
+                             <strong>Folio:</strong><br/>
+                             <span t-field="o.name"/>
+                         </div>
+                         <div class="col-2">
+                             <strong>Orden de Compra:</strong><br/>
+                             <span t-field="o.purchase_id"/>
+                         </div>
+                         <div class="col-6">
+                             <strong>Proveedor:</strong><br/>
+                             <span t-field="o.vendor_id"/>
+                         </div>
+                         <div class="col-2">
+                             <strong>Fecha de Recepcion:</strong><br/>
+                             <span t-field="o.receipts_date"/>
+                         </div>
+                     </div>
+                     <div class="row mt32 mb32">
+                       <div class="col-4">
+                           <strong>Descripcion:</strong><br/>
+                           <span t-field="o.description"/>
+                       </div>
+                       <div class="col-4">
+                           <strong>Responsable:</strong><br/>
+                           <span t-field="o.user_id"/>
+                       </div>
+                              <div class="col-4">
+                                  <strong>Avance:</strong><br/>
+                                  <span t-field="o.progress" />%
+                              </div>
+                          </div>
+                          <t t-if="o.order_line_ids">
+                                    <h3>Servicio</h3>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Cantidad</strong></th>
+                                                <th class="text-left"><strong>Producto</strong></th>
+                                                <th class="text-center">
+                                                    <strong>UM</strong>
+                                                </th>
+                                                <th class="text-right"><strong>Precio Unitario</strong></th>
+                                                  <th class="text-right"><strong>Moneda</strong></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="o.order_line_ids" t-as="line_ids">
+                                              <td class="text-right">
+                                                  <span t-field="line_ids.product_qty"/>
+                                              </td>
+                                                <td>
+                                                    [ <span t-field="line_ids.product_id.code"/> ]
+                                                    <span t-field="line_ids.product_id.name"/>-<span t-field="line_ids.name"/>
+                                                </td>
+
+                                                <t>
+                                                    <td class="text-center">
+                                                        <span t-field="line_ids.product_uom"/>
+                                                    </td>
+                                                </t>
+                                                <td class="text-right">
+                                                    <span t-field="line_ids.price_unit"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="line_ids.currency_id"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+                                <t t-if="o.invoice_ids">
+                                        <h3>Facturas</h3>
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-left"><strong>Factura</strong></th>
+                                                    <th class="text-left"><strong>Fecha Factura</strong></th>
+                                                    <th class="text-center">
+                                                        <strong>Total</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr t-foreach="o.invoice_ids" t-as="inv_ids">
+                                                  <td class="text-left">
+                                                      <span t-field="inv_ids.number"/>
+                                                  </td>
+                                                    <td>
+                                                        <span t-field="inv_ids.date_invoice"/>
+                                                    </td>
+
+                                                        <td class="text-center">
+                                                            <span t-field="inv_ids.amount_total_signed"/>
+                                                        </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                  <div class="row mt32 mb32">
+                                    <div class="col-6">
+                                    <strong>Observaciones:</strong><br/>
+                                    <span t-field="o.observation"/>
+                                  </div>
+                                  <div class="col-6">
+                                  <strong>Importe:</strong><br/>
+                                  <span t-field="o.amount"/>
+                                </div>
+                                </div>
+                                <div class="row mt32 mb32" style="text-align:center;">
+                                  <div class="col-6"  >
+                                  <span t-field="o.user_id"  />
+                                 <hr style=" height: 0.5px; background-color: black; margin:1px;" />
+                                  <strong>Responsable</strong>
+                                </div>
+
+                              </div>
+
+
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+  </odoo>

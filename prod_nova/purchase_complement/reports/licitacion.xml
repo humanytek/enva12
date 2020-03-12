@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <template id="report_purchase_orden_nova" inherit_id="purchase_requisition.report_purchaserequisitions">
+
+	         <xpath expr="//div[2]" position="after">
+            <div name="reference" class="row">
+		            <b>Motivo: <p t-field="o.reference"/></b>
+		        </div>
+		      </xpath>
+
+          <xpath expr="//span[@t-field='line_ids.product_id.name']" position="after">
+              - <span t-field="line_ids.description"/>
+         </xpath>
+
+		</template>
+  </data>
+</odoo>
