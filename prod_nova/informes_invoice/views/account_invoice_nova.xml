@@ -49,6 +49,7 @@
       <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[1]/field[@name='name']" position="after">
     <field name="re_facturado"  help="Marcar sí la factura es refacturada"/>
     <field name="date_applied"  attrs="{'invisible': [('re_facturado','=',False)]}"/>
+    <field name="sale_id" />
   </xpath>
     </field>
   </record>

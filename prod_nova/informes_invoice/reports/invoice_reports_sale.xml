@@ -296,22 +296,22 @@
                 <td colspan="7" class="text-center"><span>EXPORT 19 28 3506 9002114</span><br/><span>IMPORT 19 28 7042 9000044</span></td>
               </tr>
                <tr t-if="o.partner_id.name == 'LEEWRANGLER WH SOURCING SAGL-PANAMA BRANCH'">
-                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0000429</span><br/><span>IMPORT 20 28 7042 0000005</span></td>
+                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0002041</span><br/><span>IMPORT 20 28 7042 0000105</span></td>
               </tr>
               <tr t-if="o.partner_id.name == 'DELTA APPAREL, INC'">
-                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0000418 </span><br/><span>IMPORT 20 28 3506 0000416</span></td>
+                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0002027 </span><br/><span>IMPORT  20 28 3506 0002026</span></td>
               </tr>
               <tr t-if="o.partner_id.name == 'MOSHAY, INC.DBA A4'">
-                <td colspan="7" class="text-center"><span>EXPORT 20 28 356 0000436</span><br/><span>IMPORT 20 28 3930 0040115</span><br/><span>IMMEX NOVA: 856-2006 / IMMEX MOSHAY: 1405-2006</span></td>
+                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0002080</span><br/><span>IMPORT 20 28 3506 0002079</span><br/><span>IMMEX NOVA: 856-2006 / IMMEX MOSHAY: 1405-2006</span></td>
               </tr>
                <tr t-if="o.partner_id.name == 'GILDAN ACTIVEWEAR SRL'">
-                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0000454</span><br/><span>IMPORT 19 28 3186 9003933</span></td>
+                <td colspan="7" class="text-center"><span>EXPORT 20 28 3506 0001350</span><br/><span>IMPORT 20 28 3529 0000845</span></td>
               </tr>
               <tr t-if="o.partner_id.name == 'ALIMENTOS Y BEBIDAS LA ESTANCIA'">
                 <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO 57/2017 CON FECHA 20/10/2017</span></td>
               </tr>
               <tr t-if="o.partner_id.name == 'EMPRESA COMERCIALIZADORA DE ACEITE ECASOL'">
-                <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN SUPLEMENTO No.1 AL CONTRATO DE COMPRA VENTA INTERNACIONAL 529-0039-2018 CON FECHA 25/04/2019</span></td>
+                <td colspan="7"><span>PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FOB, PUERTO PROGRESO, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO DE COMPRA VENTA INTERNACIONAL  529-0003-2020 CON FECHA 30/03/2020</span></td>
               </tr>
               <tr t-if="o.partner_id.name == 'LOS PORTALES, SA'">
                 <td colspan="7"><span> PAIS DE ORIGEN: MEXICO CONDICION DE COMPRA: INCOTERM FCA AEROPUERTO CANCÚN, MEXICO CODIGO ARANCELARIO: 4808.1000 SEGUN CONTRATO NO. LP-52-03-20-J CON FECHA 20/01/2020</span>

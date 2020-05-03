@@ -55,6 +55,21 @@ class Account_invoice_nova(models.Model):
         index=True,
         copy=False)
 
+    @api.depends('origin','sale_id')
+    def _get_sale_id(self):
+        for r in self:
+            if r.origin:
+                r.sale_id=r.env['sale.order'].search([('name','=',r.origin)])
+            else:
+                r.sale_id=False
+
+
+    sale_id = fields.Many2one(
+    comodel_name='sale.order',
+    string='Sale order',
+    compute='_get_sale_id',
+    )
+
     @api.depends('date_invoice','payment_date')
     def _diferencia(self):
         for r in self:
