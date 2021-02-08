@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+  <record model="ir.ui.view" id="reports_group_form_view">
+    <field name="name">reports.group.form</field>
+    <field name="model">reports.group</field>
+    <field name="arch" type="xml">
+      <form string="Lineas de Reportes">
+          <sheet>
+            <div class="float-left">
+                     <label for="name" class="oe_edit_only oe_inline"/>
+                     <h1>
+                         <field name="name" />
+                     </h1>
+                 </div>
+            <group>
+                <group>
+                  <field name="type" />
+                  <field name="order"  />
+                  <field name="type_balance" attrs="{'invisible': [('type','!=','BALANCE GENERAL')]}"/>
+                  <field name="title"  attrs="{'invisible': ['|','|','|','|',('titulo_porcent','=',True),('caculate_especial_cventa','=',True),('volumen','=',True),('has_a_group','=',True),('formula','=',True)]}" />
+                  <field name="has_a_group" attrs="{'invisible': ['|','|','|','|',('title','=',True),('titulo_porcent','=',True),('caculate_especial_cventa','=',True),('formula','=',True),('volumen','=',True)]}"  />
+                  <field name="group_id"  attrs="{'invisible': ['|',('has_a_group','=',False),('caculate_especial_cventa','=',True)],'required':[('has_a_group','=',True)]}" />
+                  <field name="formula" attrs="{'invisible': ['|','|','|','|',('title','=',True),('titulo_porcent','=',True),('volumen','=',True),('has_a_group','=',True),('caculate_especial_cventa','=',True)]}" />
+                  <field name="expresion" attrs="{'invisible': [('formula','=',False)]}" />
+
+                  </group>
+                  <group>
+                  <field name="code" />
+                  <field name="level" />
+                  <field name="titulo_porcent" attrs="{'invisible': ['|','|','|','|','|',('type','!=','ESTADO DE RESULTADOS'),('caculate_especial_cventa','=',True),('volumen','=',True),('title','=',True),('has_a_group','=',True),('formula','=',True)]}"  />
+                  <field name="has_a_budget" attrs="{'invisible': ['|','|','|',('type','!=','ESTADO DE RESULTADOS'),('volumen','=',True),('title','=',True),('titulo_porcent','=',True)]}" />
+                  <field name="budget_nova_id" attrs="{'invisible': [('has_a_budget','=',False)]}" />
+                  <field name="acum_invisible" attrs="{'invisible': ['|','|',('title','=',True),('titulo_porcent','=',True),('volumen','=',True)]}" />
+
+                  </group>
+              </group>
+              <group>
+                <group>
+                  <field name="caculate_especial_cventa" attrs="{'invisible': ['|','|','|','|','|',('type','!=','ESTADO DE RESULTADOS'),('volumen','=',True),('title','=',True),('titulo_porcent','=',True),('has_a_group','=',True),('formula','=',True)]}"/>
+                  <field name="costo_venta_id" attrs="{'invisible': [('caculate_especial_cventa','=',False)]}" />
+
+                  <field name="volumen" attrs="{'invisible': ['|','|','|','|','|',('title','=',True),('titulo_porcent','=',True),('has_a_group','=',True),('type','!=','ESTADO DE RESULTADOS'),('caculate_especial_cventa','=',True),('formula','=',True)]}"  />
+                  <field name="volumen_ventas" attrs="{'invisible': [('volumen','=',False)]}" />
+                  </group>
+                  <group>
+                      <field name="formula_porcent" attrs="{'invisible': ['|','|','|',('title','=',True),('type','!=','ESTADO DE RESULTADOS'),('volumen','=',True),('titulo_porcent','=',True)]}" />
+                      <field name="expresion_porcent" attrs="{'invisible': [('formula_porcent','=',False)]}" />
+                      <field name="negative" attrs="{'invisible': ['|','|',('title','=',True),('titulo_porcent','=',True),('volumen','=',True)]}" />
+                      <field name="color_red" attrs="{'invisible': ['|','|',('title','=',True),('titulo_porcent','=',True),('volumen','=',True)]}" />
+                    </group>
+              </group>
+          </sheet>
+      </form>
+    </field>
+  </record>
+  <record model="ir.ui.view" id="reports_group_tree_view">
+    <field name="name">reports.group.tree</field>
+    <field name="model">reports.group</field>
+    <field name="arch" type="xml">
+      <tree string="Reports Group Tree">
+        <field name="name"/>
+        <field name="code"/>
+        <field name="group_id"/>
+        <field name="type"/>
+        <field name="order"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="reportsgroup_list_action">
+    <field name="name">Lineas de Reportes</field>
+    <field name="res_model">reports.group</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">Create the first Linea de Reporte
+      </p>
+    </field>
+  </record>
+    <menuitem id="menu_action_reportsgroup_list" name="Lineas de Reportes" action="reportsgroup_list_action" parent="account_reports.account_reports_partners_reports_menu" groups="account.group_account_user"/>
+  </data>
+</odoo>

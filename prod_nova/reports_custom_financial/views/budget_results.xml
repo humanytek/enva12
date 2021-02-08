@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+  <record model="ir.ui.view" id="budget_state_income_tree_view2">
+    <field name="name">Presupuesto Estado de resultados</field>
+    <field name="model">budget.statement.income</field>
+    <field name="arch" type="xml">
+      <tree string="Presupuesto Estado de resultados">
+        <field name="name"/>
+        <field name="date_from"/>
+        <field name="date_to"/>
+        <field name="amount_per_month"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="budget_state_income_form_action">
+    <field name="name">Presupuesto Estado de resultados</field>
+    <field name="res_model">budget.statement.income</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">Create the first Budget Statement of Income
+      </p>
+    </field>
+  </record>
+
+    <menuitem id="menu_budget_state_income_list_action" name="Presupuestos Nova" action="budget_state_income_form_action" parent="account_reports.account_reports_partners_reports_menu" groups="account.group_account_user"/>
+  </data>
+</odoo>
