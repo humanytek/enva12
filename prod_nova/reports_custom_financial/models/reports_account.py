@@ -83,8 +83,6 @@ class ReportsAccount(models.AbstractModel):
                         newvalue.append(groups_month.get(form[1],0))
                     elif form[0]=="G":
                         group=self.env['account.group'].search([('code_prefix','=',form[1])],order='code_prefix')
-                        _logger.info('imprimir group ---- %s', date_from)
-                        _logger.info('imprimir group ---- %s', date_to)
                         if group:
                             balance=self.with_context(date_from=date_from, date_to=date_to)._balance_initial(options,line_id,str(group.id))
                             if balance:
@@ -120,8 +118,7 @@ class ReportsAccount(models.AbstractModel):
                         newvalue.append(groups_month.get(form[1],0))
                     elif form[0]=="G":
                         group=self.env['account.group'].search([('code_prefix','=',form[1])],order='code_prefix')
-                        _logger.info('imprimir group ---- %s', date_from)
-                        _logger.info('imprimir group ---- %s', date_to)
+
                         if group:
                             balance=self.with_context(date_from=date_from, date_to=date_to)._balance_initial(options,line_id,str(group.id))
                             balance_init=self.with_context(date_from=False, date_to=date_from + timedelta(days=-1))._balance_initial(options,line_id,str(group.id))
@@ -173,38 +170,52 @@ class ReportsAccount(models.AbstractModel):
                         })
                     elif g.type_balance=="RESULTADO EJ. ANT" and g.group_id.id:
                         if g.acum_invisible and g.title==False:
+                            date_to_prev=fields.Date.from_string(date_from)
+
                             balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
                             balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
                             balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
-                            balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+                            balance_init_earning_month=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+                            if date_to_prev.month == 1:
+                                balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
+                            else:
+                                balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+
                             balance_init_earning_ant=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
-                            if balance_init:
+                            if balance_init and balance_init_earning:
                                 groups_prev_month[g.code]=balance_init[0]+balance_init_earning[0]
                             else:
                                 groups_prev_month[g.code]=balance_init_earning[0]
-                            if balance:
-                                groups_month[g.code]=balance[0]+balance_init[0]+balance_init_earning[0]
+                            if balance and balance_init and balance_init_earning :
+                                groups_month[g.code]=balance[0]+balance_init[0]+balance_init_earning_month[0]
                             else:
-                                groups_month[g.code]=balance_init[0]+balance_init_earning[0]
-                            if balance_ejer_ant:
+                                groups_month[g.code]=balance_init[0]+balance_init_earning_month[0]
+                            if balance_ejer_ant and balance_init_earning_ant:
                                 groups_dec_prev_year[g.code]=balance_ejer_ant[0]+balance_init_earning_ant[0]
                             else:
                                 groups_dec_prev_year[g.code]=balance_init_earning_ant[0]
                         else:
-                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                            date_to_prev=fields.Date.from_string(date_from)
+
+                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from) + timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
                             balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
                             balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
-                            balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+                            balance_init_earning_month=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+                            if date_to_prev.month == 1:
+                                balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
+                            else:
+                                balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
+
                             balance_init_earning_ant=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
-                            if balance_init:
+                            if balance_init and balance_init_earning:
                                 groups_prev_month[g.code]=balance_init[0]+balance_init_earning[0]
                             else:
                                 groups_prev_month[g.code]=balance_init_earning[0]
-                            if balance:
-                                groups_month[g.code]=balance[0]+balance_init[0]+balance_init_earning[0]
+                            if balance and balance_init and balance_init_earning :
+                                groups_month[g.code]=balance[0]+balance_init[0]+balance_init_earning_month[0]
                             else:
-                                groups_month[g.code]=balance_init[0]+balance_init_earning[0]
-                            if balance_ejer_ant:
+                                groups_month[g.code]=balance_init[0]+balance_init_earning_month[0]
+                            if balance_ejer_ant and balance_init_earning_ant:
                                 groups_dec_prev_year[g.code]=balance_ejer_ant[0]+balance_init_earning_ant[0]
                             else:
                                 groups_dec_prev_year[g.code]=balance_init_earning_ant[0]
@@ -222,9 +233,15 @@ class ReportsAccount(models.AbstractModel):
 
                     elif g.type_balance=="RESULTADO DEL EJERCICIO" and g.group_id.id==False:
                         if g.acum_invisible and g.title==False:
+                            date_to_prev=fields.Date.from_string(date_from)
                             balance_init_earning=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial_earning(options,line_id)
-                            balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+                            if date_to_prev.month == 1:
+                                balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+                            else:
+                                balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+
                             balance_init_earning_prev_year=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+timedelta(days=-1))._balance_initial_earning(options,line_id)
+
                             if balance_init_earning:
                                 groups_month[g.code]=balance_init_earning[0]
                             if balance_init_earning_prev_month:
@@ -232,9 +249,16 @@ class ReportsAccount(models.AbstractModel):
                             if balance_init_earning_prev_year:
                                 groups_dec_prev_year[g.code]=balance_init_earning_prev_year[0]
                         else:
+
+                            date_to_prev=fields.Date.from_string(date_from)
                             balance_init_earning=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial_earning(options,line_id)
-                            balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+                            if date_to_prev.month == 1:
+                                balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+                            else:
+                                balance_init_earning_prev_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_from)+timedelta(days=-1))._balance_initial_earning(options,line_id)
+
                             balance_init_earning_prev_year=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+timedelta(days=-1))._balance_initial_earning(options,line_id)
+
                             if balance_init_earning:
                                 groups_month[g.code]=balance_init_earning[0]
                             if balance_init_earning_prev_month:
