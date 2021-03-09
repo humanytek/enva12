@@ -53,13 +53,13 @@ class PorcentCostSale(models.Model):
     cost_per_month=fields.Float(
     compute='_cost_month',
     string='Costo por mes',
-    store=True,
+
     )
 
     porcent_per_month=fields.Float(
     compute='_porcent_cost_month',
     string='Porcentaje por mes',
-    store=True,
+    
     )
 
 

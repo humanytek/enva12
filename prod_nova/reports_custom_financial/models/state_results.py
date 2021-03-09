@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from odoo.exceptions import UserError, ValidationError
 from dateutil.relativedelta import relativedelta
 from odoo.addons.web.controllers.main import clean_action
+_logger = logging.getLogger(__name__)
 
 class ReportStateResults(models.AbstractModel):
     _name = "report.state.results.nova"
@@ -163,9 +164,9 @@ class ReportStateResults(models.AbstractModel):
 
                         balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to) )._balance_initial(options,line_id,str(g.group_id.id))
                         balance_prev_month=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_id.id))
-                        balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1) )._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1) )._balance_initial(options,line_id,str(g.group_id.id))
                         balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
-                        balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))._balance_initial(options,line_id,str(g.group_id.id))
                         if balance:
                             groups_real[g.code]=balance[0]
                         if balance_prev_month:
@@ -189,10 +190,10 @@ class ReportStateResults(models.AbstractModel):
                             calmesporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_real,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
                             calmesprevporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_prev_month,date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1))
                             calbudgetmesporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_budget_month,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
-                            caldec_prev_yearporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to = fields.Date.from_string(date_to)+relativedelta(years=-1))
+                            caldec_prev_yearporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to = fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                             calgroups_acumporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
                             calbudget_month_lyporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_budget_month_ly,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
-                            calacum_monthporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))
+                            calacum_monthporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                             if calmesporc:
                                 groups_real_porc[g.code]=calmesporc
                             if calmesprevporc:
@@ -278,10 +279,10 @@ class ReportStateResults(models.AbstractModel):
                         mesreal=self._calculate_formula(options,line_id,g.expresion,groups_real,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
                         mesanterior=self._calculate_formula(options,line_id,g.expresion,groups_prev_month,date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1))
                         mespresupuesto=self._calculate_formula(options,line_id,g.expresion,groups_budget_month,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
-                        anioanterior=self._calculate_formula(options,line_id,g.expresion,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))
+                        anioanterior=self._calculate_formula(options,line_id,g.expresion,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                         realacumulado=self._calculate_formula(options,line_id,g.expresion,groups_acum,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
                         presupuestoacumulado=self._calculate_formula(options,line_id,g.expresion,groups_budget_month_ly,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
-                        acumuladoanioanterior=self._calculate_formula(options,line_id,g.expresion,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))
+                        acumuladoanioanterior=self._calculate_formula(options,line_id,g.expresion,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                         if mesreal:
                             groups_real[g.code]=mesreal
                         if mesanterior:
@@ -300,10 +301,10 @@ class ReportStateResults(models.AbstractModel):
                             calmesporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_real,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
                             calmesprevporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_prev_month,date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1))
                             calbudgetmesporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_budget_month,date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))
-                            caldec_prev_yearporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to = fields.Date.from_string(date_to)+relativedelta(years=-1))
+                            caldec_prev_yearporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_dec_prev_year,date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to = fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                             calgroups_acumporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
                             calbudget_month_lyporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_budget_month_ly,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))
-                            calacum_monthporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))
+                            calacum_monthporc=self._calculate_formula(options,line_id,g.expresion_porcent,groups_acum_month,date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                             if calmesporc:
                                 groups_real_porc[g.code]=calmesporc
                             if calmesprevporc:
@@ -374,9 +375,10 @@ class ReportStateResults(models.AbstractModel):
 
                     porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_to))])
                     porcent_prev_month=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(months=-1)),('date_to','<=',fields.Date.from_string(date_from)+timedelta(days=-1))])
-                    porcent_prev_year=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(years=-1)),('date_to','<=',fields.Date.from_string(date_to)+relativedelta(years=-1))])
+                    porcent_prev_year=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(years=-1)),('date_to','<=',fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))])
+                    # _logger.info('fecha año ---- %s', fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                     porcent_acumulado=self._get_cost_sales(g.costo_venta_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to))
-                    porcent_acumulado_prevyear=self._get_cost_sales(g.costo_venta_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_to)+relativedelta(years=-1))
+                    porcent_acumulado_prevyear=self._get_cost_sales(g.costo_venta_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                     if g.budget_nova_id:
                         budget_month=self._get_budget_statement(g.budget_nova_id.id,fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                         budget_month_ly=self._get_budget_statement(g.budget_nova_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to))
@@ -462,10 +464,10 @@ class ReportStateResults(models.AbstractModel):
                         volmonth = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',fields.Date.from_string(date_from),fields.Date.from_string(date_to),False)
                         volmonth_budget = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',fields.Date.from_string(date_from),fields.Date.from_string(date_to),True)
                         volmonthlast = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',fields.Date.from_string(date_from)+relativedelta(months=-1),fields.Date.from_string(date_from)+timedelta(days=-1),False)
-                        vollastyear =  self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',fields.Date.from_string(date_from)+relativedelta(years=-1),fields.Date.from_string(date_to)+relativedelta(years=-1),False)
+                        vollastyear =  self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',fields.Date.from_string(date_from)+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1),False)
                         volmonthacum = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to),False)
                         volmonthacum_budget = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to),True)
-                        volmonthacumly = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_to)+relativedelta(years=-1),False)
+                        volmonthacumly = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS CAJAS',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1),False)
 
 
                         lines.append({
@@ -496,10 +498,10 @@ class ReportStateResults(models.AbstractModel):
                         volpmonth = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',fields.Date.from_string(date_from),fields.Date.from_string(date_to),False)
                         volpmonth_budget = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',fields.Date.from_string(date_from),fields.Date.from_string(date_to),True)
                         volpmonthlast = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',fields.Date.from_string(date_from)+relativedelta(months=-1),fields.Date.from_string(date_from)+timedelta(days=-1),False)
-                        volplastyear =  self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',fields.Date.from_string(date_from)+relativedelta(years=-1),fields.Date.from_string(date_to)+relativedelta(years=-1),False)
+                        volplastyear =  self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',fields.Date.from_string(date_from)+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1),False)
                         volpmonthacum = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to),False)
                         volpmonthacum_budget = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to),True)
-                        volpmonthacumly = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_to)+relativedelta(years=-1),False)
+                        volpmonthacumly = self._get_volumen_sale_boxpaper('TONELADAS FACTURADAS PAPEL',self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1),False)
 
 
                         #LINES PAPER
