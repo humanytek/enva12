@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record model="ir.ui.view" id="humidity_tolerance_purchase_form_view">
+        <field name="name">humidity.tolerance.purchase.form</field>
+        <field name="model">humidity.tolerance.purchase</field>
+        <field name="arch" type="xml">
+          <form string="Criterios de Compra OCC">
+
+            <sheet>
+              <div class="float-left">
+                       <label for="name" class="oe_edit_only oe_inline"/>
+                       <h1>
+                           <field name="purchase_id" string="Orden de Compra"/>
+                       </h1>
+                   </div>
+              <group>
+              <group>
+                <field name="porcent_tolerance_hum"  string="Porcentaje Tolerancia Humedad"/>
+                <field name="partner_id" string="Proveedor" />
+
+              </group>
+              <group>
+                <field name="porcent_tolerance_forb" string="Porcentaje Tolerancia Prohibidos" />
+                <field name="purchase_name" string="Orden de Compra" />
+
+              </group>
+            </group>
+            <notebook>
+              <page string="Lineas de Compra">
+                <field name="order_line_ids" >
+
+                </field>
+              </page>
+
+              </notebook>
+            </sheet>
+
+          </form>
+        </field>
+      </record>
+
+      <record model="ir.ui.view" id="humidity_tolerance_purchase_tree_view">
+        <field name="name">humidity.tolerance.purchase.tree</field>
+        <field name="model">humidity.tolerance.purchase</field>
+        <field name="arch" type="xml">
+          <tree string="Criterios Tree">
+            <field name="purchase_id" />
+            <field name="partner_id" string="Proveedor" />
+            <field name="porcent_tolerance_hum"  string="Porcentaje Tolerancia Humedad"/>
+            <field name="porcent_tolerance_forb" string="Porcentaje Tolerancia Prohibidos" />
+
+          </tree>
+        </field>
+      </record>
+
+    <record model="ir.actions.act_window" id="humidity_tolerance_purchase_list_action">
+      <field name="name">Criterios de Compra Occ</field>
+      <field name="res_model">humidity.tolerance.purchase</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">Crea tu primer Criterio de Compra Occ
+        </p>
+      </field>
+    </record>
+
+    <menuitem id="menu_list_humidity_tolerance_action" name="Criterios de Compra Occ" action="humidity_tolerance_purchase_list_action" parent="purchase.menu_purchase_control" />
+
+    <record model="ir.actions.act_window" id="humidity_form_action">
+      <field name="name">Criterios de Compra Occ</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">humidity.tolerance.purchase</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="domain">[('purchase_id','=',active_id)]</field>
+      <field name="context">{"search_default_purchase_id": active_id,"default_purchase_id": active_id}</field>
+    </record>
+
+
+    <record id="view_purchase_order_form_inherit_nova2" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.nova2</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//form[1]/sheet[1]/div[@name='button_box']/button[@name='action_view_invoice']" position="after">
+              <button class="oe_stat_button" icon="fa-recycle" type="action" name="%(humidity_form_action)d" attrs="{'invisible': [('criterios_occ', '=', False)]}">
+                <field name="purchase_id__humidity_purchase_count" string="Criterios de Hum Occ" widget="statinfo"/>
+              </button>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+              <field name="criterios_occ"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>
