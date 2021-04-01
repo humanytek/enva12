@@ -376,7 +376,7 @@ class ReportStateResults(models.AbstractModel):
                     porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_to))])
                     porcent_prev_month=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(months=-1)),('date_to','<=',fields.Date.from_string(date_from)+timedelta(days=-1))])
                     porcent_prev_year=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(years=-1)),('date_to','<=',fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))])
-                    _logger.info('fecha año ---- %s', fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
+                    _logger.info('fecha año ---- %s', fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1))
                     porcent_acumulado=self._get_cost_sales(g.costo_venta_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'],fields.Date.from_string(date_to))
                     porcent_acumulado_prevyear=self._get_cost_sales(g.costo_venta_id.id,self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1),fields.Date.from_string(date_from)+timedelta(days=-1)+relativedelta(months=1,years=-1))
                     if g.budget_nova_id:
