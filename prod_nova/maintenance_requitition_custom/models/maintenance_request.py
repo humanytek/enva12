@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+
+from odoo import api, fields, models,_
+from odoo.exceptions import UserError
+
+
+class MaintenanceRequest(models.Model):
+    _inherit = 'maintenance.request'
+
+    mantto_requisition_id = fields.Many2one(
+    'maintenance.requisition',
+    string='Requisicion de Mantto',
+    copy=False
+    )
+
+    requisitionpurchase_count=fields.Integer(
+    compute='_count_rp',
+    string='Requisition Purchase count',
+
+    )
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for s in self:
+            name = s.code+ ' ' + s.name
+            result.append((s.id, name))
+        return result
+
+    @api.one
+    def _count_rp(self):
+        results = self.env['purchase.requisition'].read_group([('maintenance_request_id', 'in', self.ids)], 'maintenance_request_id', 'maintenance_request_id')
+        dic = {}
+        for x in results: dic[x['maintenance_request_id'][0]] = x['maintenance_request_id_count']
+        for record in self: record['requisitionpurchase_count'] = dic.get(record.id, 0)
+
+
+    @api.onchange('mantto_requisition_id')
+    def _onchange_mantto_requisition_id(self):
+        if not self.mantto_requisition_id:
+            return
+
+        mantto_requisition = self.mantto_requisition_id
+
+        self.name=mantto_requisition.reference
+        self.priority=mantto_requisition.priority
+        self.note=mantto_requisition.note
+        self.request_date=mantto_requisition.date_request
