@@ -15,5 +15,5 @@ class MaintenanceArea(models.Model):
     )
 
     user_ids = fields.Many2many(
-        'res.users', 'area_users_rel', string="Usuarios"
+        'res.users', 'maintenance_area_users_rel', string="Usuarios"
     )
