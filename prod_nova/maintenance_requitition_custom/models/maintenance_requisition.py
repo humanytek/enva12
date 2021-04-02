@@ -23,11 +23,13 @@ class Maintenance_requisition(models.Model):
         default='New',
         store=True,
     )
+
     reference=fields.Char(
         required=True,
         string="Referencia",
         store=True,
     )
+
     date_request = fields.Date(
 
         string="Fecha de Solicitud",
@@ -43,6 +45,12 @@ class Maintenance_requisition(models.Model):
     store=True,
     )
 
+    area_id = fields.Many2one(
+    comodel_name = 'maintenance.area',
+    string = 'Area',
+    store = True,
+    )
+    
     state = fields.Selection(
     MANTTO_REQUISITION_STATES,
     'Estado',
