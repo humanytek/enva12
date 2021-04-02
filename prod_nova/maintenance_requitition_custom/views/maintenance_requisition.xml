@@ -55,6 +55,7 @@
          <field name="context">{"default_mantto_requisition_id":active_id}</field>
       </record>
 
+
       <record model="ir.ui.view" id="maintenance_requitition_view">
         <field name="name">maintenance.requisition.form</field>
         <field name="model">maintenance.requisition</field>
@@ -128,6 +129,39 @@
     </record>
 
     <menuitem id="menu_maintenance_requisition_list_action" name="Requisicion de Mantenimiento" action="maintenance_requisition_list_action" parent="maintenance.menu_m_request" sequence="1" />
+
+
+    <record model="ir.ui.view" id="maintenance_area_view">
+      <field name="name">maintenance.area.form</field>
+      <field name="model">maintenance.area</field>
+      <field name="arch" type="xml">
+        <form string="Maintenance Area">
+
+          <sheet>
+
+            <div class="float-left">
+                     <label for="name" class="oe_edit_only oe_inline"/>
+                     <h1>
+                        <field name="name"  />
+                     </h1>
+                 </div>
+            <group>
+            <group>
+              <field name="user_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create': True}"/>
+
+
+            </group>
+
+          </group>
+
+          </sheet>
+          <!-- <div class="oe_chatter">
+               <field name="message_follower_ids" widget="mail_followers"/>
+               <field name="message_ids" widget="mail_thread"/>
+             </div> -->
+        </form>
+      </field>
+    </record>
 
     <record model="ir.actions.act_window" id="maintenance_area_list_action">
       <field name="name">Areas de Mantenimiento</field>
