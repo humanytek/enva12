@@ -54,5 +54,5 @@ class MaintenanceRequest(models.Model):
         self.note=mantto_requisition.note
         self.request_date=mantto_requisition.date_request
         self.user_id=mantto_requisition.assigned_id.id
-        _logger.info('USUARIO %s', mantto_requisition.assigned_id.id)
+        
         self.area_id=mantto_requisition.area_id
