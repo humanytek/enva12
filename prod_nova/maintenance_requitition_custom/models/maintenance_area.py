@@ -15,5 +15,5 @@ class MaintenanceArea(models.Model):
     )
 
     user_ids = fields.Many2many(
-        comodel_name='res.users', string="Usuarios"
+        comodel_name='res.users', string="Usuarios",store=True,
     )
