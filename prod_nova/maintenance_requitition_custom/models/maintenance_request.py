@@ -69,6 +69,5 @@ class MaintenanceRequest(models.Model):
 
     @api.onchange('category_id')
     def onchange_category_id(self):
-        return{}
-        # if not self.user_id or not self.equipment_id or (self.user_id and not self.equipment_id.technician_user_id):
-        #     self.user_id = self.category_id.technician_user_id
+        if not self.user_id or not self.equipment_id or (self.user_id and not self.equipment_id.technician_user_id):
+            self.user_id = self.category_id.technician_user_id
