@@ -45,12 +45,19 @@ class Maintenance_requisition(models.Model):
     store=True,
     )
 
+
+    assigned_id = fields.Many2one(
+    comodel_name='res.users',
+    string='Assigned',
+    store=True,
+    )
+
     area_id = fields.Many2one(
     comodel_name = 'maintenance.area',
     string = 'Area',
     store = True,
     )
-    
+
     state = fields.Selection(
     MANTTO_REQUISITION_STATES,
     'Estado',

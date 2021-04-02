@@ -91,12 +91,13 @@
               <group>
               <group>
                 <field name="user_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
-                  <field name="area_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                <field name="area_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
 
               </group>
               <group>
                 <field name="date_request" readonly='1'/>
                 <field name="priority"  widget="priority" />
+                <field name="assigned_id" />
 
               </group>
             </group>
