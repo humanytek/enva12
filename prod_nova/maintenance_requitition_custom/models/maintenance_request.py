@@ -56,3 +56,19 @@ class MaintenanceRequest(models.Model):
         self.user_id=mantto_requisition.assigned_id
         # _logger.info('USUARIO %s', mantto_requisition.assigned_id.id)
         self.area_id=mantto_requisition.area_id
+
+
+    @api.onchange('equipment_id')
+    def onchange_equipment_id(self):
+        return{}
+        # if self.equipment_id:
+        #     self.user_id = self.equipment_id.technician_user_id if self.equipment_id.technician_user_id else self.equipment_id.category_id.technician_user_id
+        #     self.category_id = self.equipment_id.category_id
+        #     if self.equipment_id.maintenance_team_id:
+        #         self.maintenance_team_id = self.equipment_id.maintenance_team_id.id
+
+    @api.onchange('category_id')
+    def onchange_category_id(self):
+        return{}
+        # if not self.user_id or not self.equipment_id or (self.user_id and not self.equipment_id.technician_user_id):
+        #     self.user_id = self.category_id.technician_user_id
