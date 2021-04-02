@@ -52,5 +52,5 @@ class MaintenanceRequest(models.Model):
         self.priority=mantto_requisition.priority
         self.note=mantto_requisition.note
         self.request_date=mantto_requisition.date_request
-        self.user_id=mantto_requisition.assigned_id.id
+        self.user_id=mantto_requisition.assigned_id
         self.area_id=mantto_requisition.area_id
