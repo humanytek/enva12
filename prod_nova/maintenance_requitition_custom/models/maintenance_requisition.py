@@ -17,6 +17,7 @@ PRIORITY = [
 ]
 class Maintenance_requisition(models.Model):
     _name = 'maintenance.requisition'
+    _inherit = ['mail.thread']
 
     name = fields.Char(
         required=True,
