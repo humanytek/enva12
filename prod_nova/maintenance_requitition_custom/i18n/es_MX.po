@@ -29,7 +29,7 @@ msgstr "<b>Modelo Número:</b>"
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_kanban
 msgid "<b>Request to:</b>"
-msgstr "<b>Petición a:</b>"
+msgstr "<b>orden a:</b>"
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_view_kanban
@@ -132,13 +132,13 @@ msgstr "Añadir una nueva categoría de equipo"
 #: model_terms:ir.actions.act_window,help:maintenance.hr_equipment_todo_request_action_from_dashboard
 #: model_terms:ir.actions.act_window,help:maintenance.maintenance_request_action_reports
 msgid "Add a new maintenance request"
-msgstr "Añadir una nueva petición de mantenimiento"
+msgstr "Añadir una nueva orden de trabajo"
 
 #. module: maintenance
 #: model_terms:ir.actions.act_window,help:maintenance.hr_equipment_stage_action
 #: model_terms:ir.actions.act_window,help:maintenance.maintenance_dashboard_action
 msgid "Add a new stage in the maintenance request"
-msgstr "Añadir una nueva etapa en la petición de mantenimiento"
+msgstr "Añadir una nueva etapa en la orden de trabajo"
 
 #. module: maintenance
 #: model_terms:ir.actions.act_window,help:maintenance.maintenance_team_action_settings
@@ -798,22 +798,22 @@ msgstr "Categoría Equipo de mantenimiento"
 #: model:mail.activity.type,name:maintenance.mail_act_maintenance_request
 #: model:ir.model,name:maintenance_requitition_custom.model_maintenance_request
 msgid "Maintenance Request"
-msgstr "Petición de mantenimiento"
+msgstr "Orden de trabajo"
 
 #. module: maintenance
 #: model:mail.message.subtype,name:maintenance.mt_cat_req_created
 msgid "Maintenance Request Created"
-msgstr "Petición de mantenimiento creada"
+msgstr "Orden de trabajo creada"
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_stage_view_tree
 msgid "Maintenance Request Stage"
-msgstr "Etapa de petición de mantenimiento"
+msgstr "Etapa de orden de trabajo"
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_stage_view_search
 msgid "Maintenance Request Stages"
-msgstr "Etapas de petición de mantenimiento"
+msgstr "Etapas de orden de trabajo"
 
 #. module: maintenance
 #: model:mail.message.subtype,description:maintenance.mt_req_created
@@ -831,7 +831,7 @@ msgstr "Creada solicitud de mantenimiento"
 #: model:ir.ui.menu,name:maintenance.menu_m_request_form
 #: model_terms:ir.ui.view,arch_db:maintenance.maintenance_team_kanban
 msgid "Maintenance Requests"
-msgstr "Peticiones de mantenimiento"
+msgstr "Ordenes de trabajo"
 
 #. module: maintenance_requitition_custom
 #: model_terms:ir.ui.view,arch_db:maintenance_requitition_custom.maintenance_requisition_view
@@ -914,7 +914,7 @@ msgstr "Mis equipos"
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_search
 msgid "My Requests"
-msgstr "Mis peticiones"
+msgstr "Mis ordenes de trabajo"
 
 #. modules: maintenance_requitition_custom, maintenance
 #: model:ir.model.fields,field_description:maintenance.field_maintenance_stage__name
@@ -1309,7 +1309,7 @@ msgstr "Nº de serie"
 #. module: maintenance
 #: model:ir.model.fields,help:maintenance.field_maintenance_request__archive
 msgid "Set archive to true to hide the maintenance request without deleting it."
-msgstr "Establezca el \"archivo\" a verdad para esconder la petición de mantenimiento sin borrarla."
+msgstr "Establezca el \"archivo\" a verdad para esconder la orden de trabajo sin borrarla."
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.maintenance_team_kanban
@@ -1542,7 +1542,7 @@ msgstr ""
 #: code:addons/maintenance/models/maintenance.py:77
 #, python-format
 msgid "You cannot delete an equipment category containing equipments or maintenance requests."
-msgstr "No puede borrar una categoría de equipamiento que contiene equipos o peticiones de mantenimiento."
+msgstr "No puede borrar una categoría de equipamiento que contiene equipos o orden de trabajo."
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_view_form
@@ -1559,12 +1559,12 @@ msgstr "horas"
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_pivot
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_tree
 msgid "maintenance Request"
-msgstr "petición de mantenimiento"
+msgstr "orden de trabajo"
 
 #. module: maintenance
 #: model_terms:ir.ui.view,arch_db:maintenance.hr_equipment_request_view_search
 msgid "maintenance Request Search"
-msgstr "Búsqueda de peticiones de mantenimiento"
+msgstr "Búsqueda de orden de trabajo"
 
 #. module: maintenance_requitition_custom
 #: model:ir.model,name:maintenance_requitition_custom.model_maintenance_area
