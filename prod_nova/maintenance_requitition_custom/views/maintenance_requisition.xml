@@ -42,6 +42,9 @@
             <field name="equipment_id" position="before">
                 <field name="mantto_requisition_id" />
             </field>
+            <field name="user_id" position="after">
+                <field name="area_id" />
+            </field>
           </field>
       </record>
 

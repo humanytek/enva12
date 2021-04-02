@@ -19,6 +19,12 @@ class MaintenanceRequest(models.Model):
 
     )
 
+    area_id = fields.Many2one(
+    comodel_name = 'maintenance.area',
+    string = 'Area',
+    store = True,
+    )
+
     @api.multi
     def name_get(self):
         result = []
@@ -46,3 +52,5 @@ class MaintenanceRequest(models.Model):
         self.priority=mantto_requisition.priority
         self.note=mantto_requisition.note
         self.request_date=mantto_requisition.date_request
+        self.user_id=mantto_requisition.assigned_id
+        self.area_id=mantto_requisition.area_id
