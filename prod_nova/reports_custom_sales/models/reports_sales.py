@@ -90,6 +90,7 @@ class ReportsSales(models.AbstractModel):
                         'columns':[
                             {'name':invoice_line.quantity},
                             {'name':invoice_line.price_unit},
+                            {'name':invoice_line.weight},
                         ],
                         })
 
