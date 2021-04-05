@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+      <record id="action_report_sales_nova" model="ir.actions.client">
+          <field name="name">Tendencia de Ventas</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'report.sales.nova'}" />
+      </record>
+      <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
+
+
+    </data>
+</odoo>
