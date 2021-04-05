@@ -33,10 +33,44 @@ class ReportsSales(models.AbstractModel):
 
 
 
+    # def _balance_initial(self,options,line_id,arg):
+    #     tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+    #     if where_clause:
+    #         where_clause = 'AND ' + where_clause
+    #
+    #     sql_query ="""
+    #         SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
+    #             FROM """+tables+"""
+    #             LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
+    #             WHERE aa.group_id = %s """+where_clause+"""
+    #             GROUP BY aa.group_id
+    #     """
+    #     params = [str(arg)] + where_params
+    #
+    #     self.env.cr.execute(sql_query, params)
+    #     result = self.env.cr.fetchone()
+    #     if result==None:
+    #         result=(0,)
+    #
+    #     return result
 
     @api.model
     def _get_lines(self, options, line_id=None):
         lines = []
+
+        invoices=self.env['account_invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid'])],order='order')
+        for invoice in invoices:
+            lines.append({
+            'id': invoice.id,
+            'name': invoice.partner_id,
+            'level': 0,
+            'class': 'activo',
+            'columns':[
+            {'name':},
+            {'name':},
+            {'name':}
+            ],
+            })
         return lines
 
     @api.model
