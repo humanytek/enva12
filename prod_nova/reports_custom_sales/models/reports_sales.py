@@ -18,10 +18,21 @@ class ReportsSales(models.AbstractModel):
     _inherit = 'account.report'
 
     filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
-    filter_all_entries = False
+    # filter_all_entries = False
 
     def _get_columns_name(self, options):
-        return [{'name': ''}, {'name': _('ESTE MES'), 'class': 'number', 'style': 'white-space:nowrap;'}, {'name': _('MES ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},{'name': _('DIC EJ. ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'}]
+        return [
+        {'name': ''}, {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('MES AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG PPTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        ]
+
+
+
 
     @api.model
     def _get_lines(self, options, line_id=None):
