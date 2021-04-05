@@ -58,7 +58,7 @@ class ReportsSales(models.AbstractModel):
     def _get_lines(self, options, line_id=None):
         lines = []
 
-        invoices=self.env['account_invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid'])],order='date_invoice')
+        invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid'])],order='date_invoice')
         if invoices:
             for invoice in invoices:
                 lines.append({
@@ -67,7 +67,7 @@ class ReportsSales(models.AbstractModel):
                 'level': 0,
                 'class': 'activo',
                 'columns':[
-                
+
                 ],
                 })
         return lines
