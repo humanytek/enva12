@@ -63,7 +63,7 @@ class ReportsSales(models.AbstractModel):
             for invoice in invoices:
                 lines.append({
                 'id': invoice.id,
-                'name': invoice.partner_id,
+                'name': invoice.partner_id.name,
                 'level': 0,
                 'class': 'activo',
                 'columns':[
