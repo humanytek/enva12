@@ -13,7 +13,7 @@
         'account_reports'
     ],
     'data': [
-
+        'views/reports_sales.xml',
     ],
     'installable': True,
     'auto_install': False,
