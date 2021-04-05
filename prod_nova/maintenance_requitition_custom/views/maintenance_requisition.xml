@@ -121,6 +121,23 @@
         </field>
       </record>
 
+      <record model="ir.ui.view" id="maintenance_requisition_tree_view">
+        <field name="name">maintenance.requisition.tree</field>
+        <field name="model">maintenance.requisition</field>
+        <field name="arch" type="xml">
+          <tree string="Maintenance Requisition Tree">
+            <field name="name"/>
+            <field name="reference"/>
+            <field name="user_id"/>
+            <field name="area_id"/>
+            <field name="date_request"/>
+            <field name="priority"/>
+            <field name="assigned_id"/>
+            <field name="state"/>
+          </tree>
+        </field>
+      </record>
+
     <record model="ir.actions.act_window" id="maintenance_requisition_list_action">
       <field name="name">Requisicion de Mantenimiento</field>
       <field name="res_model">maintenance.requisition</field>
