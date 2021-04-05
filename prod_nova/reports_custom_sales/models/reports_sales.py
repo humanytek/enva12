@@ -83,7 +83,7 @@ class ReportsSales(models.AbstractModel):
                 for invoice_line in  invoice.invoice_line_ids:
                     lines.append({
                     'id': invoice_line.id,
-                    'name': invoice_line.name,
+                    'name': invoice_line.product_id,
                     'level': 3,
                     'class': 'activo',
                     'columns':[
