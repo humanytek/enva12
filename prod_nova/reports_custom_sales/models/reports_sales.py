@@ -80,17 +80,18 @@ class ReportsSales(models.AbstractModel):
 
                 ],
                 })
-                for invoice_line in  invoice.invoice_line_ids:
-                    lines.append({
-                    'id': invoice_line.id,
-                    'name': invoice_line.product_id.default_code,
-                    'level': 3,
-                    'class': 'activo',
-                    'columns':[
-                        {'name':invoice_line.quantity},
-                        {'name':invoice_line.price_unit},
-                    ],
-                    })
+                for invoice_line in invoice.invoice_line_ids:
+                    if invoice_line.product_id.sale_ok == True:
+                        lines.append({
+                        'id': invoice_line.id,
+                        'name': invoice_line.product_id.default_code,
+                        'level': 3,
+                        'class': 'activo',
+                        'columns':[
+                            {'name':invoice_line.quantity},
+                            {'name':invoice_line.price_unit},
+                        ],
+                        })
 
 
         return lines
