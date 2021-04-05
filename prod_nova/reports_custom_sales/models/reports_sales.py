@@ -22,7 +22,8 @@ class ReportsSales(models.AbstractModel):
 
     def _get_columns_name(self, options):
         return [
-        {'name': ''}, {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -83,10 +84,11 @@ class ReportsSales(models.AbstractModel):
                     lines.append({
                     'id': invoice_line.id,
                     'name': invoice_line.name,
-                    'level': 4,
+                    'level': 3,
                     'class': 'activo',
                     'columns':[
-
+                        {'name':invoice_line.quantity},
+                        {'name':invoice_line.price_unit},
                     ],
                     })
 
