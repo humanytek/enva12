@@ -59,12 +59,21 @@ class ReportsSales(models.AbstractModel):
         lines = []
 
         invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid'])],order='date_invoice')
+        lines.append({
+        'id': 'cliente',
+        'name': 'CLIENTE',
+        'level': 0,
+        'class': 'cliente',
+        'columns':[
+
+        ],
+        })
         if invoices:
             for invoice in invoices:
                 lines.append({
                 'id': invoice.id,
                 'name': invoice.partner_id.name,
-                'level': 0,
+                'level': 2,
                 'class': 'activo',
                 'columns':[
 
