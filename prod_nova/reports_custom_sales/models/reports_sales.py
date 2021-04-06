@@ -66,7 +66,7 @@ class ReportsSales(models.AbstractModel):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
-        invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='date_applied')
+        invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='date_applied,partner_id')
         lines.append({
         'id': 'cliente',
         'name': 'CLIENTE',
