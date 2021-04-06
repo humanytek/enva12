@@ -29,7 +29,7 @@ class ReportsSales(models.AbstractModel):
         {'name': _('UM'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PESO TOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -101,6 +101,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
                             {'name':invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency)},
                             {'name':invoice_line.quantity*invoice_line.weight},
+                            {'name':0 if invoice_line.weight else (invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight)},
                         ],
                         })
 
