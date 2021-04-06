@@ -40,33 +40,41 @@ class ReportsSales(models.AbstractModel):
 
 
 
-    # def _balance_initial(self,options,line_id,arg):
-    #     tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
-    #     if where_clause:
-    #         where_clause = 'AND ' + where_clause
-    #
-    #     sql_query ="""
-    #         SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
-    #             FROM """+tables+"""
-    #             LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
-    #             WHERE aa.group_id = %s """+where_clause+"""
-    #             GROUP BY aa.group_id
-    #     """
-    #     params = [str(arg)] + where_params
-    #
-    #     self.env.cr.execute(sql_query, params)
-    #     result = self.env.cr.fetchone()
-    #     if result==None:
-    #         result=(0,)
-    #
-    #     return result
+    def _invoice_line_partner(self,options,line_id):
+        # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+        # if where_clause:
+        #     where_clause = 'AND ' + where_clause
+        date_from = options['date']['date_from']
+        date_to = options['date']['date_to']
+        sql_query ="""
+            SELECT
+                    rp.name,
+                    SUM(ail.price_subtotal_company),
+                    SUM(ail.total_weight)
+                    FROM account_invoice_line ail
+                    LEFT JOIN product_product pp ON pp.id=ail.product_id
+                    LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                    LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND date_applied => %s AND date_applied =< %s
+                    GROUP BY
+                    rp.name
+        """
+        # params = [str(arg)] + where_params
+
+        self.env.cr.execute(sql_query, date_from, date_to)
+        result = self.env.cr.fetchall()
+        # if result==None:
+        #     result=(0,)
+
+        return result
 
     @api.model
     def _get_lines(self, options, line_id=None):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
-        invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
+        invoices = self._invoice_line_partner(options,line_id)
+        # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
         'name': 'CLIENTE',
@@ -76,35 +84,45 @@ class ReportsSales(models.AbstractModel):
 
         ],
         })
+
         if invoices:
             for invoice in invoices:
-                if invoice.partner_id==invoice.partner_id:
-                    lines.append({
-                    'id': invoice.id,
-                    'name': invoice.partner_id.name,
-                    'level': 2,
-                    'class': 'activo',
-                    'columns':[
+                 lines.append({
+                        'id': invoice['id'],
+                        'name': invoice['name'],
+                        'level': 2,
+                        'class': 'activo',
+                        'columns':[
 
-                    ],
-                    })
-                    for invoice_line in invoice.invoice_line_ids:
-                        if invoice_line.product_id.sale_ok == True:
-                            lines.append({
-                            'id': invoice_line.id,
-                            'name': invoice_line.product_id.default_code,
-                            'level': 3,
-                            'class': 'activo',
-                            'columns':[
-                                {'name':"{:,}".format(invoice_line.quantity)},
-                                {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
-                                {'name':"{:,}".format(invoice_line.weight)},
-                                {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
-                                {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
-                                {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
-                                {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
-                            ],
-                            })
+                        ],
+                        })
+        #     for invoice in invoices:
+        #         lines.append({
+        #         'id': invoice.id,
+        #         'name': invoice.partner_id.name,
+        #         'level': 2,
+        #         'class': 'activo',
+        #         'columns':[
+        #
+        #         ],
+        #         })
+        #         for invoice_line in invoice.invoice_line_ids:
+        #             if invoice_line.product_id.sale_ok == True:
+        #                 lines.append({
+        #                 'id': invoice_line.id,
+        #                 'name': invoice_line.product_id.default_code,
+        #                 'level': 3,
+        #                 'class': 'activo',
+        #                 'columns':[
+        #                     {'name':"{:,}".format(invoice_line.quantity)},
+        #                     {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
+        #                     {'name':"{:,}".format(invoice_line.weight)},
+        #                     {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
+        #                     {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
+        #                     {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
+        #                     {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
+        #                 ],
+        #                 })
 
 
         return lines
