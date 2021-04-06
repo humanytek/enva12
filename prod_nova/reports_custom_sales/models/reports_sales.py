@@ -48,9 +48,9 @@ class ReportsSales(models.AbstractModel):
         date_to = options['date']['date_to']
         sql_query ="""
             SELECT
-                    rp.name,
-                    SUM(ail.price_subtotal_company),
-                    SUM(ail.total_weight)
+                    rp.name as cliente,
+                    SUM(ail.price_subtotal_company) as subtotal,
+                    SUM(ail.total_weight) as total weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
