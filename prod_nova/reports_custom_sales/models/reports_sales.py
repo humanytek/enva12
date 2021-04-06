@@ -101,7 +101,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
                             {'name':invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency)},
                             {'name':invoice_line.quantity*invoice_line.weight},
-                            {'name':0 if invoice_line.weight else (invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight)},
+                            {'name':0 if invoice_line.weight==False else (invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight)},
                         ],
                         })
 
