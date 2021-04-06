@@ -93,6 +93,9 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
 
+                            {'name':self.format_value(invoice[2])},
+                            {'name':"{:,}".format(invoice[1])},
+
                         ],
                         })
         #     for invoice in invoices:
