@@ -45,7 +45,8 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     SUM(ail.price_subtotal_company) as subtotal,
-                    SUM(ail.total_weight) as total_weight
+                    SUM(ail.total_weight) as total_weight,
+                    ai.user_id
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
@@ -92,6 +93,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':"{:,}".format(invoice[2])},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
+                            {'name':invoice[3]},
 
 
                         ],
