@@ -23,14 +23,9 @@ class ReportsSales(models.AbstractModel):
     def _get_columns_name(self, options):
         return [
         {'name': ''},
-        {'name': _('CANTIDAD'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PRECIO UNITARIO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PESO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('UM'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PESO TOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MES AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -93,7 +88,7 @@ class ReportsSales(models.AbstractModel):
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-
+                            {'name':},
                             {'name':"{:,}".format(invoice[2])},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
