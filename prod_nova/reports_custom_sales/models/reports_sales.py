@@ -93,8 +93,10 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
 
-                            {'name':self.format_value(invoice[2])},
-                            {'name':"{:,}".format(invoice[1])},
+                            {'name':"{:,}".format(invoice[2])},
+                            {'name':self.format_value(invoice[1])},
+                            {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
+
 
                         ],
                         })
