@@ -53,6 +53,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    AND ai.user_id not in (90) 
                     GROUP BY rp.name,ai.user_id
                     ORDER BY rp.name ASC
         """
@@ -91,7 +92,7 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
                             {'name':''},
-                            {'name':"{:,}".format(invoice[2])},
+                            {'name':0 if invoice[2]==0 else "{:,}".format(invoice[2]/1000)},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
                             {'name':invoice[3]},
