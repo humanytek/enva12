@@ -95,13 +95,13 @@ class ReportsSales(models.AbstractModel):
                         'level': 3,
                         'class': 'activo',
                         'columns':[
-                            {'name':invoice_line.quantity},
-                            {'name':invoice_line.price_unit*invoice.type_currency},
-                            {'name':invoice_line.weight},
+                            {'name':self.format_value(invoice_line.quantity)},
+                            {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
+                            {'name':"{:,}".format(invoice_line.weight)},
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
-                            {'name':invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency)},
-                            {'name':invoice_line.quantity*invoice_line.weight},
-                            {'name': 0 if invoice_line.weight==False else (invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight)},
+                            {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
+                            {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
+                            {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
                         ],
                         })
 
