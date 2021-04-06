@@ -45,7 +45,7 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             SELECT
                     rp.name as cliente,
-                    SUM(ail.price_subtotal_company) as subtotal,
+                    SUM(ail.price_unit*ail.type_currency) as subtotal,
                     SUM(ail.total_weight) as total_weight,
                     ai.user_id
                     FROM account_invoice_line ail
