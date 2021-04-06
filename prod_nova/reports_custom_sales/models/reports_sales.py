@@ -57,6 +57,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     GROUP BY rp.name
+                    ORDER BY rp.name ASC
         """
         # params = [str(arg)] + where_params
 
