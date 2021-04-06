@@ -87,8 +87,8 @@ class ReportsSales(models.AbstractModel):
         if invoices:
             for invoice in invoices:
                  lines.append({
-                        'id': invoice['name'],
-                        'name': invoice['name'],
+                        'id': str(invoice['name']),
+                        'name': str(invoice['name']),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
