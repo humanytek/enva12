@@ -50,7 +50,7 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     SUM(ail.price_subtotal_company) as subtotal,
-                    SUM(ail.total_weight) as total weight
+                    SUM(ail.total_weight) as total_weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
@@ -87,8 +87,8 @@ class ReportsSales(models.AbstractModel):
         if invoices:
             for invoice in invoices:
                  lines.append({
-                        'id': str(invoice['name']),
-                        'name': str(invoice['name']),
+                        'id': str(invoice['cliente']),
+                        'name': str(invoice['cliente']),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
