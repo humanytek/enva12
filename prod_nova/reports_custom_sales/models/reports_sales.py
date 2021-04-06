@@ -96,10 +96,10 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
                             {'name':invoice_line.quantity},
-                            {'name':invoice_line.price_unit},
+                            {'name':invoice_line.price_unit*invoice.type_currency},
                             {'name':invoice_line.weight},
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
-                            {'name':invoice_line.quantity*invoice_line.price_unit},
+                            {'name':invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency)},
                             {'name':invoice_line.quantity*invoice_line.weight},
                         ],
                         })
