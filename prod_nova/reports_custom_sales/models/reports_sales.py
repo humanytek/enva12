@@ -78,32 +78,33 @@ class ReportsSales(models.AbstractModel):
         })
         if invoices:
             for invoice in invoices:
-                lines.append({
-                'id': invoice.id,
-                'name': invoice.partner_id.name,
-                'level': 2,
-                'class': 'activo',
-                'columns':[
+                if invoice.partner_id==invoice.partner_id:
+                    lines.append({
+                    'id': invoice.id,
+                    'name': invoice.partner_id.name,
+                    'level': 2,
+                    'class': 'activo',
+                    'columns':[
 
-                ],
-                })
-                for invoice_line in invoice.invoice_line_ids:
-                    if invoice_line.product_id.sale_ok == True:
-                        lines.append({
-                        'id': invoice_line.id,
-                        'name': invoice_line.product_id.default_code,
-                        'level': 3,
-                        'class': 'activo',
-                        'columns':[
-                            {'name':"{:,}".format(invoice_line.quantity)},
-                            {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
-                            {'name':"{:,}".format(invoice_line.weight)},
-                            {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
-                            {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
-                            {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
-                            {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
-                        ],
-                        })
+                    ],
+                    })
+                    for invoice_line in invoice.invoice_line_ids:
+                        if invoice_line.product_id.sale_ok == True:
+                            lines.append({
+                            'id': invoice_line.id,
+                            'name': invoice_line.product_id.default_code,
+                            'level': 3,
+                            'class': 'activo',
+                            'columns':[
+                                {'name':"{:,}".format(invoice_line.quantity)},
+                                {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
+                                {'name':"{:,}".format(invoice_line.weight)},
+                                {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
+                                {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
+                                {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
+                                {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
+                            ],
+                            })
 
 
         return lines
