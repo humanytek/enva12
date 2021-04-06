@@ -96,7 +96,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':invoice_line.quantity},
                             {'name':invoice_line.price_unit},
                             {'name':invoice_line.weight},
-                            {'name':invoice_line.uom_id.name},
+                            {'name':invoice_line.uom_id.name +' '+invoice_line.uom_id.id},
                         ],
                         })
 
