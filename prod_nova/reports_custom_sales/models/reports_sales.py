@@ -25,6 +25,7 @@ class ReportsSales(models.AbstractModel):
         {'name': ''},
         {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
