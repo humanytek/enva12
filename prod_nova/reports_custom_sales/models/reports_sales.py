@@ -27,6 +27,8 @@ class ReportsSales(models.AbstractModel):
         {'name': _('PRECIO UNITARIO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PESO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('UM'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PESO TOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -97,6 +99,8 @@ class ReportsSales(models.AbstractModel):
                             {'name':invoice_line.price_unit},
                             {'name':invoice_line.weight},
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
+                            {'name':invoice_line.quantity*invoice_line.price_unit},
+                            {'name':invoice_line.quantity*invoice_line.weight},
                         ],
                         })
 
