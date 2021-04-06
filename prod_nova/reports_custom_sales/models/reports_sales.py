@@ -95,7 +95,7 @@ class ReportsSales(models.AbstractModel):
                         'level': 3,
                         'class': 'activo',
                         'columns':[
-                            {'name':self.format_value(invoice_line.quantity)},
+                            {'name':"{:,}".format(invoice_line.quantity)},
                             {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
                             {'name':"{:,}".format(invoice_line.weight)},
                             {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
