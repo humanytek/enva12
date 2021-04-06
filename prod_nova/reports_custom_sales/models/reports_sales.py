@@ -54,7 +54,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
-                    AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%'
+                    AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%'
                     GROUP BY rp.name,ai.user_id
                     ORDER BY rp.name ASC
         """
