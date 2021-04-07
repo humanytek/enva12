@@ -86,7 +86,7 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self.env['trend.budget.sales'].search([('name','=',157),('date_from','>=',date_from),('date_to','<=',date_to)])
+                budget=self.env['trend.budget.sales'].search([('name','=',157)])
                  lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
