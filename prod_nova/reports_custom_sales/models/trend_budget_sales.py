@@ -4,7 +4,7 @@ from odoo import api, fields, models,_
 from odoo.exceptions import UserError
 
 
-class BudgetStatementIncome(models.Model):
+class TrendbudgetSales(models.Model):
     _name = 'trend.budget.sales'
 
     name = fields.Many2one(
