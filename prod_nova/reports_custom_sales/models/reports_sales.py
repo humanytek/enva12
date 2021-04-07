@@ -67,6 +67,19 @@ class ReportsSales(models.AbstractModel):
 
         return result
 
+
+
+    def _get_budget_sales(self, nstate, date_f,date_t):
+        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',nstate),('date_from','>=',date_f),('date_to','<=',date_t)])
+
+        budgetacum=0
+        if budget:
+            for b in budget:
+                budgetacum+=b.kg_per_month
+
+        return budgetacum
+
+
     @api.model
     def _get_lines(self, options, line_id=None):
         lines = []
@@ -86,14 +99,14 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self.env['trend.budget.sales'].search([])
+
                  lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':buget[0].id},
+                            {'name':''},
                             {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
