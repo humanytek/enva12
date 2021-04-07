@@ -11,6 +11,19 @@
       </record>
       <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
 
+      <record model="ir.actions.act_window" id="trend_budget_sales_list_action">
+        <field name="name">Presupuesto Ventas Tendencia</field>
+        <field name="res_model">trend.budget.sales</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer presupuesto de ventas
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
 
     </data>
 </odoo>
