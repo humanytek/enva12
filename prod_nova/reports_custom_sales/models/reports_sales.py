@@ -46,7 +46,8 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
-                    SUM(ail.total_weight) as total_weight
+                    SUM(ail.total_weight) as total_weight,
+                    rp.id
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -54,7 +55,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                    GROUP BY rp.name
+                    GROUP BY rp.id,rp.name
                     ORDER BY rp.name ASC
         """
         # params = [str(arg)] + where_params
@@ -85,13 +86,14 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
+                budget=self.env['trend.budget.sales'].search([('name','>=',invoice[3]),('date_from','>=',date_from),('date_to','<=',date_to)])
                  lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':''},
+                            {'name':0 if budget==False else budget.kg_per_month},
                             {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
