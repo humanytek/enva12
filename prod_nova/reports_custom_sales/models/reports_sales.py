@@ -86,14 +86,14 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self.env['trend.budget.sales'].search([('name','=','AIRSYSTEM S.A. DE C.V.' )])
+                budget=self.env['trend.budget.sales'].search([('name','=','AIRSYSTEM S.A. DE C.V.')])
                  lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':0 if budget==False else budget.kg_per_month},
+                            {'name':''},
                             {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
                             {'name':self.format_value(invoice[1])},
                             {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
