@@ -139,7 +139,7 @@ class ReportsSales(models.AbstractModel):
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':},
+                            {'name':''},
                             # {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
                             # {'name':self.format_value(invoice[1])},
                             # {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
