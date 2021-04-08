@@ -10,7 +10,7 @@ class TrendbudgetSales(models.Model):
     name = fields.Many2one(
     comodel_name ='res.partner',
     string = 'Cliente',
-    store=True,
+    store = True,
     )
 
 
