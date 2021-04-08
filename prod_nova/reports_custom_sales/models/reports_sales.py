@@ -61,7 +61,7 @@ class ReportsSales(models.AbstractModel):
 
 
         self.env.cr.execute(sql_query)
-        result = self.env.cr.fetchone()
+        result = self.env.cr.fetchall()
         # if result==None:
         #     result=(0,)
 
