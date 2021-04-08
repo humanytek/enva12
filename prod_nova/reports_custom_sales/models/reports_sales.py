@@ -24,9 +24,13 @@ class ReportsSales(models.AbstractModel):
         return [
         {'name': ''},
         {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG REAL PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('AVANCE'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('DESVIACIÓN'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('DESVIACIÓN PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MES AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -114,6 +118,18 @@ class ReportsSales(models.AbstractModel):
 
         return budgetacum
 
+    def _get_budget_sales_price(self, nstate, date_f,date_t):
+        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',nstate),('date_from','>=',date_f),('date_to','<=',date_t)])
+
+        budgetacum=0
+        contador=count(budget)
+        if budget:
+            for b in budget:
+                budgetacum+=b.price_unit_per_month
+
+        budgetacum=budgetacum/contador
+        return budgetacum
+
 
     @api.model
     def _get_lines(self, options, line_id=None):
@@ -137,7 +153,7 @@ class ReportsSales(models.AbstractModel):
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
-
+                price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
@@ -145,9 +161,12 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
                             {'name':0 if budget==False else "{:,.2f}".format(budget/1000) },
+                            {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':"{:,.2f}".format(invoices_line[2]/1000)},
                             {'name':self.format_value(invoices_line[1])},
-                            {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
+                            {'name':0 if invoices_line[2]==0 else self.format_value((budget/1000)/(invoices_line[2]/1000))},
+                            {'name':0},
+                            {'name':0},
 
                         ],
                         })
