@@ -145,7 +145,9 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
                             {'name':0 if budget==False else "{:,.2f}".format(budget/1000) },
-                            {'name':invoices_line[2]},
+                            {'name':"{:,.2f}".format(invoices_line[2]/1000)},
+                            {'name':self.format_value(invoices_line[1])},
+                            {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
 
                         ],
                         })
