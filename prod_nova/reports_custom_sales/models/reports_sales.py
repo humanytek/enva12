@@ -132,7 +132,7 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self._get_budget_sales(157, date_from,date_to)
+                budget=self._get_budget_sales(157, str(date_from),str(date_to))
                  lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
