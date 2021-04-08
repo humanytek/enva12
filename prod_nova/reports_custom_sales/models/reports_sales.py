@@ -46,8 +46,7 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
-                    SUM(ail.total_weight) as total_weight,
-                    rp.id
+                    SUM(ail.total_weight) as total_weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -55,15 +54,15 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ail.partner_id="""+partner_id+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                    GROUP BY rp.id,rp.name
+                    GROUP BY rp.name
                     ORDER BY rp.name ASC
         """
 
 
         self.env.cr.execute(sql_query)
         result = self.env.cr.fetchone()
-        # if result==None:
-        #     result=(0,)
+        if result==None:
+            result=('',0,0)
 
         return result
 
