@@ -184,8 +184,8 @@ class ReportsSales(models.AbstractModel):
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
-                invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), fields.Date.from_string(date_from),fields.Date.from_string(date_to))
-                invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), date_from,date_to)
+                invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),date_from,date_to)
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 if price_per_kg and price_per_kg>0:
                     if invoices_line[1]>0:
