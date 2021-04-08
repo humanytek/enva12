@@ -215,7 +215,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0},
                             {'name':desv_price_per_kg },
                             {'name':''},
-                            {'name':"{:,.2f}".format(invoices_line_promedio[2]) },
+                            {'name':0 if invoices_line_promedio[2]==0 else "{:,.2f}".format(invoices_line_promedio[2]/12) },
                             {'name':"{:,.2f}".format(invoices_line_lymonth[2]) },
 
                         ],
