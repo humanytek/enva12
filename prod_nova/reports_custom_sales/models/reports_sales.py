@@ -75,7 +75,8 @@ class ReportsSales(models.AbstractModel):
         date_to = options['date']['date_to']
         sql_query ="""
             (SELECT
-                    rp.name as cliente
+                    rp.name as cliente,
+                    rp.id
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -85,7 +86,8 @@ class ReportsSales(models.AbstractModel):
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.name)
                     UNION
-                    (SELECT rp.name as cliente
+                    (SELECT rp.name as cliente,
+                    rp.id
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+date_to+"""'
@@ -132,7 +134,7 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self._get_budget_sales(157, fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
