@@ -8,9 +8,9 @@ class TrendbudgetSales(models.Model):
     _name = 'trend.budget.sales'
 
     name = fields.Many2one(
-    comodel_name ='res.partner',
-    string = 'Cliente',
-    store = True,
+        comodel_name = 'res.partner',
+        string = 'Cliente',
+        store = True,
     )
 
 
@@ -27,11 +27,11 @@ class TrendbudgetSales(models.Model):
     )
 
     kg_per_month=fields.Float(
-    string='Kilogramos por mes',
-    store=True,
+        string='Kilogramos por mes',
+        store=True,
     )
 
     price_unit_per_month=fields.Float(
-    string='Precio por mes',
-    store=True,
+        string='Precio por mes',
+        store=True,
     )
