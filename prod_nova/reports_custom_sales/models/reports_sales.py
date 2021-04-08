@@ -61,7 +61,7 @@ class ReportsSales(models.AbstractModel):
         params = [str(partner_id)]
 
         self.env.cr.execute(sql_query,params)
-        result = self.env.cr.fetchall()
+        result = self.env.cr.fetchone()
         # if result==None:
         #     result=(0,)
 
