@@ -60,7 +60,7 @@ class ReportsSales(models.AbstractModel):
         """
         # params = [str(arg)] + where_params
 
-        self.env.cr.execute(sql_query,str(partner_id))
+        self.env.cr.execute(sql_query,[str(partner_id)])
         result = self.env.cr.fetchall()
         # if result==None:
         #     result=(0,)
