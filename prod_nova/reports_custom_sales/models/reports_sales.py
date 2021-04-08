@@ -120,14 +120,17 @@ class ReportsSales(models.AbstractModel):
 
     def _get_budget_sales_price(self, nstate, date_f,date_t):
         budget=self.env['trend.budget.sales'].search(['&','&',('name','=',nstate),('date_from','>=',date_f),('date_to','<=',date_t)])
-
+        contador=0
         budgetacum=0
         contador=count(budget)
         if budget:
             for b in budget:
                 budgetacum+=b.price_unit_per_month
+        if contador!=0:
+            budgetacum=budgetacum/contador
+        else:
+            budgetacum=budgetacum       
 
-        budgetacum=budgetacum/contador
         return budgetacum
 
 
