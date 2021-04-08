@@ -67,6 +67,39 @@ class ReportsSales(models.AbstractModel):
 
         return result
 
+    def _partner_trend(self,options,line_id):
+        # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+        # if where_clause:
+        #     where_clause = 'AND ' + where_clause
+        date_from = options['date']['date_from']
+        date_to = options['date']['date_to']
+        sql_query ="""
+            (SELECT
+                    rp.name as cliente
+                    FROM account_invoice_line ail
+                    LEFT JOIN product_product pp ON pp.id=ail.product_id
+                    LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
+                    LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                    LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                    GROUP BY rp.name)
+                    UNION
+                    (SELECT rp.name as cliente
+                    FROM trend_budget_sales tbs
+                    LEFT JOIN res_partner rp ON rp.id=tbs.name
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+date_to+"""'
+                    )
+                    ORDER BY cliente ASC
+        """
+        # params = [str(arg)] + where_params
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.fetchall()
+        # if result==None:
+        #     result=(0,)
+
+        return result
 
 
     def _get_budget_sales(self, nstate, date_f,date_t):
@@ -85,7 +118,7 @@ class ReportsSales(models.AbstractModel):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
-        invoices = self._invoice_line_partner(options,line_id)
+        invoices = self._partner_trend(options,line_id)
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -106,10 +139,10 @@ class ReportsSales(models.AbstractModel):
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':''},
-                            {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
-                            {'name':self.format_value(invoice[1])},
-                            {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
+                            # {'name':''},
+                            # {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
+                            # {'name':self.format_value(invoice[1])},
+                            # {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
 
 
 
