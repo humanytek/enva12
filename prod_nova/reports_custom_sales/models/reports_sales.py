@@ -36,7 +36,7 @@ class ReportsSales(models.AbstractModel):
 
 
 
-    def _invoice_line_partner(self,options,line_id):
+    def _invoice_line_partner(self,options,line_id,partner_id):
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         # if where_clause:
         #     where_clause = 'AND ' + where_clause
@@ -53,7 +53,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
-                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND rp.id="""+partner_id+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.id,rp.name
                     ORDER BY rp.name ASC
@@ -122,6 +122,7 @@ class ReportsSales(models.AbstractModel):
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
         invoices = self._partner_trend(options,line_id)
+
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -136,18 +137,17 @@ class ReportsSales(models.AbstractModel):
         if invoices:
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                invoices_line=self._invoice_line_partner(options,line_id,partner_id)
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':0 if budget==False else budget },
-                            # {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
-                            # {'name':self.format_value(invoice[1])},
-                            # {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
-
-
+                            {'name':0 if budget==False else "{:,.2f}".format(budget/1000) },
+                            {'name':0 if invoices_line[2]==0 else "{:,.2f}".format(invoices_line[2]/1000)},
+                            {'name':self.format_value(invoices_line[1])},
+                            {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
 
                         ],
                         })
