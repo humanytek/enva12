@@ -185,7 +185,7 @@ class ReportsSales(models.AbstractModel):
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
                 invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), date_from,date_to)
-                invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),date_from,date_to)
+                invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),date_from+relativedelta(years=-1),date_from+relativedelta(months=1,years=-1)+timedelta(days=-1))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 if price_per_kg and price_per_kg>0:
                     if invoices_line[1]>0:
@@ -212,6 +212,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if invoices_line[2]==0 else self.format_value((budget/1000)/(invoices_line[2]/1000))},
                             {'name':0},
                             {'name':desv_price_per_kg },
+                            {'name':''},
                             {'name':"{:,.2f}".format(invoices_line_promedio[2]) },
                             {'name':"{:,.2f}".format(invoices_line_lymonth[2]) },
 
