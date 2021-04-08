@@ -53,14 +53,14 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
-                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND rp.id='"""+partner_id+"""' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND rp.id=%s AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.id,rp.name
                     ORDER BY rp.name ASC
         """
         # params = [str(arg)] + where_params
 
-        self.env.cr.execute(sql_query)
+        self.env.cr.execute(sql_query,partner_id)
         result = self.env.cr.fetchall()
         # if result==None:
         #     result=(0,)
