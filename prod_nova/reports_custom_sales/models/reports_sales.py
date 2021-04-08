@@ -103,7 +103,7 @@ class ReportsSales(models.AbstractModel):
 
 
     def _get_budget_sales(self, nstate, date_f,date_t):
-        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',nstate),('date_from','>=',date_f),('date_to','<=',date_t)])
+        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',157),('date_from','>=',date_f),('date_to','<=',date_t)])
 
         budgetacum=0
         if budget:
@@ -132,14 +132,14 @@ class ReportsSales(models.AbstractModel):
 
         if invoices:
             for invoice in invoices:
-                budget=self._get_budget_sales(invoice[0], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                budget=self._get_budget_sales(157, fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':0 if budget==False else budget[0] },
+                            {'name':0 if budget[0]==False else budget[0] },
                             # {'name':0 if invoice[2]==0 else "{:,.2f}".format(invoice[2]/1000)},
                             # {'name':self.format_value(invoice[1])},
                             # {'name':0 if invoice[2]==0 else self.format_value(invoice[1]/invoice[2])},
