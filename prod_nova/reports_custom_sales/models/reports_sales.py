@@ -167,6 +167,8 @@ class ReportsSales(models.AbstractModel):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
+        first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] +relativedelta(years=-1)
+        last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
 
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
@@ -184,7 +186,7 @@ class ReportsSales(models.AbstractModel):
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
-                invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), date_from,date_to)
+                invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
                 invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 if price_per_kg and price_per_kg>0:
