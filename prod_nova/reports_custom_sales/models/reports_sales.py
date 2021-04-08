@@ -149,12 +149,23 @@ class ReportsSales(models.AbstractModel):
 
         ],
         })
-
+        desv_price_per_kg=0
         if invoices:
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                if price_per_kg and price_per_kg>0:
+                    if invoices_line[1]>0:
+                        if invoices_line[2]>0:
+                            desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
+                        else:
+                            desv_price_per_kg=0
+                    else:
+                        desv_price_per_kg=0
+                else:
+                    desv_price_per_kg=0
+
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
@@ -168,7 +179,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':0 if invoices_line[2]==0 else self.format_value((budget/1000)/(invoices_line[2]/1000))},
                             {'name':0},
-                            {'name':0 if (invoices_line[1]/invoices_line[2])==0 or invoices_line[2]==0 or price_per_kg==False  else price_per_kg/((invoices_line[1]/invoices_line[2])-1) },
+                            {'name':desv_price_per_kg },
 
                         ],
                         })
