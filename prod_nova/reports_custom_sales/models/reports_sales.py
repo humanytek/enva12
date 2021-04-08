@@ -167,7 +167,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':"{:,.2f}".format(invoices_line[2]/1000)},
                             {'name':self.format_value(invoices_line[1])},
-                            {'name':self.format_value(invoices_line[1]/invoices_line[2])},
+                            {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':0 if invoices_line[2]==0 else self.format_value((budget/1000)/(invoices_line[2]/1000))},
                             {'name':0},
                             {'name':0},
