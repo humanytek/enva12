@@ -58,9 +58,9 @@ class ReportsSales(models.AbstractModel):
                     GROUP BY rp.id,rp.name
                     ORDER BY rp.name ASC
         """
-        params = [str(partner_id)]
 
-        self.env.cr.execute(sql_query,params)
+
+        self.env.cr.execute(sql_query,(partner_id))
         result = self.env.cr.fetchone()
         # if result==None:
         #     result=(0,)
