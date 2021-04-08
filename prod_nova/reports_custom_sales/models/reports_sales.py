@@ -105,7 +105,7 @@ class ReportsSales(models.AbstractModel):
 
 
     def _get_budget_sales(self, nstate, date_f,date_t):
-        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',157),('date_from','>=',date_f),('date_to','<=',date_t)])
+        budget=self.env['trend.budget.sales'].search(['&','&',('name','=',nstate),('date_from','>=',date_f),('date_to','<=',date_t)])
 
         budgetacum=0
         if budget:
