@@ -138,16 +138,15 @@ class ReportsSales(models.AbstractModel):
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.name,rp.id)
-                    UNION ALL
+                    UNION
                     (SELECT
                     rp.name as cliente,
-                    rp.id,
-                    tbs.kg_per_month
+                    rp.id
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     )
-                    ORDER BY tbs.kg_per_month ASC
+                    ORDER BY cliente ASC
         """
         # params = [str(arg)] + where_params
 
