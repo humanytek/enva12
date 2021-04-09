@@ -129,8 +129,7 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             (SELECT
                     rp.name as cliente,
-                    rp.id,
-                    tbs.kg_per_month==0 as tonelada_presupuesto
+                    rp.id
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -142,13 +141,12 @@ class ReportsSales(models.AbstractModel):
                     UNION
                     (SELECT
                     rp.name as cliente,
-                    rp.id,
-                    tbs.kg_per_month as tonelada_presupuesto
+                    rp.id
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     )
-                    ORDER BY tonelada_presupuesto ASC
+                    ORDER BY cliente ASC
         """
         # params = [str(arg)] + where_params
 
