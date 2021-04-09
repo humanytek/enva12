@@ -206,7 +206,7 @@ class ReportsSales(models.AbstractModel):
         desv_price_per_kg=0
         if invoices:
             for invoice in invoices:
-                budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
+                budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
                 invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
                 invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
