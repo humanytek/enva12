@@ -141,7 +141,8 @@ class ReportsSales(models.AbstractModel):
                     UNION
                     (SELECT
                     rp.name as cliente,
-                    rp.id
+                    rp.id,
+                    tbs.kg_per_month
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
