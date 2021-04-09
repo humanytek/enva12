@@ -188,6 +188,7 @@ class ReportsSales(models.AbstractModel):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
+        df=fields.Date.from_string(date_from)
         first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] +relativedelta(years=-1)
         last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
@@ -210,7 +211,7 @@ class ReportsSales(models.AbstractModel):
                 invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
                 invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_to))
-                bussines_days=self.env['bussines.days'].search([('name','=',str(date_from.month)),('year','=',str(date_from.year))])
+                bussines_days=self.env['bussines.days'].search([('name','=',str(df.month)),('year','=',str(df.year))])
                 if price_per_kg and price_per_kg>0:
                     if invoices_line[1]>0:
                         if invoices_line[2]>0:
