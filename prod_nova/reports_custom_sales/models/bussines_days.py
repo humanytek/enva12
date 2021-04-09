@@ -30,13 +30,13 @@ class BussinesDays(models.Model):
         store=True,
     )
 
-    bussines_days = Integer(
+    bussines_days = fields.Integer(
         string= 'Dias Habiles',
         required=True,
         store = True,
     )
 
-    year = Integer(
+    year = fields.Integer(
         string = 'Año',
         required= True,
         store = True,
