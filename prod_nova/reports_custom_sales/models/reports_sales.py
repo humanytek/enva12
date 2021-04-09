@@ -238,7 +238,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if invoices_line[2]==0 else self.format_value((budget/1000)/(invoices_line[2]/1000))},
                             {'name':0},
                             {'name':desv_price_per_kg },
-                            {'name':0 if self._billed_days(options,line_id)==0 else ((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days},
+                            {'name':0 if self._billed_days(options,line_id)==0 or budget==False else self.format_value((((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)/1000)},
                             {'name':0 if invoices_line_promedio[2]==0 else "{:,.2f}".format(invoices_line_promedio[2]/12) },
                             {'name':"{:,.2f}".format(invoices_line_lymonth[2]) },
 
