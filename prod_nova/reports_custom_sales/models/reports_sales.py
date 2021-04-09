@@ -125,6 +125,7 @@ class ReportsSales(models.AbstractModel):
         #     where_clause = 'AND ' + where_clause
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
+        df=fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)
         sql_query ="""
             (SELECT
                     rp.name as cliente,
@@ -143,7 +144,7 @@ class ReportsSales(models.AbstractModel):
                     rp.id
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
-                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1))+"""'
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+df+"""'
                     )
                     ORDER BY cliente ASC
         """
