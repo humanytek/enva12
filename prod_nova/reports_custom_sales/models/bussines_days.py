@@ -25,7 +25,7 @@ class BussinesDays(models.Model):
 
     name = fields.Selection(
         NAME_MONTH,
-        'MES',
+        'Mes',
         required=True,
         store=True,
     )
@@ -36,7 +36,7 @@ class BussinesDays(models.Model):
         store = True,
     )
 
-    year = fields.Integer(
+    year = fields.Char(
         string = 'Año',
         required= True,
         store = True,
