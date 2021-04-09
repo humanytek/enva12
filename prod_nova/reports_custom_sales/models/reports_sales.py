@@ -143,7 +143,7 @@ class ReportsSales(models.AbstractModel):
                     rp.id
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
-                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+date_to+"""'
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1))+"""'
                     )
                     ORDER BY cliente ASC
         """
