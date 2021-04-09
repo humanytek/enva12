@@ -215,7 +215,9 @@ class ReportsSales(models.AbstractModel):
                 if price_per_kg and price_per_kg>0:
                     if invoices_line[1]>0:
                         if invoices_line[2]>0:
-                            desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
+                             desv_price_per_kg=((invoices_line[1]/invoices_line[2])-price_per_kg)/price_per_kg
+                            # desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
+
                         else:
                             desv_price_per_kg=0
                     else:
@@ -235,8 +237,8 @@ class ReportsSales(models.AbstractModel):
                             # {'name':self.format_value(invoices_line[1])},
 
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
-                            {'name':0 if invoices_line[2]==0 else "{:.2%}".format((budget/1000)/(invoices_line[2]/1000))},
-                            {'name':0},
+                            {'name':0 if invoices_line[2]==0 else "{:.2%}".format((invoices_line[2]/1000)/(budget/1000))},
+                            {'name':0 if budget==False else "{:.2%}".format(((invoices_line[2]/1000)-(budget/1000))/(budget/1000))},
                             {'name':"{:.2%}".format(desv_price_per_kg) },
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,.2f}".format(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)},
                             {'name':0 if invoices_line_promedio[2]==0 else "{:,.2f}".format(invoices_line_promedio[2]/12) },
