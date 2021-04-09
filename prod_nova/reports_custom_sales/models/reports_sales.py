@@ -75,7 +75,7 @@ class ReportsSales(models.AbstractModel):
         date_to = options['date']['date_to']
         sql_query ="""
             SELECT
-                    DISTINCT(ai.date_applied) as dias_facturados,
+                    DISTINCT(ai.date_applied) as dias_facturados
                     FROM account_invoice ai
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90)
