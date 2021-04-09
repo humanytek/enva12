@@ -25,5 +25,18 @@
       <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
 
 
+      <record model="ir.actions.act_window" id="bussines_day_list_action">
+        <field name="name">Dias Habiles</field>
+        <field name="res_model">bussines.day</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer Mes con dias Habiles
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
     </data>
 </odoo>
