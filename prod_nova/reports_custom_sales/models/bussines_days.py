@@ -4,18 +4,18 @@ from odoo import api, fields, models,_
 from odoo.exceptions import UserError
 
 NAME_MONTH=[
-('ENERO','01'),
-('FEBRERO','02'),
-('MARZO','03'),
-('ABRIL','04'),
-('MAYO','05'),
-('JUNIO','06'),
-('JULIO','07'),
-('AGOSTO','08'),
-('SEPTIEMBRE','09'),
-('OCTUBRE','10'),
-('NOVIEMBRE','11'),
-('DICIEMBRE','12'),
+('01','ENERO'),
+('02','FEBRERO'),
+('03','MARZO'),
+('04','ABRIL'),
+('05','MAYO'),
+('06','JUNIO'),
+('07','JULIO'),
+('08','AGOSTO'),
+('09','SEPTIEMBRE'),
+('10','OCTUBRE'),
+('11','NOVIEMBRE'),
+('12','DICIEMBRE'),
 
 ]
 
