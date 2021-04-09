@@ -146,7 +146,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     )
-                    ORDER BY cliente ASC
+                    ORDER BY tbs.kg_per_month ASC
         """
         # params = [str(arg)] + where_params
 
