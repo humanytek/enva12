@@ -20,7 +20,7 @@ NAME_MONTH=[
 ]
 
 class BussinesDays(models.Model):
-    _name = 'bussines.day'
+    _name = 'bussines.days'
 
     name = fields.Selection(
         NAME_MONTH,
