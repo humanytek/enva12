@@ -130,7 +130,7 @@ class ReportsSales(models.AbstractModel):
             (SELECT
                     rp.name as cliente,
                     rp.id,
-                    tp==0 as tonelada_presupuesto
+                    tbs.kg_per_month==0 as tonelada_presupuesto
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
