@@ -139,7 +139,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                    GROUP BY rp.name,rp.id
+                    GROUP BY rp.name,rp.id,tbs.kg_per_month
                     )
                     UNION
                     (
