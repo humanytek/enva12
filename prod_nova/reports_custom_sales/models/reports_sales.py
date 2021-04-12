@@ -23,17 +23,17 @@ class ReportsSales(models.AbstractModel):
     def _get_columns_name(self, options):
         return [
         {'name': ''},
-        {'name': _('VOLUMEN PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PRECIO x KG PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('VOLUMEN REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('FACTURACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PRECIO x KG ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         # {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('AVANCE'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('DESVIACIÓN'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('AVANCE TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('DESVIACIÓN TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('DESVIACIÓN PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('TENDENCIA'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PROMEDIO AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('MES AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('TENDENCIA TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PROM. AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('MES AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         ]
 
 
@@ -233,10 +233,9 @@ class ReportsSales(models.AbstractModel):
                         'class': 'activo',
                         'columns':[
                             {'name':0 if budget==False else "{:,.2f}".format(budget/1000) },
-                            {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':"{:,.2f}".format(invoices_line[2]/1000)},
+                            {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             # {'name':self.format_value(invoices_line[1])},
-
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':"{:.2%}".format(0) if budget==0 else "{:.2%}".format((invoices_line[2]/1000)/(budget/1000))},
                             {'name':"{:.2%}".format(0) if budget==0 else "{:.2%}".format(((invoices_line[2]/1000)-(budget/1000))/(budget/1000))},
