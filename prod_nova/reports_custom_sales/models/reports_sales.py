@@ -200,8 +200,11 @@ class ReportsSales(models.AbstractModel):
         first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] +relativedelta(years=-1)
         last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
+        contadorinv=0
+
         estimado=0
         facturacion=0
+        tprice_per_kgp=0
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -224,6 +227,7 @@ class ReportsSales(models.AbstractModel):
         })
         desv_price_per_kg=0
         if invoices:
+            contadorinv=len(invoices)
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
@@ -268,6 +272,7 @@ class ReportsSales(models.AbstractModel):
 
                 estimado+=budget/1000
                 facturacion+=invoices_line[2]/1000
+                tprice_per_kgp+=price_per_kg/contadorinv
             lines.append({
                     'id': 'total',
                     'name': 'Total',
@@ -276,6 +281,7 @@ class ReportsSales(models.AbstractModel):
                     'columns':[
                     {'name': "{:,}".format(round(estimado))},
                     {'name': "{:,}".format(round(facturacion))},
+                    {'name': self.format_value(tprice_per_kgp)},
                     ],
                     })
 
