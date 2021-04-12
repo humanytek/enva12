@@ -336,8 +336,11 @@ class ReportsSales(models.AbstractModel):
             else:
                 tavancetons=0
 
+            if bussines_days.bussines_days!=0:
+                tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
+            else:
+                tdesvton=0
 
-            tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
             if tprice_per_kgp!=0:
                 tdesvpricekg=(tprice_per_kgf-tprice_per_kgp)/tprice_per_kgp
             else:
