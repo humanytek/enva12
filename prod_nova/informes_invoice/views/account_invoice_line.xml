@@ -18,6 +18,7 @@
         <field name="quantity"/>
         <field name="weight"/>
         <field name="total_weight" sum="Total"/>
+        <field name="price_per_kg"/>
         <field name="price_unit"/>
         <field name="standard_price"/>
         <field name="uom_id"/>

@@ -48,6 +48,11 @@ class Invoice_line(models.Model):
         store=True,
 
     )
+    price_per_kg=fields.Float(
+        compute='_price_per_kg',
+        string='precio por Kg',
+        store=True,
+    )
     price_total_company=fields.Monetary(
         compute='_total_company',
         store=True,
@@ -77,3 +82,14 @@ class Invoice_line(models.Model):
     def _total_company(self):
         for r in self:
             r.price_total_company=r.price_total*r.type_currency
+
+    @api.depends('price_subtotal_company','total_weight')
+    def _price_per_kg(self):
+        for r in self:
+            if r.total_weight!=0:
+                if r.price_subtotal_company!=0:
+                    r.price_per_kg=r.price_subtotal_company/r.total_weight
+                else:
+                    r.price_per_kg=0
+            else:
+                r.price_per_kg=0
