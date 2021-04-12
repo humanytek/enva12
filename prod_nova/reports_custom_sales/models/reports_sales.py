@@ -387,7 +387,7 @@ class ReportsSales(models.AbstractModel):
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
-                        'level': 2,
+                        'level': 0,
                         'class': 'activo',
                         'columns':[
                             {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
