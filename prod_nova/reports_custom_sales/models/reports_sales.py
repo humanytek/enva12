@@ -201,6 +201,16 @@ class ReportsSales(models.AbstractModel):
         'level': 0,
         'class': 'cliente',
         'columns':[
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
+                {'name',''},
 
         ],
         })
