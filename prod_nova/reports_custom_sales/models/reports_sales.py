@@ -29,10 +29,10 @@ class ReportsSales(models.AbstractModel):
         # {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('AVANCE TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('DESVIACIÓN TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('DESVIACIÓN PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('TENDENCIA TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('PROM. AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('DESV.TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('DESV.PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('TEND.TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('PROM.AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MES AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         ]
 
@@ -200,7 +200,8 @@ class ReportsSales(models.AbstractModel):
         first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] +relativedelta(years=-1)
         last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
-
+        estimado=0
+        facturacion=0
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -264,6 +265,19 @@ class ReportsSales(models.AbstractModel):
 
                         ],
                         })
+
+                estimado+=budget/1000
+
+            lines.append({
+                    'id': 'total',
+                    'name': 'total',
+                    'level': 2,
+                    'class': 'total',
+                    'columns':[
+                    {'name': estimado },
+                    ],
+                    })
+
         #     for invoice in invoices:
         #         lines.append({
         #         'id': invoice.id,
