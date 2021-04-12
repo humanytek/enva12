@@ -153,7 +153,7 @@ class ReportsSales(models.AbstractModel):
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
 
                     )
-                    ORDER BY ton DESC
+                    ORDER BY ton ASC
         """
         # params = [str(arg)] + where_params
 
