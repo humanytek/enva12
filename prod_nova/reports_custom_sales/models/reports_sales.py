@@ -150,7 +150,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    GROUP BY rp.name,rp.id
+                    GROUP BY rp.name,rp.id,tbs.kg_per_month
                     )
                     ORDER BY tbs.kg_per_month DESC
         """
