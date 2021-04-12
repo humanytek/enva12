@@ -345,7 +345,7 @@ class ReportsSales(models.AbstractModel):
 
             lines.append({
                     'id': 'total',
-                    'name': 'Total',
+                    'name': 'TOTAL',
                     'level': 0,
                     'class': 'total',
                     'columns':[
