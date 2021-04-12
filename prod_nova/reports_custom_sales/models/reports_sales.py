@@ -178,7 +178,7 @@ class ReportsSales(models.AbstractModel):
                     COALESCE(tbs.kg_per_month,0) as ton
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
-                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""' AND rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                     )
                     UNION
@@ -194,7 +194,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
-                    AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                    AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%' AND rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
 
                     )
@@ -241,9 +241,10 @@ class ReportsSales(models.AbstractModel):
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
         df=fields.Date.from_string(date_from)
-        first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] +relativedelta(years=-1)
+        first_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + relativedelta(years=-1)
         last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
+        invoicesarchi = self._partner_trendArchi(options,line_id)
         contadorinv=0
 
         estimado=0
@@ -360,6 +361,50 @@ class ReportsSales(models.AbstractModel):
                     {'name':"{:,}".format(round(tmesprevyear))},
                     ],
                     })
+
+        if invoicesarchi:
+
+            for invoice in invoicesarchi:
+                budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
+                invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
+                invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
+                invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
+                price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
+                bussines_days=self.env['bussines.days'].search([('name','=',str(df.month)),('year','=',str(df.year))])
+                if price_per_kg and price_per_kg>0:
+                    if invoices_line[1]>0:
+                        if invoices_line[2]>0:
+                             desv_price_per_kg=((invoices_line[1]/invoices_line[2])-price_per_kg)/price_per_kg
+                            # desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
+
+                        else:
+                            desv_price_per_kg=0
+                    else:
+                        desv_price_per_kg=0
+                else:
+                    desv_price_per_kg=0
+
+                lines.append({
+                        'id': str(invoice[0]),
+                        'name': str(invoice[0]),
+                        'level': 2,
+                        'class': 'activo',
+                        'columns':[
+                            {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
+                            {'name':"{:,}".format(round(invoices_line[2]/1000))},
+                            {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
+                            # {'name':self.format_value(invoices_line[1])},
+                            {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
+                            {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format((invoices_line[2]/1000)/(budget/1000))},
+                            # {'name':"{:.2%}".format(0) if budget==0 else "{:.2%}".format(((invoices_line[2]/1000)-(budget/1000))/(budget/1000))},
+                            {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
+                            {'name':"{:.0%}".format(desv_price_per_kg) },
+                            {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
+                            {'name':0 if invoices_line_promedio[2]==0 else "{:,}".format(round((invoices_line_promedio[2]/12)/1000)) },
+                            {'name':"{:,}".format(round((invoices_line_lymonth[2])/1000)) },
+
+                        ],
+                        })
 
         #     for invoice in invoices:
         #         lines.append({
