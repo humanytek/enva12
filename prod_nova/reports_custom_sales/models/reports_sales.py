@@ -141,7 +141,7 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     rp.id,
-                    tbs.kg_per_month as ton
+                    tbs.kg_per_month=0 as ton
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
