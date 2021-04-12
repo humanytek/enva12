@@ -331,8 +331,12 @@ class ReportsSales(models.AbstractModel):
                     tprice_per_kgf+=0
                 tpromprevyear+=(invoices_line_promedio[2]/12)/1000
                 tmesprevyear+=invoices_line_lymonth[2]/1000
+            if estimado!=0:
+                tavancetons=facturacion/estimado
+            else:
+                tavancetons=0
 
-            tavancetons=facturacion/estimado
+
             tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
             if tprice_per_kgp!=0:
                 tdesvpricekg=(tprice_per_kgf-tprice_per_kgp)/tprice_per_kgp
