@@ -259,7 +259,7 @@ class ReportsSales(models.AbstractModel):
                             # {'name':"{:.2%}".format(0) if budget==0 else "{:.2%}".format(((invoices_line[2]/1000)-(budget/1000))/(budget/1000))},
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':"{:.0%}".format(desv_price_per_kg) },
-                            {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)},
+                            {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
                             {'name':0 if invoices_line_promedio[2]==0 else "{:,}".format(round((invoices_line_promedio[2]/12)/1000)) },
                             {'name':"{:,}".format(round((invoices_line_lymonth[2])/1000)) },
 
