@@ -48,7 +48,7 @@ class Invoice_line(models.Model):
         store=True,
 
     )
-    price_per_kg=fields.Monetary(
+    price_per_kg=fields.Float(
         compute='_price_per_kg',
         string='precio por Kg',
         store=True,
