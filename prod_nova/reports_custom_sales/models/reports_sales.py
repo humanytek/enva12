@@ -205,6 +205,13 @@ class ReportsSales(models.AbstractModel):
         estimado=0
         facturacion=0
         tprice_per_kgp=0
+        tprice_per_kgf=0
+        tavancetons=0
+        tdesvton=0
+        tdesvpricekg=0
+        ttendtonsfm=0
+        tpromprevyear=0
+        tmesprevyear=0
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -273,6 +280,24 @@ class ReportsSales(models.AbstractModel):
                 estimado+=budget/1000
                 facturacion+=invoices_line[2]/1000
                 tprice_per_kgp+=price_per_kg/contadorinv
+                if invoices_line[2]!=0:
+                    tprice_per_kgf+=(invoices_line[1]/invoices_line[2])/contadorinv
+                else:
+                    tprice_per_kgf+=0
+                tpromprevyear+=(invoices_line_promedio[2]/12)/1000
+                tmesprevyear+=invoices_line_lymonth[2])/1000
+                
+            tavancetons=facturacion/estimado
+            tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
+            if tprice_per_kgp!=0:
+                tdesvpricekg=(tprice_per_kgf-tprice_per_kgp)/tprice_per_kgp
+            else:
+                tdesvpricekg=0
+            if self._billed_days(options,line_id)!=0:
+                ttendtonsfm=(facturacion/self._billed_days(options,line_id))*bussines_days.bussines_days
+            else:
+                ttendtonsfm=0
+
             lines.append({
                     'id': 'total',
                     'name': 'Total',
@@ -282,6 +307,13 @@ class ReportsSales(models.AbstractModel):
                     {'name': "{:,}".format(round(estimado))},
                     {'name': "{:,}".format(round(facturacion))},
                     {'name': self.format_value(tprice_per_kgp)},
+                    {'name':self.format_value(tprice_per_kgf)},
+                    {'name':"{:.0%}".format(tavancetons)},
+                    {'name':"{:.0%}".format(tdesvton)},
+                    {'name':"{:.0%}".format(tdesvpricekg)},
+                    {'name':"{:,}".format(round(ttendtonsfm))},
+                    {'name':"{:,}".format(round(tpromprevyear))},
+                    {'name':"{:,}".format(round(tmesprevyear))},
                     ],
                     })
 
