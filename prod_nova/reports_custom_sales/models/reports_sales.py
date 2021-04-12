@@ -346,7 +346,7 @@ class ReportsSales(models.AbstractModel):
             lines.append({
                     'id': 'total',
                     'name': 'Total',
-                    'level': 2,
+                    'level': 0,
                     'class': 'total',
                     'columns':[
                     {'name': "{:,}".format(round(estimado))},
