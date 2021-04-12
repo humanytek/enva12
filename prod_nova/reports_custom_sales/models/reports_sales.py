@@ -154,6 +154,7 @@ class ReportsSales(models.AbstractModel):
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                     ORDER BY tbs.kg_per_month DESC
                     )
+                    ORDER BY tbs.kg_per_month DESC
         """
         # params = [str(arg)] + where_params
 
