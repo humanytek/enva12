@@ -129,7 +129,8 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             (SELECT
                     rp.name as cliente,
-                    rp.id
+                    rp.id,
+                    sum(0) as kg
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -144,13 +145,13 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     rp.id
-
+                    sum(tbs.kg_per_month) as kg,
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     GROUP BY rp.name,rp.id
                     )
-                    ORDER BY cliente DESC
+                    ORDER BY kg DESC
         """
         # params = [str(arg)] + where_params
 
