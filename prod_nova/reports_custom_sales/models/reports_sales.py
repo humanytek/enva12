@@ -267,14 +267,15 @@ class ReportsSales(models.AbstractModel):
                         })
 
                 estimado+=budget/1000
-
+                facturacion+=invoices_line[2]/1000
             lines.append({
                     'id': 'total',
-                    'name': 'total',
+                    'name': 'Total',
                     'level': 2,
                     'class': 'total',
                     'columns':[
-                    {'name': estimado },
+                    {'name': "{:,}".format(round(estimado))},
+                    {'name': "{:,}".format(round(facturacion))},
                     ],
                     })
 
