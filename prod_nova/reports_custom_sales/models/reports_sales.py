@@ -242,7 +242,7 @@ class ReportsSales(models.AbstractModel):
                         'level': 2,
                         'class': 'activo',
                         'columns':[
-                            {'name':0 if budget==False else "{:,}".format(budget/1000) },
+                            {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
                             {'name':"{:,.2f}".format(invoices_line[2]/1000)},
                             {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             # {'name':self.format_value(invoices_line[1])},
