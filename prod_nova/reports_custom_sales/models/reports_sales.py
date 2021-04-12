@@ -145,7 +145,7 @@ class ReportsSales(models.AbstractModel):
             SELECT
                     rp.name as cliente,
                     rp.id,
-                    sum(tbs.kg_per_month) as kg,
+                    sum(tbs.kg_per_month) as kg
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
