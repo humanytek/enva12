@@ -130,7 +130,7 @@ class ReportsSales(models.AbstractModel):
             (SELECT
                     rp.name as cliente,
                     rp.id,
-                    null as Ton
+                    0 as Ton
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
@@ -138,7 +138,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                    GROUP BY rp.name,rp.id)
+                    GROUP BY rp.name,rp.id,Ton)
                     UNION
                     (SELECT
                     rp.name as cliente,
@@ -147,7 +147,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    GROUP BY rp.name,rp.id
+                    GROUP BY rp.name,rp.id,Ton
                     )
                     ORDER BY Ton DESC
         """
