@@ -69,23 +69,20 @@ class ReportsSales(models.AbstractModel):
         return result
 
 
+    def daterange(self,date1, date2):
+        for n in range(int ((fields.Date.from_string(date2) - fields.Date.from_string(date1)).days)+1):
+            yield fields.Date.from_string(date1) + timedelta(n)
+
+
     def _billed_days(self,options,line_id):
         contador=0
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
-        sql_query ="""
-            SELECT
-                    DISTINCT(ai.date_applied) as dias_facturados
-                    FROM account_invoice ai
-                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
-                    AND ai.user_id not in (90)
-                    ORDER BY ai.date_applied ASC
-        """
 
+        for dt in self.daterange(date_from, date_to):
+            if dt.weekday() < 5:
+                contador+=1
 
-        self.env.cr.execute(sql_query)
-        result = self.env.cr.fetchall()
-        contador=len(result)
         return contador
 
 
