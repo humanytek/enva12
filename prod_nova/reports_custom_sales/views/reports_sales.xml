@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <template id="account_reports_main_template_inherit" inherit_id="account_reports.main_template">
+        <xpath expr="//div[@class='container o_account_reports_page o_account_reports_no_print']" position="attributes">
+            <attribute name="style">max-width:1850px;</attribute>
+        </xpath>
+      
+    </template>
+
+      <record id="action_report_sales_nova" model="ir.actions.client">
+          <field name="name">Tendencia de Ventas</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'report.sales.nova'}" />
+      </record>
+      <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
+
+
+      <record model="ir.ui.view" id="trend_budget_sales_tree_view">
+        <field name="name">Presupuesto Ventas Tendencia</field>
+        <field name="model">trend.budget.sales</field>
+        <field name="arch" type="xml">
+          <tree string="Presupuesto Ventas Tendencia">
+            <field name="name"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="kg_per_month"/>
+            <field name="price_unit_per_month"/>
+          </tree>
+        </field>
+      </record>
+
+
+      <record model="ir.actions.act_window" id="trend_budget_sales_list_action">
+        <field name="name">Presupuesto Ventas Tendencia</field>
+        <field name="res_model">trend.budget.sales</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer presupuesto de ventas
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
+      <record model="ir.ui.view" id="bussines_days_tree_view">
+        <field name="name">Dias Habiles</field>
+        <field name="model">bussines.days</field>
+        <field name="arch" type="xml">
+          <tree string="Dias Habiles">
+            <field name="name"/>
+            <field name="bussines_days"/>
+            <field name="year"/>
+          </tree>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="bussines_day_list_action">
+        <field name="name">Dias Habiles</field>
+        <field name="res_model">bussines.days</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer Mes con dias Habiles
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
+    </data>
+</odoo>
