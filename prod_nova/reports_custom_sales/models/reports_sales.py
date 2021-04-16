@@ -334,7 +334,10 @@ class ReportsSales(models.AbstractModel):
                 tavancetons=0
 
             if bussines_days.bussines_days!=0:
-                tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
+                if (estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)!=0:
+                    tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
+                else:
+                    tdesvton=0
             else:
                 tdesvton=0
 
