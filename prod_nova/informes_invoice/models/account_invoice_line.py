@@ -62,11 +62,25 @@ class Invoice_line(models.Model):
         string='Re-Facturado',
         store=True,
     )
+
+    facturado_to=fields.Boolean(
+    related='invoice_id.facturado_to',
+    string='Facturado a:',
+    store=True,
+    )
+
+    not_accumulate=fields.Boolean(
+    related='invoice_id.not_accumulate',
+    string='No Acumular',
+    store=True,
+    )
+
     date_applied = fields.Date(
         related='invoice_id.date_applied',
         string='Fecha Aplicada',
         store=True,
         )
+
 
     @api.depends('weight','quantity')
     def _total_weight(self):

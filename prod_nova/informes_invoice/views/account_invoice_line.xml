@@ -18,7 +18,7 @@
         <field name="quantity"/>
         <field name="weight"/>
         <field name="total_weight" sum="Total"/>
-        <field name="price_per_kg"/>
+        <field name="price_per_kg" avg="Prom Precio x Kg"/>
         <field name="price_unit"/>
         <field name="standard_price"/>
         <field name="uom_id"/>
@@ -42,7 +42,7 @@
       <search string="Search invoice lines">
         <!-- <field name="date_invoice"/> -->
         <field name="invoice_id"/>
-         <filter name="invoice_line_search2" string="Reporte Socios" domain="['|','|',('state','=','paid'),('state','=','open'),('invoice_type','=','out_invoice')]"/>
+         <filter name="invoice_line_search2" string="Reporte Socios" domain="['&amp;','&amp;',('state','!=','draft'),('state','!=','cancel'),('invoice_type','=','out_invoice')]"/>
       </search>
     </field>
   </record>

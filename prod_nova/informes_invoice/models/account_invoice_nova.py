@@ -50,6 +50,19 @@ class Account_invoice_nova(models.Model):
     copy=False
     )
 
+    facturado_to=fields.Boolean(
+    string='Facturado a:',
+    store=True,
+    copy=False
+    )
+
+    not_accumulate=fields.Boolean(
+    string='No Acumular',
+    store=True,
+    default=False,
+    copy=False
+    )
+
     date_applied = fields.Date(
         string='Fecha Aplicada',
         store=True,
