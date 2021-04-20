@@ -26,7 +26,6 @@ class ReportsSales(models.AbstractModel):
         {'name': _('ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('FACTURACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        # {'name': _('SUBTOTAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('AVANCE TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('DESV.TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -54,7 +53,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
-                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ail.partner_id="""+partner_id+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL ) AND ail.partner_id="""+partner_id+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND ai.user_id not in (90) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.name
                     ORDER BY rp.name ASC
@@ -67,24 +66,6 @@ class ReportsSales(models.AbstractModel):
             result=('',0,0)
 
         return result
-
-
-    def daterange(self,date1, date2):
-        for n in range(int ((fields.Date.from_string(date2) - fields.Date.from_string(date1)).days)+1):
-            yield fields.Date.from_string(date1) + timedelta(n)
-
-
-    def _billed_days(self,options,line_id):
-        contador=0
-        date_from = options['date']['date_from']
-        date_to = options['date']['date_to']
-
-        for dt in self.daterange(date_from, date_to):
-            if dt.weekday() < 5:
-                contador+=1
-
-        return contador
-
 
     def _invoice_line_partner_n(self,options,line_id,partner_id,date_f,date_t):
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
@@ -115,6 +96,24 @@ class ReportsSales(models.AbstractModel):
             result=('',0,0)
 
         return result
+
+
+    def daterange(self,date1, date2):
+        for n in range(int ((fields.Date.from_string(date2) - fields.Date.from_string(date1)).days)+1):
+            yield fields.Date.from_string(date1) + timedelta(n)
+
+
+    def _billed_days(self,options,line_id):
+        contador=0
+        date_from = options['date']['date_from']
+        date_to = options['date']['date_to']
+
+        for dt in self.daterange(date_from, date_to):
+            if dt.weekday() < 5:
+                contador+=1
+
+        return contador
+
 
     def _partner_trend(self,options,line_id):
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
