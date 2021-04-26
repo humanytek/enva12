@@ -338,7 +338,6 @@ class ReportsSales(models.AbstractModel):
                     if invoices_line[1]>0:
                         if invoices_line[2]>0:
                              desv_price_per_kg=((invoices_line[1]/invoices_line[2])-price_per_kg)/price_per_kg
-                            # desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
 
                         else:
                             desv_price_per_kg=0
