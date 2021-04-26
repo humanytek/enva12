@@ -4,13 +4,14 @@
 {
     'name': 'Sale Reports - Custom Sale Reports',
     'author': 'ING.JESUS CHULIM',
-    'version': '1.0.0',
+    'version': '1.5.0',
     'category': 'reporting',
     'description': """
         A custom report to get Sale Reports Empaques Nova
     """,
     'depends': [
-        'account_reports'
+        'account_reports',
+        'informes_invoice',
     ],
     'data': [
         'views/reports_sales.xml',

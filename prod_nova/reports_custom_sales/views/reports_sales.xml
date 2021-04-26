@@ -6,7 +6,7 @@
         <xpath expr="//div[@class='container o_account_reports_page o_account_reports_no_print']" position="attributes">
             <attribute name="style">max-width:1850px;</attribute>
         </xpath>
-      
+
     </template>
 
       <record id="action_report_sales_nova" model="ir.actions.client">
@@ -15,6 +15,13 @@
           <field name="context" eval="{'model': 'report.sales.nova'}" />
       </record>
       <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
+
+      <record id="action_report_ton_corrug_nova" model="ir.actions.client">
+          <field name="name">Reporte Toneladas</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'report.ton.corrug.nova'}" />
+      </record>
+      <menuitem id="menu_action_report_ton_corrug_nova" name="Reporte Toneladas" action="action_report_ton_corrug_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
 
 
       <record model="ir.ui.view" id="trend_budget_sales_tree_view">
@@ -44,6 +51,62 @@
       </record>
 
       <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
+      <record model="ir.ui.view" id="budget_budget_sales_tree_view">
+        <field name="name">Presupuesto Ventas Inicio de Año</field>
+        <field name="model">budget.budget.sales</field>
+        <field name="arch" type="xml">
+          <tree string="Presupuesto Ventas">
+            <field name="name"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="kg_per_month"/>
+            <field name="price_unit_per_month"/>
+          </tree>
+        </field>
+      </record>
+
+
+      <record model="ir.actions.act_window" id="budget_budget_sales_list_action">
+        <field name="name">Presupuesto Ventas Inicio de Año</field>
+        <field name="res_model">budget.budget.sales</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer presupuesto de ventas de inicio de año
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_budget_budget_sales_list_action" name="Presupuesto de ventas Inicio de año" action="budget_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+
+      <record model="ir.ui.view" id="project_user_sales_tree_view">
+        <field name="name">Proyeccion ventas</field>
+        <field name="model">project.user.sales</field>
+        <field name="arch" type="xml">
+          <tree string="Proyeccion ventas">
+            <field name="name"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="kg_per_month"/>
+            <field name="note"/>
+          </tree>
+        </field>
+      </record>
+
+
+      <record model="ir.actions.act_window" id="project_user_sales_list_action">
+        <field name="name">Proyeccion de ventas</field>
+        <field name="res_model">project.user.sales</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primera proyeccion de ventas
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_project_user_sales_list_action" name="Proyeccion de ventas" action="project_user_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
 
       <record model="ir.ui.view" id="bussines_days_tree_view">
         <field name="name">Dias Habiles</field>
