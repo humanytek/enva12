@@ -34,6 +34,7 @@ class ReportsSales(models.AbstractModel):
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('DESV.PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('MES ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROM.AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MES AÑO ANTERIOR TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         ]
@@ -87,6 +88,38 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ail.partner_id="""+partner_id+""" AND ai.date_applied >= '"""+date_f+"""' AND ai.date_applied <= '"""+date_t+"""'
+                    AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                    GROUP BY rp.name
+                    ORDER BY rp.name ASC
+        """
+
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.fetchone()
+        if result==None:
+            result=('',0,0)
+
+        return result
+
+    def _invoice_line_partner_ant_month(self,options,line_id,partner_id):
+        # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+        # if where_clause:
+        #     where_clause = 'AND ' + where_clause
+        date_from = options['date']['date_from']
+        date_to = options['date']['date_to']
+        df=fields.Date.from_string(date_from)+relativedelta(months=-1)
+        dt=fields.Date.from_string(date_from)+timedelta(days=-1)
+        sql_query ="""
+            SELECT
+                    rp.name as cliente,
+                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                    SUM(ail.total_weight) as total_weight
+                    FROM account_invoice_line ail
+                    LEFT JOIN product_product pp ON pp.id=ail.product_id
+                    LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
+                    LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                    LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL ) AND ail.partner_id="""+partner_id+""" AND ai.date_applied >= '"""+str(df)+"""' AND ai.date_applied <= '"""+str(dt)+"""'
                     AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                     GROUP BY rp.name
                     ORDER BY rp.name ASC
@@ -289,6 +322,7 @@ class ReportsSales(models.AbstractModel):
         estimado=0
         presupuesto=0
         facturacion=0
+        facturacion_mes_ant=0
         tprice_per_kgp=0
         tprice_per_kgf=0
         tavancetons=0
@@ -318,6 +352,7 @@ class ReportsSales(models.AbstractModel):
                 {'name':''},
                 {'name':''},
                 {'name':''},
+                {'name':''},
 
         ],
         })
@@ -330,6 +365,7 @@ class ReportsSales(models.AbstractModel):
                 project_sale=self._get_project_user_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
                 comentarios = self.env['project.user.sales'].search(['&','&',('name','=',invoice[1]),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))])
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
+                invoices_line_ant_month=self._invoice_line_partner_ant_month(options,line_id,str(invoice[1]))
                 invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
                 invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
@@ -338,6 +374,7 @@ class ReportsSales(models.AbstractModel):
                     if invoices_line[1]>0:
                         if invoices_line[2]>0:
                              desv_price_per_kg=((invoices_line[1]/invoices_line[2])-price_per_kg)/price_per_kg
+                            # desv_price_per_kg=price_per_kg/(invoices_line[1]/invoices_line[2])-1
 
                         else:
                             desv_price_per_kg=0
@@ -363,6 +400,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':"{:.0%}".format(desv_price_per_kg) },
                             {'name':0 if budget_budget==False else "{:,}".format(round(budget_budget/1000)) },
+                            {'name':"{:,}".format(round(invoices_line_ant_month[2]/1000))},
                             {'name':0 if invoices_line_promedio[2]==0 else "{:,}".format(round((invoices_line_promedio[2]/12)/1000)) },
                             {'name':"{:,}".format(round((invoices_line_lymonth[2])/1000)) },
 
@@ -372,6 +410,7 @@ class ReportsSales(models.AbstractModel):
                 estimado+=budget/1000
                 presupuesto+=budget_budget/1000
                 facturacion+=invoices_line[2]/1000
+                facturacion_mes_ant+=invoices_line_ant_month[2]/1000
                 tprice_per_kgp+=price_per_kg/contadorinv
                 if invoices_line[2]!=0:
                     tprice_per_kgf+=(invoices_line[1]/invoices_line[2])/contadorinv
@@ -430,6 +469,7 @@ class ReportsSales(models.AbstractModel):
                     {'name':self.format_value(tprice_per_kgf)},
                     {'name':"{:.0%}".format(tdesvpricekg)},
                     {'name': "{:,}".format(round(presupuesto))},
+                    {'name': "{:,}".format(round(facturacion_mes_ant))},
                     {'name':"{:,}".format(round(tpromprevyear))},
                     {'name':"{:,}".format(round(tmesprevyear))},
                     ],
@@ -443,6 +483,7 @@ class ReportsSales(models.AbstractModel):
                 project_sale=self._get_project_user_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
                 comentarios = self.env['project.user.sales'].search(['&','&',('name','=',invoice[1]),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))])
                 invoices_line=self._invoice_line_partner(options,line_id,str(invoice[1]))
+                invoices_line_ant_month=self._invoice_line_partner_ant_month(options,line_id,str(invoice[1]))
                 invoices_line_promedio=self._invoice_line_partner_n(options,line_id,str(invoice[1]), str(first_day_previous_fy),str(last_day_previous_fy))
                 invoices_line_lymonth=self._invoice_line_partner_n(options,line_id,str(invoice[1]),str(fields.Date.from_string(date_from)+relativedelta(years=-1)),str(fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1)))
                 price_per_kg=self._get_budget_sales_price(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
@@ -477,6 +518,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':"{:.0%}".format(desv_price_per_kg) },
                             {'name':0 if budget_budget==False else "{:,}".format(round(budget_budget/1000)) },
+                            {'name':"{:,}".format(round(invoices_line_ant_month[2]/1000))},
                             {'name':0 if invoices_line_promedio[2]==0 else "{:,}".format(round((invoices_line_promedio[2]/12)/1000)) },
                             {'name':"{:,}".format(round((invoices_line_lymonth[2])/1000)) },
 
