@@ -161,11 +161,11 @@ class ReportsFibers(models.AbstractModel):
                         'class': 'fibras',
                         'columns':[
                                 {'name':"{:,}".format(round((account_analytic_line[0]['cantidad']/1000)*-1)) if account_analytic_line else 0},
-                                {'name':"{:.0%}".format(abs((account_analytic_line[0]['cantidad']/1000)/(account_analytic_line_total[0]['total']/1000))) if (account_analytic_line_total or account_analytic_line_total[0]['total']==0) and (account_analytic_line or account_analytic_line[0]['cantidad']==0) else "{:.0%}".format(0)},
+                                {'name':"{:.0%}".format(abs((account_analytic_line[0]['cantidad']/1000)/(account_analytic_line_total[0]['total']/1000))) if (account_analytic_line_total or account_analytic_line_total[0]['total']!=0) and (account_analytic_line or account_analytic_line[0]['cantidad']!=0) else "{:.0%}".format(0)},
                                 {'name':"{:,}".format(round((account_analytic_line_ant[0]['cantidad']/1000)*-1)) if account_analytic_line_ant else 0},
-                                {'name':"{:.0%}".format(abs((account_analytic_line_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant[0]['total']/1000))) if (account_analytic_line_total_ant or account_analytic_line_total_ant[0]['total']==0) and (account_analytic_line_ant or account_analytic_line_ant[0]['cantidad']==0)  else "{:.0%}".format(0)},
+                                {'name':"{:.0%}".format(abs((account_analytic_line_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant[0]['total']/1000))) if (account_analytic_line_total_ant or account_analytic_line_total_ant[0]['total']!=0) and (account_analytic_line_ant or account_analytic_line_ant[0]['cantidad']!=0)  else "{:.0%}".format(0)},
                                 {'name':"{:,}".format(round((account_analytic_line_ant_ant[0]['cantidad']/1000)*-1)) if account_analytic_line_ant_ant else 0},
-                                {'name':"{:.0%}".format(abs((account_analytic_line_ant_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000))) if (account_analytic_line_total_ant_ant or account_analytic_line_total_ant_ant[0]['total']==0) and (account_analytic_line_ant_ant or account_analytic_line_ant_ant[0]['cantidad']==0) else "{:.0%}".format(0)},
+                                {'name':"{:.0%}".format(abs((account_analytic_line_ant_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000))) if (account_analytic_line_total_ant_ant or account_analytic_line_total_ant_ant[0]['total']!=0) and (account_analytic_line_ant_ant or account_analytic_line_ant_ant[0]['cantidad']!=0) else "{:.0%}".format(0)},
 
                         ],
                         })
