@@ -178,7 +178,7 @@ class ReportsFibers(models.AbstractModel):
         'class': 'total',
         'columns':[
                 {'name':"{:,}".format(round((account_analytic_line_total[0]['total']/1000)*-1)) if account_analytic_line_total else 0 },
-                {'name':"{:.0%}".format((account_analytic_line_total[0]['total']/1000)/(account_analytic_line_total[0]['total']/1000)) if account_analytic_line_total else "{:.0%}".format(0)},
+                {'name':"{:.0%}".format((account_analytic_line_total[0]['total']/1000)/(account_analytic_line_total[0]['total']/1000)) if account_analytic_line_total and account_analytic_line_total[0]['total']!=0 else "{:.0%}".format(0)},
                 {'name':"{:,}".format(round((account_analytic_line_total_ant[0]['total']/1000)*-1)) if account_analytic_line_total_ant else 0 },
                 {'name':"{:.0%}".format((account_analytic_line_total_ant[0]['total']/1000)/(account_analytic_line_total_ant[0]['total']/1000)) if account_analytic_line_total_ant else "{:.0%}".format(0)},
                 {'name':"{:,}".format(round((account_analytic_line_total_ant_ant[0]['total']/1000)*-1)) if account_analytic_line_total_ant_ant else 0 },
