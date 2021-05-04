@@ -393,7 +393,7 @@ class ReportsSales(models.AbstractModel):
                     else:
                         porcentcubrimiento=0
                 else:
-                    if invoices_line[2]!=0 or budget!=False:
+                    if invoices_line[2]!=0 and (self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0) and (bussines_days.bussines_days!=0 or bussines_days!=False) and (budget!=False or budget!=0) :
                         porcentcubrimiento=(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)/(budget/1000)
                     else:
                         porcentcubrimiento=0
@@ -525,7 +525,7 @@ class ReportsSales(models.AbstractModel):
                     else:
                         porcentcubrimiento=0
                 else:
-                    if invoices_line[2]!=0 or budget!=False:
+                    if invoices_line[2]!=0 and (self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0) and (bussines_days.bussines_days!=0 or bussines_days!=False) and (budget!=False or budget!=0) :
                         porcentcubrimiento=(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)/(budget/1000)
                     else:
                         porcentcubrimiento=0
