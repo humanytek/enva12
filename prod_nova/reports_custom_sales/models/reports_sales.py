@@ -29,6 +29,7 @@ class ReportsSales(models.AbstractModel):
         {'name': _('DESV.TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TEND.TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROYECTADO VENTAS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('% CUBRIMIENTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('COMENTARIOS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -323,6 +324,7 @@ class ReportsSales(models.AbstractModel):
         presupuesto=0
         facturacion=0
         facturacion_mes_ant=0
+        porcentcubrimiento=0
         tprice_per_kgp=0
         tprice_per_kgf=0
         tavancetons=0
@@ -339,6 +341,7 @@ class ReportsSales(models.AbstractModel):
         'level': 0,
         'class': 'cliente',
         'columns':[
+                {'name':''},
                 {'name':''},
                 {'name':''},
                 {'name':''},
@@ -383,6 +386,19 @@ class ReportsSales(models.AbstractModel):
                 else:
                     desv_price_per_kg=0
 
+
+                if project_sale and project_sale!=0:
+                    if budget!=0 and budget!=False:
+                        porcentcubrimiento=(project_sale/1000)/(budget/1000)
+                    else:
+                        porcentcubrimiento=0
+                else:
+                    if invoices_line[2]!=0 or budget!=False:
+                        porcentcubrimiento=(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)/(budget/1000)
+                    else:
+                        porcentcubrimiento=0
+
+
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
@@ -395,6 +411,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
                             {'name':(0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))) if project_sale==False else "{:,}".format(round(project_sale/1000)) },
+                            {'name': "{:.0%}".format(porcentcubrimiento)},
                             {'name':'' if comentarios.note==False else comentarios.note},
                             {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
@@ -464,6 +481,7 @@ class ReportsSales(models.AbstractModel):
                     {'name':"{:.0%}".format(tdesvton)},
                     {'name':"{:,}".format(round(ttendtonsfm))},
                     {'name':"{:,}".format(round(tprojectventas))},
+                    {'name': "{:.0%}".format(tprojectventas/estimado) if tprojectventas!=0 else "{:.0%}".format(0)},
                     {'name':''},
                     {'name': self.format_value(tprice_per_kgp)},
                     {'name':self.format_value(tprice_per_kgf)},
@@ -501,6 +519,17 @@ class ReportsSales(models.AbstractModel):
                 else:
                     desv_price_per_kg=0
 
+                if project_sale and project_sale!=0:
+                    if budget!=0 and budget!=False:
+                        porcentcubrimiento=(project_sale/1000)/(budget/1000)
+                    else:
+                        porcentcubrimiento=0
+                else:
+                    if invoices_line[2]!=0 or budget!=False:
+                        porcentcubrimiento=(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days)/(budget/1000)
+                    else:
+                        porcentcubrimiento=0
+
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
@@ -513,6 +542,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
                             {'name':(0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))) if project_sale==False else "{:,}".format(round(project_sale/1000)) },
+                            {'name': "{:.0%}".format(porcentcubrimiento)},
                             {'name':'' if comentarios.note==False else comentarios.note},
                             {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},

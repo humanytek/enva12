@@ -52,6 +52,8 @@ class ReportsFibers(models.AbstractModel):
                 params = "AND (pt.default_code = 'MAP0009' OR pt.default_code = 'OCCPAC002')"
             if concepto=="DKL NACIONAL":
                 params = "AND pt.default_code = 'MAP0001'"
+            if concepto=="DKL OBSOLETOS":
+                params = "AND pt.default_code = 'MAP0006'"
             if concepto=="OCC IMPORTADO":
                 params = "AND pt.default_code='MAP0008'"
             if concepto=="OCC ACOPIO":
@@ -127,7 +129,7 @@ class ReportsFibers(models.AbstractModel):
         lines = []
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
-        conceptos=('OCC NACIONAL','OCC IMPORTADO','OCC ACOPIO','DKL NACIONAL','DKL IMPORTADO','GALLETA CON COSTO','GALLETA SIN COSTO')
+        conceptos=('OCC NACIONAL','OCC IMPORTADO','OCC ACOPIO','DKL NACIONAL','DKL IMPORTADO','DKL OBSOLETOS','GALLETA CON COSTO','GALLETA SIN COSTO')
         account_analytic_line_total=self._account_analytic_line_total(options,line_id,fields.Date.from_string(date_from),fields.Date.from_string(date_to))
         account_analytic_line_total_ant=self._account_analytic_line_total(options,line_id,fields.Date.from_string(date_from)+relativedelta(months=-1),fields.Date.from_string(date_from)+timedelta(days=-1))
         account_analytic_line_total_ant_ant=self._account_analytic_line_total(options,line_id,fields.Date.from_string(date_from)+relativedelta(months=-2),fields.Date.from_string(date_from)+relativedelta(months=-1)+timedelta(days=-1))
@@ -163,9 +165,9 @@ class ReportsFibers(models.AbstractModel):
                                 {'name':"{:,}".format(round((account_analytic_line[0]['cantidad']/1000)*-1)) if account_analytic_line else 0},
                                 {'name':"{:.0%}".format(abs((account_analytic_line[0]['cantidad']/1000)/(account_analytic_line_total[0]['total']/1000))) if (account_analytic_line_total and account_analytic_line) and account_analytic_line[0]['cantidad']!=0 else "{:.0%}".format(0)},
                                 {'name':"{:,}".format(round((account_analytic_line_ant[0]['cantidad']/1000)*-1)) if account_analytic_line_ant else 0},
-                                {'name':"{:.0%}".format(abs((account_analytic_line_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant[0]['total']/1000))) if account_analytic_line_total_ant and account_analytic_line_ant else "{:.0%}".format(0)},
+                                {'name':"{:.0%}".format(abs((account_analytic_line_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant[0]['total']/1000))) if (account_analytic_line_total_ant and account_analytic_line_ant) and account_analytic_line_ant[0]['cantidad']!=0 else "{:.0%}".format(0)},
                                 {'name':"{:,}".format(round((account_analytic_line_ant_ant[0]['cantidad']/1000)*-1)) if account_analytic_line_ant_ant else 0},
-                                {'name':"{:.0%}".format(abs((account_analytic_line_ant_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000))) if account_analytic_line_total_ant_ant and account_analytic_line_ant_ant else "{:.0%}".format(0)},
+                                {'name':"{:.0%}".format(abs((account_analytic_line_ant_ant[0]['cantidad']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000))) if (account_analytic_line_total_ant_ant and account_analytic_line_ant_ant) and account_analytic_line_ant_ant[0]['cantidad']!=0 else "{:.0%}".format(0)},
 
                         ],
                         })
@@ -180,9 +182,9 @@ class ReportsFibers(models.AbstractModel):
                 {'name':"{:,}".format(round((account_analytic_line_total[0]['total']/1000)*-1)) if account_analytic_line_total else 0 },
                 {'name':"{:.0%}".format((account_analytic_line_total[0]['total']/1000)/(account_analytic_line_total[0]['total']/1000)) if account_analytic_line_total and account_analytic_line_total[0]['total']!=0 else "{:.0%}".format(0)},
                 {'name':"{:,}".format(round((account_analytic_line_total_ant[0]['total']/1000)*-1)) if account_analytic_line_total_ant else 0 },
-                {'name':"{:.0%}".format((account_analytic_line_total_ant[0]['total']/1000)/(account_analytic_line_total_ant[0]['total']/1000)) if account_analytic_line_total_ant else "{:.0%}".format(0)},
+                {'name':"{:.0%}".format((account_analytic_line_total_ant[0]['total']/1000)/(account_analytic_line_total_ant[0]['total']/1000)) if account_analytic_line_total_ant and account_analytic_line_total_ant[0]['total']!=0 else "{:.0%}".format(0)},
                 {'name':"{:,}".format(round((account_analytic_line_total_ant_ant[0]['total']/1000)*-1)) if account_analytic_line_total_ant_ant else 0 },
-                {'name':"{:.0%}".format((account_analytic_line_total_ant_ant[0]['total']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000)) if account_analytic_line_total_ant_ant else "{:.0%}".format(0)},
+                {'name':"{:.0%}".format((account_analytic_line_total_ant_ant[0]['total']/1000)/(account_analytic_line_total_ant_ant[0]['total']/1000)) if account_analytic_line_total_ant_ant and account_analytic_line_total_ant_ant[0]['total']!=0 else "{:.0%}".format(0)},
         ],
         })
         # if account_analytic_line:

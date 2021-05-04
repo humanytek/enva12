@@ -2,12 +2,12 @@
 <odoo>
     <data>
 
-      <template id="account_reports_main_template_inherit" inherit_id="account_reports.main_template">
+      <!-- <template id="account_reports_main_template_inherit" inherit_id="account_reports.main_template">
         <xpath expr="//div[@class='container o_account_reports_page o_account_reports_no_print']" position="attributes">
             <attribute name="style">max-width:1850px;</attribute>
         </xpath>
 
-    </template>
+    </template> -->
 
       <record id="action_report_sales_nova" model="ir.actions.client">
           <field name="name">Tendencia de Ventas</field>
