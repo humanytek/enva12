@@ -607,7 +607,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
                             {'name':"{:,}".format(round(invoices_line[2]/1000))},
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format((invoices_line[2]/1000)/(budget/1000))},
-                            {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
+                            {'name':"{:.0%}".format(0) if budget==0 or invoices_line[2]==0 or bussines_days.bussines_days==0 or self._billed_days(options,line_id)==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
                             {'name':(0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))) if project_sale==False else "{:,}".format(round(project_sale/1000)) },
                             {'name': "{:.0%}".format(porcentcubrimiento)},
