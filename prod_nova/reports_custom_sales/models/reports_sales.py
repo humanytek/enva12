@@ -166,7 +166,11 @@ class ReportsSales(models.AbstractModel):
                     COALESCE(tbs.kg_per_month,0) as ton
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
-                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""' AND rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
+                    AND (rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name not ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name not ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name not ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                     )
                     UNION
@@ -177,7 +181,11 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' AND rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
+                    AND (rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name not ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name not ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name not ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
             )
                     UNION
@@ -193,7 +201,11 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
-                    AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%' AND rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                    AND (rp.name not ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name not ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name not ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name not ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
 
                     )
@@ -222,7 +234,11 @@ class ReportsSales(models.AbstractModel):
                     COALESCE(tbs.kg_per_month,0) as ton
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
-                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""' AND rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
+                    AND (rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                 )
                     UNION
@@ -233,7 +249,11 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' AND rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
+                    AND (rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                 )
                     UNION
@@ -248,7 +268,11 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
-                    AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%' AND rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                    AND (rp.name ilike 'ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.%'
+                    OR rp.name ilike 'AJEMEX S.A. DE C.V.%'
+                    OR rp.name ilike 'EMPACADORA SAN MARCOS S.A DE C.V.%'
+                    OR rp.name ilike 'PAKTON S. DE R.L. DE C.V.%')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                 )
                     ORDER BY ton DESC
@@ -318,22 +342,7 @@ class ReportsSales(models.AbstractModel):
         last_day_previous_fy = self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'] + timedelta(days=-1)
         invoices = self._partner_trend(options,line_id)
         invoicesarchi = self._partner_trendArchi(options,line_id)
-        contadorinv=0
 
-        estimado=0
-        presupuesto=0
-        facturacion=0
-        facturacion_mes_ant=0
-        porcentcubrimiento=0
-        tprice_per_kgp=0
-        tprice_per_kgf=0
-        tavancetons=0
-        tdesvton=0
-        tdesvpricekg=0
-        ttendtonsfm=0
-        tpromprevyear=0
-        tmesprevyear=0
-        tprojectventas=0
         # invoices=self.env['account.invoice'].search([('type','in',['out_invoice']),('state','in',['open','in_payment','paid']),('date_applied','>=',date_from),('date_applied','<=',date_to)],order='partner_id ASC,date_applied')
         lines.append({
         'id': 'cliente',
@@ -359,8 +368,25 @@ class ReportsSales(models.AbstractModel):
 
         ],
         })
-        desv_price_per_kg=0
+
         if invoices:
+            contadorinv=0
+
+            estimado=0
+            presupuesto=0
+            facturacion=0
+            facturacion_mes_ant=0
+            porcentcubrimiento=0
+            tprice_per_kgp=0
+            tprice_per_kgf=0
+            tavancetons=0
+            tdesvton=0
+            tdesvpricekg=0
+            ttendtonsfm=0
+            tpromprevyear=0
+            tmesprevyear=0
+            tprojectventas=0
+            desv_price_per_kg=0
             contadorinv=len(invoices)
             for invoice in invoices:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
@@ -494,6 +520,48 @@ class ReportsSales(models.AbstractModel):
                     })
 
         if invoicesarchi:
+            contadorinv=0
+
+            estimado=0
+            presupuesto=0
+            facturacion=0
+            facturacion_mes_ant=0
+            porcentcubrimiento=0
+            tprice_per_kgp=0
+            tprice_per_kgf=0
+            tavancetons=0
+            tdesvton=0
+            tdesvpricekg=0
+            ttendtonsfm=0
+            tpromprevyear=0
+            tmesprevyear=0
+            tprojectventas=0
+            desv_price_per_kg=0
+            contadorinv=len(invoices)
+            lines.append({
+            'id': 'cliente',
+            'name': 'CLIENTE',
+            'level': 0,
+            'class': 'cliente',
+            'columns':[
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+                    {'name':''},
+
+            ],
+            })
 
             for invoice in invoicesarchi:
                 budget=self._get_budget_sales(invoice[1], fields.Date.from_string(date_from),fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))
@@ -533,7 +601,7 @@ class ReportsSales(models.AbstractModel):
                 lines.append({
                         'id': str(invoice[0]),
                         'name': str(invoice[0]),
-                        'level': 0,
+                        'level': 2,
                         'class': 'activo',
                         'columns':[
                             {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
@@ -554,6 +622,75 @@ class ReportsSales(models.AbstractModel):
 
                         ],
                         })
+                        
+                estimado+=budget/1000
+                presupuesto+=budget_budget/1000
+                facturacion+=invoices_line[2]/1000
+                facturacion_mes_ant+=invoices_line_ant_month[2]/1000
+                tprice_per_kgp+=price_per_kg/contadorinv
+                if invoices_line[2]!=0:
+                    tprice_per_kgf+=(invoices_line[1]/invoices_line[2])/contadorinv
+                else:
+                    tprice_per_kgf+=0
+                tpromprevyear+=(invoices_line_promedio[2]/12)/1000
+                tmesprevyear+=invoices_line_lymonth[2]/1000
+                if project_sale:
+                    tprojectventas+=project_sale/1000
+                else:
+                    if self._billed_days(options,line_id)!=0:
+                        tprojectventas+=((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days
+                    else:
+                        tprojectventas+=0
+
+            if estimado!=0:
+                tavancetons=facturacion/estimado
+            else:
+                tavancetons=0
+
+            if bussines_days.bussines_days!=0:
+                if (estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)!=0:
+                    tdesvton=(facturacion/((estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)))-1
+                else:
+                    tdesvton=0
+
+            else:
+                tdesvton=0
+
+            if tprice_per_kgp!=0:
+                tdesvpricekg=(tprice_per_kgf-tprice_per_kgp)/tprice_per_kgp
+            else:
+                tdesvpricekg=0
+            if self._billed_days(options,line_id)!=0:
+                ttendtonsfm=(facturacion/self._billed_days(options,line_id))*bussines_days.bussines_days
+            else:
+                ttendtonsfm=0
+
+
+
+
+            lines.append({
+                    'id': 'total',
+                    'name': 'TOTAL',
+                    'level': 0,
+                    'class': 'total',
+                    'columns':[
+                    {'name': "{:,}".format(round(estimado))},
+                    {'name': "{:,}".format(round(facturacion))},
+                    {'name':"{:.0%}".format(tavancetons)},
+                    {'name':"{:.0%}".format(tdesvton)},
+                    {'name':"{:,}".format(round(ttendtonsfm))},
+                    {'name':"{:,}".format(round(tprojectventas))},
+                    {'name': "{:.0%}".format(tprojectventas/estimado) if tprojectventas!=0 else "{:.0%}".format(0)},
+                    {'name':''},
+                    {'name': self.format_value(tprice_per_kgp)},
+                    {'name':self.format_value(tprice_per_kgf)},
+                    {'name':"{:.0%}".format(tdesvpricekg)},
+                    {'name': "{:,}".format(round(presupuesto))},
+                    {'name': "{:,}".format(round(facturacion_mes_ant))},
+                    {'name':"{:,}".format(round(tpromprevyear))},
+                    {'name':"{:,}".format(round(tmesprevyear))},
+                    ],
+                    })
 
         #     for invoice in invoices:
         #         lines.append({
