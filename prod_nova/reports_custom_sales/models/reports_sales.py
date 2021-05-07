@@ -170,7 +170,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""' OR tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""')
+                WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""' AND tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                 AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                 AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.%','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                 GROUP BY rp.name,rp.id,tbs.kg_per_month)
@@ -193,7 +193,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                    WHERE (bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' OR tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""')
+                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' AND tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                 )
@@ -226,7 +226,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""' OR tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""')
+                WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""' AND tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                 AND ai.user_id not in (90) AND ail.uom_id not in (24) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                 AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                 GROUP BY rp.name,rp.id,tbs.kg_per_month
@@ -250,7 +250,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     LEFT JOIN trend_budget_sales tbs ON tbs.name=rp.id
-                    WHERE (bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' OR tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""')
+                    WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""' AND tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
                     AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                     GROUP BY rp.name,rp.id,tbs.kg_per_month
                 )
