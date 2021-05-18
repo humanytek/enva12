@@ -25,6 +25,7 @@ class ReportsSales(models.AbstractModel):
         {'name': ''},
         {'name': _('ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('FACTURACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('TEORICO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('AVANCE TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('DESV.TONS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('TEND.TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -60,7 +61,7 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                     WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice'
                     AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
-                    AND ail.partner_id="""+partner_id+""" 
+                    AND ail.partner_id="""+partner_id+"""
                     AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3)
                     AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%'
@@ -359,6 +360,7 @@ class ReportsSales(models.AbstractModel):
                 {'name':''},
                 {'name':''},
                 {'name':''},
+                {'name':''},
 
         ],
         })
@@ -371,6 +373,7 @@ class ReportsSales(models.AbstractModel):
             facturacion=0
             facturacion_mes_ant=0
             porcentcubrimiento=0
+            teorico=0
             tprice_per_kgp=0
             tprice_per_kgf=0
             tavancetons=0
@@ -427,6 +430,7 @@ class ReportsSales(models.AbstractModel):
                         'columns':[
                             {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
                             {'name':"{:,}".format(round(invoices_line[2]/1000))},
+                            {'name':"{:,}".format(0) if budget==0 or bussines_days.bussines_days==0 or self._billed_days(options,line_id)==0 else "{:,}".format(round(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id)))},
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format((invoices_line[2]/1000)/(budget/1000))},
                             {'name':"{:.0%}".format(0) if budget==0 or invoices_line[2]==0 or bussines_days.bussines_days==0 or self._billed_days(options,line_id)==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
@@ -488,6 +492,11 @@ class ReportsSales(models.AbstractModel):
                 ttendtonsfm=(facturacion/self._billed_days(options,line_id))*bussines_days.bussines_days
             else:
                 ttendtonsfm=0
+            if estimado!=0 or bussines_days.bussines_days!=0 or self._billed_days(options,line_id)!=0:
+                teorico=(estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)
+            else:
+                teorico=0
+
 
 
 
@@ -500,6 +509,7 @@ class ReportsSales(models.AbstractModel):
                     'columns':[
                     {'name': "{:,}".format(round(estimado))},
                     {'name': "{:,}".format(round(facturacion))},
+                    {'name': "{:,}".format(round(teorico))},
                     {'name':"{:.0%}".format(tavancetons)},
                     {'name':"{:.0%}".format(tdesvton)},
                     {'name':"{:,}".format(round(ttendtonsfm))},
@@ -524,6 +534,7 @@ class ReportsSales(models.AbstractModel):
             facturacion=0
             facturacion_mes_ant=0
             porcentcubrimiento=0
+            teorico=0
             tprice_per_kgp=0
             tprice_per_kgf=0
             tavancetons=0
@@ -541,6 +552,7 @@ class ReportsSales(models.AbstractModel):
             'level': 0,
             'class': 'cliente',
             'columns':[
+                    {'name':''},
                     {'name':''},
                     {'name':''},
                     {'name':''},
@@ -603,6 +615,7 @@ class ReportsSales(models.AbstractModel):
                         'columns':[
                             {'name':0 if budget==False else "{:,}".format(round(budget/1000)) },
                             {'name':"{:,}".format(round(invoices_line[2]/1000))},
+                            {'name':"{:,}".format(0) if budget==0 or bussines_days.bussines_days==0 or self._billed_days(options,line_id)==0 else "{:,}".format(round(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id)))},
                             {'name':"{:.0%}".format(0) if budget==0 else "{:.0%}".format((invoices_line[2]/1000)/(budget/1000))},
                             {'name':"{:.0%}".format(0) if budget==0 or invoices_line[2]==0 or bussines_days.bussines_days==0 or self._billed_days(options,line_id)==0 else "{:.0%}".format(((invoices_line[2]/1000)/(((budget/1000)/bussines_days.bussines_days)*self._billed_days(options,line_id))-1))},
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
@@ -664,7 +677,10 @@ class ReportsSales(models.AbstractModel):
                 ttendtonsfm=(facturacion/self._billed_days(options,line_id))*bussines_days.bussines_days
             else:
                 ttendtonsfm=0
-
+            if estimado!=0 or bussines_days.bussines_days!=0 or self._billed_days(options,line_id)!=0:
+                teorico=(estimado/bussines_days.bussines_days)*self._billed_days(options,line_id)
+            else:
+                teorico=0
 
 
 
@@ -676,6 +692,7 @@ class ReportsSales(models.AbstractModel):
                     'columns':[
                     {'name': "{:,}".format(round(estimado))},
                     {'name': "{:,}".format(round(facturacion))},
+                    {'name': "{:,}".format(round(teorico))},
                     {'name':"{:.0%}".format(tavancetons)},
                     {'name':"{:.0%}".format(tdesvton)},
                     {'name':"{:,}".format(round(ttendtonsfm))},
@@ -691,34 +708,6 @@ class ReportsSales(models.AbstractModel):
                     {'name':"{:,}".format(round(tmesprevyear))},
                     ],
                     })
-
-        #     for invoice in invoices:
-        #         lines.append({
-        #         'id': invoice.id,
-        #         'name': invoice.partner_id.name,
-        #         'level': 2,
-        #         'class': 'activo',
-        #         'columns':[
-        #
-        #         ],
-        #         })
-        #         for invoice_line in invoice.invoice_line_ids:
-        #             if invoice_line.product_id.sale_ok == True:
-        #                 lines.append({
-        #                 'id': invoice_line.id,
-        #                 'name': invoice_line.product_id.default_code,
-        #                 'level': 3,
-        #                 'class': 'activo',
-        #                 'columns':[
-        #                     {'name':"{:,}".format(invoice_line.quantity)},
-        #                     {'name':self.format_value(invoice_line.price_unit*invoice.type_currency)},
-        #                     {'name':"{:,}".format(invoice_line.weight)},
-        #                     {'name':str(invoice_line.uom_id.name)+' '+str(invoice_line.uom_id.id)},
-        #                     {'name':self.format_value(invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))},
-        #                     {'name':"{:,}".format(invoice_line.quantity*invoice_line.weight)},
-        #                     {'name': 0 if invoice_line.weight==False else self.format_value((invoice_line.quantity*(invoice_line.price_unit*invoice.type_currency))/(invoice_line.quantity*invoice_line.weight))},
-        #                 ],
-        #                 })
 
 
         return lines
