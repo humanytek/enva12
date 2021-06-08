@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+      <record id="action_reports_receipts_nova" model="ir.actions.client">
+          <field name="name">Reporte de ingresos Corrugado</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'reports.receipts.nova'}" />
+      </record>
+      <menuitem id="menu_action_reports_receipts_nova" name="Reporte de Ingresos Corrugado" action="action_reports_receipts_nova" parent="account.menu_finance_receivables" groups="account.group_account_user" sequence="60"/>
+
+      <record id="action_reports_receipts_nova_paper" model="ir.actions.client">
+          <field name="name">Reporte de ingresos Papel</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'reports.receipts.nova.paper'}" />
+      </record>
+      <menuitem id="menu_action_reports_receipts_nova_paper" name="Reporte de Ingresos Papel" action="action_reports_receipts_nova_paper" parent="account.menu_finance_receivables" groups="account.group_account_user" sequence="61"/>
+
+      <record model="ir.ui.view" id="budget_goal_tree_view">
+        <field name="name">Meta de Cobranza</field>
+        <field name="model">budget.goal.receipts</field>
+        <field name="arch" type="xml">
+          <tree string="Meta de Cobranza">
+            <field name="name"/>
+            <field name="date_from"/>
+            <field name="date_to"/>
+            <field name="goal"/>
+            <field name="note"/>
+          </tree>
+        </field>
+      </record>
+
+
+      <record model="ir.actions.act_window" id="budget_goal_list_action">
+        <field name="name">Meta Credito y Cobranza</field>
+        <field name="res_model">budget.goal.receipts</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primera meta de cobranza
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_budget_goal_list_action" name="Meta de Cobranza" action="budget_goal_list_action" parent="account.menu_finance_receivables" sequence="65" />
+
+
+    </data>
+</odoo>

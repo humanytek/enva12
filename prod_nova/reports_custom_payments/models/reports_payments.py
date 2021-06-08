@@ -19,6 +19,7 @@ class ReportsPayments(models.AbstractModel):
 
     filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
 
+
     def _get_columns_name(self, options):
         return [
         {'name': _('FECHA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
@@ -72,41 +73,94 @@ class ReportsPayments(models.AbstractModel):
 
         return result
 
+    def _invoice_aml(self,options,line_id,invoice_id):
+
+        # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+        # if where_clause:
+        #     where_clause = 'AND ' + where_clause
+        date_from = options['date']['date_from']
+        date_to = options['date']['date_to']
+        sql_query ="""
+              SELECT
+                      aml.id as aml_id ,
+                      aml.full_reconcile_id as full_reconcile_id
+                      FROM account_move_line aml
+                      WHERE aml.reconciled=True AND aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
+                      limit 1
+                                """
+
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.fetchall()
+
+        return result
+
+    def _payment_aml(self,options,line_id,payment_id,full_reconcile_id):
+
+
+        sql_query ="""
+              SELECT
+                      aml.debit as debit,
+                      aml.amount_currency as amount_currency
+                      FROM account_move_line aml
+                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+""" AND
+                      aml.reconciled=True AND aml.credit = 0 AND aml.debit > 0 """
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.dictfetchall()
+
+        return result
+
+    def _payment_aml2(self,options,line_id,payment_id):
+
+
+        sql_query ="""
+              SELECT
+                      aml.id as aml_id
+                      FROM account_move_line aml
+                      WHERE aml.payment_id = """+payment_id+""" limit 1"""
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.fetchall()
+
+        return result
 
     @api.model
     def _get_lines(self, options, line_id=None):
+
         lines = []
         pagos = self._payment_line(options,line_id,False)
         if pagos:
             for p in pagos:
-                amlpaid=self.env['account.move.line'].search([('payment_id','=',p['payment_id'])],limit=1)
                 caret_type ='account.move'
                 if p['factura'] != None:
                     caret_type = 'account.invoice.in'
-                    aml=self.env['account.move.line'].search(['&','&','&',('invoice_id','=',p['invoice_id']),('reconciled','=',True),('credit', '>', 0), ('debit', '=', 0)])
+                    aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
                     monto=0
                     if aml:
-                        aml2=self.env['account.move.line'].search(['&','&','&','&',('payment_id','=',p['payment_id']),('full_reconcile_id','=',aml.full_reconcile_id.id),('reconciled','=',True),('debit', '>', 0), ('credit', '=', 0)])
+                        aml_id=aml[0][0]
+                        aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
                         if p['moneda']=='MXN':
                             if aml2:
                                 for a in aml2:
-                                    monto+=a.debit
+                                    monto+=a['debit']
                             else:
                                 monto=0
                         else:
                             if aml2:
                                 for a in aml2:
-                                    monto+=a.amount_currency
+                                    monto+=a['amount_currency']
                             else:
                                 monto=0
-
                 else:
+                    aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
                     caret_type = 'account.payment'
-                    aml=amlpaid
+                    aml_id = aml3[0][0]
 
                 lines.append({
-                'id': aml.id,
-                'name': str(p['fecha_pago']) ,
+                'id': aml_id,
+                'name': str(p['fecha_pago']),
+                'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
                 'caret_options': caret_type,

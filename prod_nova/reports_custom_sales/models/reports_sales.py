@@ -31,7 +31,7 @@ class ReportsSales(models.AbstractModel):
         {'name': _('TEND.TONS FIN DE MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PROYECTADO VENTAS'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('% CUBRIMIENTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('COMENTARIOS'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('COMENTARIOS'), 'style': 'text-align: left;white-space:nowrap;'},
         {'name': _('PRECIO x KG ESTIMADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('PRECIO x KG REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('DESV.PRECIO X KG'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -52,7 +52,7 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             SELECT
                     rp.name as cliente,
-                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                     SUM(ail.total_weight) as total_weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -87,7 +87,7 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             SELECT
                     rp.name as cliente,
-                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                     SUM(ail.total_weight) as total_weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -119,7 +119,7 @@ class ReportsSales(models.AbstractModel):
         sql_query ="""
             SELECT
                     rp.name as cliente,
-                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                    SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                     SUM(ail.total_weight) as total_weight
                     FROM account_invoice_line ail
                     LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -177,7 +177,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                 GROUP BY rp.name,rp.id
                 )
                 UNION
@@ -186,7 +186,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                     GROUP BY rp.name,rp.id
                 )
                     UNION
@@ -195,7 +195,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                     GROUP BY rp.name,rp.id
                 )
                 ORDER BY cliente
@@ -241,7 +241,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                 GROUP BY rp.name,rp.id
                 )
                 UNION
@@ -250,7 +250,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                     GROUP BY rp.name,rp.id
                 )
                     UNION
@@ -259,7 +259,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
                     GROUP BY rp.name,rp.id
                 )
                 ORDER BY cliente
@@ -436,7 +436,7 @@ class ReportsSales(models.AbstractModel):
                             {'name':0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))},
                             {'name':(0 if self._billed_days(options,line_id)==0 or budget==False else "{:,}".format(round(((invoices_line[2]/1000)/(self._billed_days(options,line_id)))*bussines_days.bussines_days))) if project_sale==False else "{:,}".format(round(project_sale/1000)) },
                             {'name': "{:.0%}".format(porcentcubrimiento)},
-                            {'name':'' if comentarios.note==False else comentarios.note},
+                            {'name':'' if comentarios.note==False else comentarios.note, 'style': 'text-align: left;white-space:nowrap;'},
                             {'name':0 if price_per_kg==False else self.format_value(price_per_kg) },
                             {'name':0 if invoices_line[2]==0 else self.format_value(invoices_line[1]/invoices_line[2])},
                             {'name':"{:.0%}".format(desv_price_per_kg) },

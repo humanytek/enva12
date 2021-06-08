@@ -173,7 +173,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -200,7 +200,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -244,7 +244,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -271,7 +271,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -316,7 +316,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
@@ -343,7 +343,7 @@ class ReportsTonCorrug(models.AbstractModel):
                             WHEN ail.uom_id = 1 THEN ail.quantity/1000
                             WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_applied AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
                         SUM(ail.total_weight) as total_weight
                         FROM account_invoice_line ail
                         LEFT JOIN product_product pp ON pp.id=ail.product_id
