@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ReportsReceiptsNova(models.AbstractModel):
-    _name = "reports.receipts.nova"
+    _name = "reports.receipts.nova.paper"
     _description = "Reports Receipts"
     _inherit = 'account.report'
 
@@ -71,7 +71,7 @@ class ReportsReceiptsNova(models.AbstractModel):
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
                     WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
                     AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
-                    AND rpc.name='CORRUGADO'
+                    AND rpc.name='PAPEL'
                     GROUP BY rp.id,rp.name
                     )
                     UNION(
@@ -82,7 +82,7 @@ class ReportsReceiptsNova(models.AbstractModel):
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=bgr.name
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
                     WHERE bgr.date_from >= '"""+date_from+"""' AND bgr.date_to <= '"""+str(df)+"""'
-                     AND rpc.name='CORRUGADO'
+                     AND rpc.name='PAPEL'
                     GROUP BY rp.id,rp.name
                     )
             ORDER BY partner
@@ -167,7 +167,18 @@ class ReportsReceiptsNova(models.AbstractModel):
         date_to = options['date']['date_to']
         partner = self._partner_line(options,line_id,False)
         df=fields.Date.from_string(date_from)
+
         if partner:
+
+            tbudget=0
+            tfacturacion=0
+            tacumulado=0
+            tacumuladom=0
+            tacumuladoy=0
+            tcumplimiento=0
+            tpptodia=0
+            tporcentaje=0
+            ttendencia=0
             for p in partner:
                 facturacion=0
                 acumulado=0
@@ -187,56 +198,75 @@ class ReportsReceiptsNova(models.AbstractModel):
                 comentarios = self.env['budget.goal.receipts'].search(['&','&',('name','=',p['partner_id']),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_from)+relativedelta(months=1)+timedelta(days=-1))])
                 if r[0]['residual'] != None:
                     facturacion=r[0]['residual']
+                    tfacturacion+=r[0]['residual']
                 else:
                     facturacion=0
+                    tfacturacion+=0
 
                 if m[0]['monto'] != None:
                     acumulado=m[0]['monto']
+                    tacumulado+=m[0]['monto']
                 else:
                     acumulado=0
+                    tacumulado+=0
 
                 if m_ant[0]['monto'] != None:
                     acumuladom=m_ant[0]['monto']
+                    tacumuladom+=m_ant[0]['monto']
                 else:
                     acumuladom=0
+                    tacumuladom+=0
 
                 if m_anio_ant[0]['monto'] != None:
                     acumuladoy=m_anio_ant[0]['monto']
+                    tacumuladoy+=m_anio_ant[0]['monto']
                 else:
                     acumuladoy=0
+                    tacumuladoy+=0
 
                 if budget!=0:
                     if m[0]['monto']!=None:
                         if m[0]['monto']!=0:
                             cumplimiento=m[0]['monto']/budget
+
                         else:
                             cumplimiento=0
+
                     else:
                         cumplimiento=0
+
                 else:
                     cumplimiento=0
+
 
                 if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
                     if budget!=0:
                         if self._billed_days(options,line_id)!=False:
                             pptodia=(budget/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                            tpptodia+=(budget/bussines_days.bussines_days)*self._billed_days(options,line_id)
                         else:
                             pptodia=(budget/bussines_days.bussines_days)*0
+                            tpptodia+=(budget/bussines_days.bussines_days)*0
 
                 if pptodia!=0:
                     if acumulado!=0:
                         porcentaje=acumulado/pptodia
+
                     else:
                         porcentaje=0
+
                 else:
                     porcentaje=0
+
 
                 if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
                     if acumulado!=0:
                         if bussines_days.bussines_days!=False:
                             tendencia=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                            ttendencia+=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
                         else:
                             tendencia=(acumulado/self._billed_days(options,line_id))*0
+                            ttendencia+=(acumulado/self._billed_days(options,line_id))*0
 
 
                 lines.append({
@@ -261,6 +291,55 @@ class ReportsReceiptsNova(models.AbstractModel):
                 ],
 
                 })
+                if budget:
+                    tbudget+=budget
+                else:
+                    tbudget+=0
+
+                if tbudget!=0:
+                    if tacumulado!=None:
+                        if tacumulado!=0:
+                            tcumplimiento+=tacumulado/tbudget
+                        else:
+                            tcumplimiento+=0
+                    else:
+                        tcumplimiento+=0
+                else:
+                    tcumplimiento+=0
+
+                if tpptodia!=0:
+                    if tacumulado!=0:
+                        tporcentaje+=tacumulado/tpptodia
+                    else:
+                        tporcentaje+=0
+                else:
+                    tporcentaje+=0
+
+
+
+            lines.append({
+            'id': 'TOTAL',
+            'name': 'TOTAL' ,
+            'level': 1,
+            'class': 'payment',
+            'columns':[
+                    {'name':self.format_value(tbudget), 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tfacturacion) , 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tacumulado) , 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tbudget-tacumulado) , 'style': 'white-space:nowrap;'},
+                    {'name':"{:.0%}".format(tcumplimiento), 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tpptodia) , 'style': 'white-space:nowrap;'},
+                    {'name':"{:.0%}".format(tporcentaje) , 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(ttendencia), 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tacumuladom) , 'style': 'white-space:nowrap;'},
+                    {'name':self.format_value(tacumuladoy), 'style': 'white-space:nowrap;'},
+                    {'name':''},
+
+
+            ],
+
+            })
+
         return lines
 
     @api.model
