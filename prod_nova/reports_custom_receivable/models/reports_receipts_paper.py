@@ -299,21 +299,21 @@ class ReportsReceiptsNova(models.AbstractModel):
                 if tbudget!=0:
                     if tacumulado!=None:
                         if tacumulado!=0:
-                            tcumplimiento+=tacumulado/tbudget
+                            tcumplimiento=tacumulado/tbudget
                         else:
-                            tcumplimiento+=0
+                            tcumplimiento=0
                     else:
-                        tcumplimiento+=0
+                        tcumplimiento=0
                 else:
-                    tcumplimiento+=0
+                    tcumplimiento=0
 
                 if tpptodia!=0:
                     if tacumulado!=0:
-                        tporcentaje+=tacumulado/tpptodia
+                        tporcentaje=tacumulado/tpptodia
                     else:
-                        tporcentaje+=0
+                        tporcentaje=0
                 else:
-                    tporcentaje+=0
+                    tporcentaje=0
 
 
 
