@@ -85,7 +85,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.id as aml_id ,
                       aml.full_reconcile_id as full_reconcile_id
                       FROM account_move_line aml
-                      WHERE aml.reconciled=True AND aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
+                      WHERE aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
                       limit 1
                                 """
 
@@ -120,7 +120,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.amount_currency as amount_currency
                       FROM account_move_line aml
                       WHERE aml.payment_id = """+payment_id+""" AND aml.name = '"""+factura+"""' AND
-                      aml.reconciled=True AND aml.credit = 0 AND aml.debit > 0 """
+                      aml.credit = 0 AND aml.debit > 0 """
 
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
@@ -173,16 +173,31 @@ class ReportsPayments(models.AbstractModel):
                             aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
                             if p['moneda']=='MXN':
                                 if aml3:
-                                    for a in aml3:
-                                        monto+=a['debit']
+                                    for am in aml3:
+                                        monto+=am['debit']
                                 else:
                                     monto=0
                             else:
                                 if aml3:
-                                    for a in aml3:
-                                        monto+=a['amount_currency']
+                                    for am in aml3:
+                                        monto+=am['amount_currency']
                                 else:
                                     monto=0
+                    # else:
+                    #     aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
+                    #     aml_id = aml3[0]['aml_id']
+                    #     if p['moneda']=='MXN':
+                    #         if aml3:
+                    #             for am in aml3:
+                    #                 monto+=am['debit']
+                    #         else:
+                    #             monto=0
+                    #     else:
+                    #         if aml3:
+                    #             for am in aml3:
+                    #                 monto+=am['amount_currency']
+                    #         else:
+                    #             monto=0
                 else:
                     aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
                     caret_type = 'account.payment'
