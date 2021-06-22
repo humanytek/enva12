@@ -3,4 +3,5 @@
 
 from . import reports_receipts
 from . import reports_receipts_paper
+from . import reports_receipts_acum
 from . import budget_goal

@@ -17,6 +17,13 @@
       </record>
       <menuitem id="menu_action_reports_receipts_nova_paper" name="Reporte de Ingresos Papel" action="action_reports_receipts_nova_paper" parent="account.menu_finance_receivables" groups="account.group_account_user" sequence="61"/>
 
+      <record id="action_reports_receipts_nova_acum" model="ir.actions.client">
+          <field name="name">Reporte de ingresos Acumulados</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'reports.receipts.nova.acum'}" />
+      </record>
+      <menuitem id="menu_action_reports_receipts_nova_acum" name="Reporte de Ingresos Acumulados" action="action_reports_receipts_nova_acum" parent="account.menu_finance_receivables" groups="account.group_account_user" sequence="62"/>
+
       <record model="ir.ui.view" id="budget_goal_tree_view">
         <field name="name">Meta de Cobranza</field>
         <field name="model">budget.goal.receipts</field>

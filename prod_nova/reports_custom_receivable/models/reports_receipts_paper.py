@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 
 class ReportsReceiptsNova(models.AbstractModel):
     _name = "reports.receipts.nova.paper"
-    _description = "Reports Receipts"
+    _description = "Reports Receipts Paper"
     _inherit = 'account.report'
 
     filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
@@ -22,16 +22,16 @@ class ReportsReceiptsNova(models.AbstractModel):
     def _get_columns_name(self, options):
         return [
         {'name': _('CLIENTE'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('META'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('FACTURACION'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('ACUMULADO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('DIF'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('CUMPLIMIENTO'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('PPTO DIA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('%'), 'class': 'number', 'style': 'text-align: center;white-space:nowrap;'},
-        {'name': _('TENDENCIA'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
-        {'name': _('MES ANTERIOR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
-        {'name': _('AÑO ANTERIOR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('META COBR MES'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('FACT DEL MES'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('COBR ACUM MES'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('META COBR VS META ACUM'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': _('CUMPL COBR MES'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('PPTO COBR MES'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('% CUMPL COBR MES'), 'class': 'number', 'style': 'text-align: center;white-space:nowrap;'},
+        {'name': _('TEND COBR MES'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('COBR MES ANTERIOR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('COBR MISMO MES AÑO ANTERIOR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
         {'name': _('COMENTARIOS'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
         ]
 
