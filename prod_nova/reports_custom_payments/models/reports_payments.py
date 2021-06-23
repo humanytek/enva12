@@ -86,6 +86,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.full_reconcile_id as full_reconcile_id
                       FROM account_move_line aml
                       WHERE aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
+                      AND aml.full_reconcile_id is not NULL
                       limit 1
                                 """
 
@@ -103,8 +104,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.debit as debit,
                       aml.amount_currency as amount_currency
                       FROM account_move_line aml
-                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+""" AND
-                      aml.reconciled=True AND aml.credit = 0 AND aml.debit > 0 """
+                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+""" AND aml.credit = 0 AND aml.debit > 0 """
 
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
@@ -152,21 +152,22 @@ class ReportsPayments(models.AbstractModel):
                 if p['factura'] != None:
                     caret_type = 'account.invoice.in'
                     aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
-                    monto=0
+
                     if aml:
                         aml_id=aml[0][0]
-                        if aml[0][1]!=None:
+                        monto=0
+                        if aml[0][1] != None:
                             aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
                             if p['moneda']=='MXN':
                                 if aml2:
                                     for a in aml2:
-                                        monto+=a['debit']
+                                        monto=a['debit']
                                 else:
                                     monto=0
                             else:
                                 if aml2:
                                     for a in aml2:
-                                        monto+=a['amount_currency']
+                                        monto=a['amount_currency']
                                 else:
                                     monto=0
                         else:
@@ -176,7 +177,7 @@ class ReportsPayments(models.AbstractModel):
                                     for am in aml3:
                                         monto+=am['debit']
                                 else:
-                                    monto=0
+                                    monto=1
                             else:
                                 if aml3:
                                     for am in aml3:
