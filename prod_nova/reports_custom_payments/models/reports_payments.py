@@ -17,7 +17,7 @@ class ReportsPayments(models.AbstractModel):
     _description = "Reports Payments"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
+    filter_date = {'date_from': '2021-05-30', 'date_to': '2021-05-30'}
 
 
     def _get_columns_name(self, options):
@@ -30,6 +30,7 @@ class ReportsPayments(models.AbstractModel):
         {'name': _('FACTURA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('FECHA FACTURA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('CIRCULAR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('DESCRIPCION'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
 
         ]
 
@@ -152,7 +153,7 @@ class ReportsPayments(models.AbstractModel):
                 if p['factura'] != None:
                     caret_type = 'account.invoice.in'
                     aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
-
+                    ail=self.env['account.invoice.line'].search([('invoice_id','=',p['invoice_id'])], limit=1)
                     if aml:
                         aml_id=aml[0][0]
                         monto=0
@@ -200,6 +201,7 @@ class ReportsPayments(models.AbstractModel):
                     #         else:
                     #             monto=0
                 else:
+                    ail=False
                     aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
                     caret_type = 'account.payment'
                     aml_id = aml3[0][0]
@@ -219,6 +221,7 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(ail.name) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
 
 
