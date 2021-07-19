@@ -4,7 +4,7 @@
 
 
       <record id="action_report_bank_nova" model="ir.actions.client">
-          <field name="name">Reportes de Bancario</field>
+          <field name="name">Relacion Bancaria</field>
           <field name="tag">account_report</field>
           <field name="context" eval="{'model': 'report.bank.nova'}" />
       </record>
