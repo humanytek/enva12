@@ -19,15 +19,20 @@ class ReportsBanks(models.AbstractModel):
 
     filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
 
+    def _get_templates(self):
+        templates = super(ReportsBanks, self)._get_templates()
+        templates['line_template'] = 'reports_custom_bank.line_template_nova_banks'
+        return templates
+
     def _get_columns_name(self, options):
         return [
-        {'name': _(''), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('SALDO INICIAL'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('CARGOS'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('ABONOS'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('INGRESOS'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('PAGOS CONTADO/CARTERA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('SALDO DISPONIBLE'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _(''), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
+        {'name': _('SALDO INICIAL'), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
+        {'name': _('CARGOS'), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
+        {'name': _('ABONOS'), 'class': 'number', 'style':  'text-align: center; white-space:nowrap;'},
+        {'name': _('INGRESOS'), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
+        {'name': _('PAGOS CONTADO/CARTERA'), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
+        {'name': _('SALDO DISPONIBLE'), 'class': 'number', 'style': 'text-align: center; white-space:nowrap;'},
 
         ]
 
@@ -372,13 +377,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init4[0])},
-        {'name':self.format_value(abs(comision4[0]+transfer_out4[0]))},
-        {'name':self.format_value(transfer_in4[0])},
-        {'name':self.format_value(ingresos4[0])},
+        {'name':self.format_value(balance_init4[0]), 'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(comision4[0]+transfer_out4[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in4[0]), 'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos4[0]), 'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init4[0]+ingresos4[0]+comision4[0]+transfer_out4[0]+transfer_in4[0])},
-        {'name':self.format_value(abs(pagos4[0]))},
-        {'name':self.format_value(balance_final4[0])},
+        {'name':self.format_value(abs(pagos4[0])), 'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final4[0]), 'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_usd+=balance_init4[0]+ingresos4[0]+comision4[0]+transfer_out4[0]+transfer_in4[0]
@@ -397,13 +402,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init5[0])},
-        {'name':self.format_value(abs(comision5[0]+transfer_out5[0]))},
-        {'name':self.format_value(transfer_in5[0])},
-        {'name':self.format_value(ingresos5[0])},
+        {'name':self.format_value(balance_init5[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(comision5[0]+transfer_out5[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in5[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos5[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init5[0]+ingresos5[0]+comision5[0]+transfer_out5[0]+transfer_in5[0])},
-        {'name':self.format_value(abs(pagos5[0]))},
-        {'name':self.format_value(balance_final5[0])},
+        {'name':self.format_value(abs(pagos5[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final5[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_euro+=balance_init5[0]+ingresos5[0]+comision5[0]+transfer_out5[0]+transfer_in5[0]
@@ -423,13 +428,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init[0])},
-        {'name':self.format_value(abs(comision[0]+transfer_out[0]))},
-        {'name':self.format_value(transfer_in[0]+devoluciones[0])},
-        {'name':self.format_value(ingresos[0])},
+        {'name':self.format_value(balance_init[0]),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(comision[0]+transfer_out[0])),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in[0]+devoluciones[0]),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos[0]),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init[0]+ingresos[0]+comision[0]+transfer_out[0]+transfer_in[0])},
-        {'name':self.format_value(abs(pagos[0]))},
-        {'name':self.format_value(balance_final[0])},
+        {'name':self.format_value(abs(pagos[0])),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final[0]),'style': 'text-align: right; white-space:nowrap;','style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_mxn+=balance_init[0]+ingresos[0]+comision[0]+transfer_out[0]+transfer_in[0]
@@ -449,13 +454,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init1[0])},
-        {'name':self.format_value(abs(transfer_out1[0]+comision1[0]))},
-        {'name':self.format_value(transfer_in1[0]+devoluciones1[0])},
-        {'name':self.format_value(ingresos1[0])},
+        {'name':self.format_value(balance_init1[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out1[0]+comision1[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in1[0]+devoluciones1[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos1[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init1[0]+ingresos1[0]+comision1[0]+transfer_out1[0]+transfer_in1[0])},
-        {'name':self.format_value(abs(pagos1[0]))},
-        {'name':self.format_value(balance_final1[0])},
+        {'name':self.format_value(abs(pagos1[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final1[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_mxn+=balance_init1[0]+ingresos1[0]+comision1[0]+transfer_out1[0]+transfer_in1[0]
@@ -476,13 +481,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init2[0])},
-        {'name':self.format_value(abs(transfer_out2[0]+comision2[0]))},
-        {'name':self.format_value(transfer_in2[0]+devoluciones2[0])},
-        {'name':self.format_value(ingresos2[0])},
+        {'name':self.format_value(balance_init2[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out2[0]+comision2[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in2[0]+devoluciones2[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos2[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init2[0]+ingresos2[0]+comision2[0]+transfer_out2[0]+transfer_in2[0])},
-        {'name':self.format_value(abs(pagos2[0]))},
-        {'name':self.format_value(balance_final2[0])},
+        {'name':self.format_value(abs(pagos2[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final2[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_mxn+=balance_init2[0]+ingresos2[0]+comision2[0]+transfer_out2[0]+transfer_in2[0]
@@ -501,13 +506,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init6[0])},
-        {'name':self.format_value(abs(transfer_out6[0]+comision6[0]))},
-        {'name':self.format_value(transfer_in6[0])},
-        {'name':self.format_value(ingresos6[0])},
+        {'name':self.format_value(balance_init6[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out6[0]+comision6[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in6[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos6[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init6[0]+ingresos6[0]+comision6[0]+transfer_out6[0]+transfer_in6[0])},
-        {'name':self.format_value(abs(pagos6[0]))},
-        {'name':self.format_value(balance_final6[0])},
+        {'name':self.format_value(abs(pagos6[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final6[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_mxn+=balance_init6[0]+ingresos6[0]+comision6[0]+transfer_out6[0]+transfer_in6[0]
@@ -526,13 +531,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init7[0])},
-        {'name':self.format_value(abs(transfer_out7[0]+comision7[0]))},
-        {'name':self.format_value(transfer_in7[0])},
-        {'name':self.format_value(ingresos7[0])},
+        {'name':self.format_value(balance_init7[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out7[0]+comision7[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in7[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos7[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init7[0]+ingresos7[0]+comision7[0]+transfer_out7[0]+transfer_in7[0])},
-        {'name':self.format_value(abs(pagos7[0]))},
-        {'name':self.format_value(balance_final7[0])},
+        {'name':self.format_value(abs(pagos7[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final7[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_euro+=balance_init7[0]+ingresos7[0]+comision7[0]+transfer_out7[0]+transfer_in7[0]
@@ -551,13 +556,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init8[0])},
-        {'name':self.format_value(abs(transfer_out8[0]+comision8[0]))},
-        {'name':self.format_value(transfer_in8[0])},
-        {'name':self.format_value(ingresos8[0])},
+        {'name':self.format_value(balance_init8[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out8[0]+comision8[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in8[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos8[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init8[0]+ingresos8[0]+comision8[0]+transfer_out8[0]+transfer_in8[0])},
-        {'name':self.format_value(abs(pagos8[0]))},
-        {'name':self.format_value(balance_final8[0])},
+        {'name':self.format_value(abs(pagos8[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final8[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_mxn+=balance_init8[0]+ingresos8[0]+comision8[0]+transfer_out8[0]+transfer_in8[0]
@@ -576,13 +581,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init3[0])},
-        {'name':self.format_value(abs(transfer_out3[0]+comision3[0]))},
-        {'name':self.format_value(transfer_in3[0])},
-        {'name':self.format_value(ingresos3[0])},
+        {'name':self.format_value(balance_init3[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out3[0]+comision3[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in3[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos3[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init3[0]+ingresos3[0]+comision3[0]+transfer_out3[0]+transfer_in3[0])},
-        {'name':self.format_value(abs(pagos3[0]))},
-        {'name':self.format_value(balance_final3[0])},
+        {'name':self.format_value(abs(pagos3[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final3[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_usd+=balance_init3[0]+ingresos3[0]+comision3[0]+transfer_out3[0]+transfer_in3[0]
@@ -601,13 +606,13 @@ class ReportsBanks(models.AbstractModel):
         'level':2,
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init9[0])},
-        {'name':self.format_value(abs(transfer_out9[0]+comision9[0]))},
-        {'name':self.format_value(transfer_in9[0])},
-        {'name':self.format_value(ingresos9[0])},
+        {'name':self.format_value(balance_init9[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out9[0]+comision9[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in9[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos9[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init9[0]+ingresos9[0]+comision9[0]+transfer_out9[0]+transfer_in9[0])},
-        {'name':self.format_value(abs(pagos9[0]))},
-        {'name':self.format_value(balance_final9[0])},
+        {'name':self.format_value(abs(pagos9[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final9[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         saldo_final_euro+=balance_init9[0]+ingresos9[0]+comision9[0]+transfer_out9[0]+transfer_in9[0]
@@ -627,13 +632,13 @@ class ReportsBanks(models.AbstractModel):
         'style': 'border-style: none;',
         'class': 'cuentas',
         'columns':[
-        {'name':self.format_value(balance_init10[0])},
-        {'name':self.format_value(abs(transfer_out10[0]+comision10[0]))},
-        {'name':self.format_value(transfer_in10[0])},
-        {'name':self.format_value(ingresos10[0])},
+        {'name':self.format_value(balance_init10[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out10[0]+comision10[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in10[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos10[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init10[0]+ingresos10[0]+comision10[0]+transfer_out10[0]+transfer_in10[0])},
-        {'name':self.format_value(abs(pagos10[0]))},
-        {'name':self.format_value(balance_final10[0])},
+        {'name':self.format_value(abs(pagos10[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final10[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
 
@@ -665,8 +670,8 @@ class ReportsBanks(models.AbstractModel):
         {'name':''},
         # {'name':self.format_value(saldo_final_mxn)},
         # {'name':self.format_value(abs(pagos_mxn))},
-        {'name':'TOTAL M.N.:'},
-        {'name':self.format_value(total_mxn)},
+        {'name':'TOTAL M.N.:','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(total_mxn),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
 
@@ -683,8 +688,8 @@ class ReportsBanks(models.AbstractModel):
         {'name':''},
         # {'name':self.format_value(saldo_final_usd)},
         # {'name':self.format_value(abs(pagos_usd))},
-        {'name':'TOTAL USD:'},
-        {'name':self.format_value(total_usd)},
+        {'name':'TOTAL USD:','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(total_usd),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         tipo_cambio_usd=self.env['res.currency.rate'].search(['&',('currency_id','=',2),('name','=',fields.Date.from_string(date_from))])
@@ -704,8 +709,8 @@ class ReportsBanks(models.AbstractModel):
         {'name':''},
         # {'name':self.format_value(saldo_final_euro)},
         # {'name':self.format_value(abs(pagos_euro))},
-        {'name':'TOTAL EURO:'},
-        {'name':self.format_value(total_euro)},
+        {'name':'TOTAL EURO:','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(total_euro),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         total_euro_to_mxn=total_euro*(1/tipo_cambio_euro.rate)
@@ -720,8 +725,8 @@ class ReportsBanks(models.AbstractModel):
         {'name':''},
         {'name':''},
         {'name':''},
-        {'name':'TOTAL EN M.N. DISP'},
-        {'name':self.format_value(total_mxn+balance_final10[0]+total_usd_to_mxn+total_euro_to_mxn)},
+        {'name':'TOTAL EN M.N. DISP:','style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(total_mxn+balance_final10[0]+total_usd_to_mxn+total_euro_to_mxn),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         # lines.append({
