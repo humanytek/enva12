@@ -318,7 +318,7 @@ class ReportsBanks(models.AbstractModel):
                 LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
                 WHERE aa.code = %s """+where_clause+""" AND debit > 0 AND credit = 0
                 AND (\"account_move_line\".partner_id is not Null )
-                AND (rpc.name!='BANCO' OR rpc.name is Null)
+                AND rpc.name IN ('CORRUGADO','PAPEL')
                 GROUP BY aa.id
         """
         params = [str(arg)] + where_params
