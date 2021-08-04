@@ -155,6 +155,31 @@ class ReportsBanks(models.AbstractModel):
             result=(0,)
 
         return result
+    def _interes(self,options,line_id,arg):
+        tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
+        if where_clause:
+            where_clause = 'AND ' + where_clause
+
+        sql_query ="""
+            SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
+                FROM """+tables+"""
+                LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
+                LEFT JOIN res_partner rp on rp.id=\"account_move_line\".partner_id
+                LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=\"account_move_line\".partner_id
+                LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
+                WHERE aa.code = %s """+where_clause+""" AND debit > 0 AND credit = 0
+                AND (\"account_move_line\".partner_id is not Null )
+                AND rpc.name IN ('BANCO')
+                GROUP BY aa.id
+        """
+        params = [str(arg)] + where_params
+
+        self.env.cr.execute(sql_query, params)
+        result = self.env.cr.fetchone()
+        if result==None:
+            result=(0,)
+
+        return result
     def _transfer_inext(self,options,line_id,arg):
         tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         if where_clause:
@@ -261,22 +286,25 @@ class ReportsBanks(models.AbstractModel):
 
         sql_query ="""
             SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
+
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
                 LEFT JOIN res_partner rp on rp.id=\"account_move_line\".partner_id
-                LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=\"account_move_line\".partner_id
-                LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
                 WHERE aa.code = %s """+where_clause+""" AND debit > 0 AND credit = 0
                 AND (\"account_move_line\".partner_id is not Null )
-                AND (rpc.name not in ('CORRUGADO','PAPEL') OR rpc.name is Null)
+                AND rp.id NOT IN (SELECT rp.id
+                                FROM res_partner_category rpc
+                                LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.category_id=rpc.id
+                                 WHERE rp.id=rpcr.partner_id AND rpc.name IN ('CORRUGADO','PAPEL') Limit 1)
                 GROUP BY aa.id
         """
         params = [str(arg)] + where_params
 
+
         self.env.cr.execute(sql_query, params)
         result = self.env.cr.fetchone()
         if result==None:
-            result=(0,)
+            result=(0,0,)
 
         return result
     def _paymentsext(self,options,line_id,arg):
@@ -625,6 +653,7 @@ class ReportsBanks(models.AbstractModel):
         transfer_in10=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._transfer_in(options,line_id,str('103.01.001'))
         transfer_out10=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._transfer_out(options,line_id,str('103.01.001'))
         comision10=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._comision(options,line_id,str('103.01.001'))
+        interes10=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._interes(options,line_id,str('103.01.001'))
         lines.append({
         'id': '103.01.001',
         'name': 'MULTIVA INTEGRA  6469507',
@@ -634,7 +663,7 @@ class ReportsBanks(models.AbstractModel):
         'columns':[
         {'name':self.format_value(balance_init10[0]),'style': 'text-align: right; white-space:nowrap;'},
         {'name':self.format_value(abs(transfer_out10[0]+comision10[0])),'style': 'text-align: right; white-space:nowrap;'},
-        {'name':self.format_value(transfer_in10[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in10[0]+interes10[0]),'style': 'text-align: right; white-space:nowrap;'},
         {'name':self.format_value(ingresos10[0]),'style': 'text-align: right; white-space:nowrap;'},
         # {'name':self.format_value(balance_init10[0]+ingresos10[0]+comision10[0]+transfer_out10[0]+transfer_in10[0])},
         {'name':self.format_value(abs(pagos10[0])),'style': 'text-align: right; white-space:nowrap;'},
@@ -694,7 +723,10 @@ class ReportsBanks(models.AbstractModel):
         })
         tipo_cambio_usd=self.env['res.currency.rate'].search(['&',('currency_id','=',2),('name','=',fields.Date.from_string(date_from))])
         tipo_cambio_euro=self.env['res.currency.rate'].search(['&',('currency_id','=',1),('name','=',fields.Date.from_string(date_from))])
-        total_usd_to_mxn=total_usd*(1/tipo_cambio_usd.rate)
+        if tipo_cambio_usd:
+            total_usd_to_mxn=total_usd*(1/tipo_cambio_usd.rate)
+        else:
+            total_usd_to_mxn=total_usd*(1/1)
         lines.append({
         'id': 'TOTAL EURO',
         'name': '',
@@ -713,7 +745,10 @@ class ReportsBanks(models.AbstractModel):
         {'name':self.format_value(total_euro),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
-        total_euro_to_mxn=total_euro*(1/tipo_cambio_euro.rate)
+        if tipo_cambio_euro:
+            total_euro_to_mxn=total_euro*(1/tipo_cambio_euro.rate)
+        else:
+            total_euro_to_mxn=total_euro*(1/1)
         lines.append({
         'id': 'TOTAL MN DISP',
         'name': '',
