@@ -177,7 +177,8 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A','CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
+                AND rp.id not in (SELECT pml.name FROM partner_maquila_lamina pml)
                 GROUP BY rp.name,rp.id
                 )
                 UNION
@@ -186,7 +187,8 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A','CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                    AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
+                    AND rp.id not in (SELECT pml.name FROM partner_maquila_lamina pml)
                     GROUP BY rp.name,rp.id
                 )
                     UNION
@@ -195,7 +197,8 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A','CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                    AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
+                    AND rp.id not in (SELECT pml.name FROM partner_maquila_lamina pml)
                     GROUP BY rp.name,rp.id
                 )
                 ORDER BY cliente
@@ -241,7 +244,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
+                AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                 GROUP BY rp.name,rp.id
                 )
                 UNION
@@ -250,7 +253,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
+                    AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                     GROUP BY rp.name,rp.id
                 )
                     UNION
@@ -259,7 +262,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA DE HUAMANTLA S.A DE C.V.','PRODUCTOS ALIMENTICIOS LA MORENA S.A')
+                    AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                     GROUP BY rp.name,rp.id
                 )
                 ORDER BY cliente
@@ -299,7 +302,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN res_partner rp ON rp.id=ail.partner_id
                 WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                AND rp.name in ('CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                AND rp.id in (SELECT pml.name FROM partner_maquila_lamina pml)
                 GROUP BY rp.name,rp.id
                 )
                 UNION
@@ -308,7 +311,7 @@ class ReportsSales(models.AbstractModel):
                     FROM trend_budget_sales tbs
                     LEFT JOIN res_partner rp ON rp.id=tbs.name
                     WHERE tbs.date_from >= '"""+date_from+"""' AND tbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                    AND rp.id in (SELECT pml.name FROM partner_maquila_lamina pml)
                     GROUP BY rp.name,rp.id
                 )
                     UNION
@@ -317,7 +320,7 @@ class ReportsSales(models.AbstractModel):
                     FROM budget_budget_sales bbs
                     LEFT JOIN res_partner rp ON rp.id=bbs.name
                     WHERE bbs.date_from >= '"""+date_from+"""' AND bbs.date_to <= '"""+str(df)+"""'
-                    AND rp.name in ('CORRUGADOS Y EMPAQUES DE ORIENTE S.A. DE C.V.','CCI CORRUGADOS S.A. DE C.V.')
+                    AND rp.id in (SELECT pml.name FROM partner_maquila_lamina pml)
                     GROUP BY rp.name,rp.id
                 )
                 ORDER BY cliente

@@ -8,20 +8,20 @@
         </xpath>
 
     </template> -->
-
+    <menuitem id="menu_reports_sales_nova_account" name="Reportes Ventas" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
       <record id="action_report_sales_nova" model="ir.actions.client">
           <field name="name">Tendencia de Ventas</field>
           <field name="tag">account_report</field>
           <field name="context" eval="{'model': 'report.sales.nova'}" />
       </record>
-      <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
+      <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="1"/>
 
       <record id="action_report_ton_corrug_nova" model="ir.actions.client">
           <field name="name">Reporte Toneladas</field>
           <field name="tag">account_report</field>
           <field name="context" eval="{'model': 'report.ton.corrug.nova'}" />
       </record>
-      <menuitem id="menu_action_report_ton_corrug_nova" name="Reporte Toneladas" action="action_report_ton_corrug_nova" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
+      <menuitem id="menu_action_report_ton_corrug_nova" name="Reporte Toneladas" action="action_report_ton_corrug_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="2"/>
 
 
       <record model="ir.ui.view" id="trend_budget_sales_tree_view">
@@ -50,7 +50,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="4" />
 
       <record model="ir.ui.view" id="budget_budget_sales_tree_view">
         <field name="name">Presupuesto Ventas Inicio de Año</field>
@@ -78,7 +78,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_budget_budget_sales_list_action" name="Presupuesto de ventas Inicio de año" action="budget_budget_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+      <menuitem id="menu_budget_budget_sales_list_action" name="Presupuesto de ventas Inicio de año" action="budget_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="3" />
 
       <record model="ir.ui.view" id="project_user_sales_tree_view">
         <field name="name">Proyeccion ventas</field>
@@ -106,7 +106,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_project_user_sales_list_action" name="Proyeccion de ventas" action="project_user_sales_list_action" parent="account.menu_finance_receivables" sequence="10" />
+      <menuitem id="menu_project_user_sales_list_action" name="Proyeccion de ventas" action="project_user_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="5" />
 
       <record model="ir.ui.view" id="bussines_days_tree_view">
         <field name="name">Dias Habiles</field>
@@ -131,7 +131,55 @@
         </field>
       </record>
 
-      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="account.menu_finance_receivables" sequence="10" />
+      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="6" />
+
+      <record model="ir.ui.view" id="partner_maquila_tree_view">
+        <field name="name">Cliente Maquila Archimex</field>
+        <field name="model">partner.maquila</field>
+        <field name="arch" type="xml">
+          <tree string="Cliente Maquila">
+            <field name="name"/>
+
+          </tree>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="partner_maquila_list_action">
+        <field name="name">Cliente Maquila</field>
+        <field name="res_model">partner.maquila</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer Cliente Maquila Archimex
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_partner_maquila_list_action" name="Cliente Maquila Archimex" action="partner_maquila_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="10" />
+
+      <record model="ir.ui.view" id="partner_maquila_lamina_tree_view">
+        <field name="name">Cliente Maquila Lamina</field>
+        <field name="model">partner.maquila.lamina</field>
+        <field name="arch" type="xml">
+          <tree string="Cliente Maquila Lamina">
+            <field name="name"/>
+
+          </tree>
+        </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="partner_maquila_lamina_list_action">
+        <field name="name">Cliente Maquila Lamina</field>
+        <field name="res_model">partner.maquila.lamina</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu primer Cliente Maquila Lamina
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_partner_maquila_lamina_list_action" name="Cliente Maquila" action="partner_maquila_lamina_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="10" />
 
     </data>
 </odoo>
