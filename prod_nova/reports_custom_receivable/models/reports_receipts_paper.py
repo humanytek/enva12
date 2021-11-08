@@ -239,14 +239,14 @@ class ReportsReceiptsNova(models.AbstractModel):
                     cumplimiento=0
 
 
-                if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
+                if bussines_days.bussines_days_c!=False or bussines_days.bussines_days_c!=0:
                     if budget!=0:
                         if self._billed_days(options,line_id)!=False:
-                            pptodia=(budget/bussines_days.bussines_days)*self._billed_days(options,line_id)
-                            tpptodia+=(budget/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                            pptodia=(budget/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
+                            tpptodia+=(budget/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
                         else:
-                            pptodia=(budget/bussines_days.bussines_days)*0
-                            tpptodia+=(budget/bussines_days.bussines_days)*0
+                            pptodia=(budget/bussines_days.bussines_days_c)*0
+                            tpptodia+=(budget/bussines_days.bussines_days_c)*0
 
                 if pptodia!=0:
                     if acumulado!=0:
@@ -261,9 +261,9 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                 if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
                     if acumulado!=0:
-                        if bussines_days.bussines_days!=False:
-                            tendencia=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
-                            ttendencia+=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                        if bussines_days.bussines_days_c!=False:
+                            tendencia=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
+                            ttendencia+=(acumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
                         else:
                             tendencia=(acumulado/self._billed_days(options,line_id))*0
                             ttendencia+=(acumulado/self._billed_days(options,line_id))*0

@@ -115,6 +115,7 @@
           <tree string="Dias Habiles">
             <field name="name"/>
             <field name="bussines_days"/>
+            <field name="bussines_days_c"/>
             <field name="year"/>
           </tree>
         </field>

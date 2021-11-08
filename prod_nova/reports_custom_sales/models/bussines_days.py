@@ -36,6 +36,12 @@ class BussinesDays(models.Model):
         store = True,
     )
 
+    bussines_days_c = fields.Integer(
+        string= 'Dias Habiles Cobranza',
+        required=True,
+        store = True,
+    )
+    
     year = fields.Char(
         string = 'Año',
         required= True,

@@ -416,13 +416,13 @@ class ReportsReceiptsNova(models.AbstractModel):
         else:
             tcumplimiento=0
 
-        if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
+        if bussines_days.bussines_days_c!=False or bussines_days.bussines_days_c!=0:
             if tbudget!=0:
                 if self._billed_days(options,line_id)!=False:
-                    tpptodia=(tbudget/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                    tpptodia=(tbudget/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
 
                 else:
-                    tpptodia=(tbudget/bussines_days.bussines_days)*0
+                    tpptodia=(tbudget/bussines_days.bussines_days_c)*0
 
         if tpptodia!=0:
             if tacumulado!=0:
@@ -437,8 +437,8 @@ class ReportsReceiptsNova(models.AbstractModel):
 
         if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
             if tacumulado!=0:
-                if bussines_days.bussines_days!=False:
-                    ttendencia=(tacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                if bussines_days.bussines_days_c!=False:
+                    ttendencia=(tacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
 
                 else:
                     ttendencia=(tacumulado/self._billed_days(options,line_id))*0
@@ -540,13 +540,13 @@ class ReportsReceiptsNova(models.AbstractModel):
         else:
             tcumplimiento=0
 
-        if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
+        if bussines_days.bussines_days_c!=False or bussines_days.bussines_days_c!=0:
             if tcmeta!=0:
                 if self._billed_days(options,line_id)!=False:
-                    tcpptodia=(tcmeta/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                    tcpptodia=(tcmeta/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
 
                 else:
-                    tcpptodia=(tcmeta/bussines_days.bussines_days)*0
+                    tcpptodia=(tcmeta/bussines_days.bussines_days_c)*0
 
         if tcpptodia!=0:
             if tcacumulado!=0:
@@ -561,8 +561,8 @@ class ReportsReceiptsNova(models.AbstractModel):
 
         if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
             if tcacumulado!=0:
-                if bussines_days.bussines_days!=False:
-                    tctendencia=(tcacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                if bussines_days.bussines_days_c!=False:
+                    tctendencia=(tcacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
 
                 else:
                     tctendencia=(tcacumulado/self._billed_days(options,line_id))*0
@@ -665,13 +665,13 @@ class ReportsReceiptsNova(models.AbstractModel):
         else:
             tpumplimiento=0
 
-        if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
+        if bussines_days.bussines_days_c!=False or bussines_days.bussines_days_c!=0:
             if tpmeta!=0:
                 if self._billed_days(options,line_id)!=False:
-                    tppptodia=(tpmeta/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                    tppptodia=(tpmeta/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
 
                 else:
-                    tppptodia=(tpmeta/bussines_days.bussines_days)*0
+                    tppptodia=(tpmeta/bussines_days.bussines_days_c)*0
 
         if tppptodia!=0:
             if tpacumulado!=0:
@@ -686,8 +686,8 @@ class ReportsReceiptsNova(models.AbstractModel):
 
         if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
             if tpacumulado!=0:
-                if bussines_days.bussines_days!=False:
-                    tptendencia=(tpacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                if bussines_days.bussines_days_c!=False:
+                    tptendencia=(tpacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
 
                 else:
                     tptendencia=(tpacumulado/self._billed_days(options,line_id))*0
@@ -790,13 +790,13 @@ class ReportsReceiptsNova(models.AbstractModel):
         else:
             tacumplimiento=0
 
-        if bussines_days.bussines_days!=False or bussines_days.bussines_days!=0:
+        if bussines_days.bussines_days_c!=False or bussines_days.bussines_days_c!=0:
             if tacmeta!=0:
                 if self._billed_days(options,line_id)!=False:
-                    tacpptodia=(tacmeta/bussines_days.bussines_days)*self._billed_days(options,line_id)
+                    tacpptodia=(tacmeta/bussines_days.bussines_days_c)*self._billed_days(options,line_id)
 
                 else:
-                    tacpptodia=(tacmeta/bussines_days.bussines_days)*0
+                    tacpptodia=(tacmeta/bussines_days.bussines_days_c)*0
 
         if tacpptodia!=0:
             if tacacumulado!=0:
@@ -811,8 +811,8 @@ class ReportsReceiptsNova(models.AbstractModel):
 
         if self._billed_days(options,line_id)!=False or self._billed_days(options,line_id)!=0:
             if tacacumulado!=0:
-                if bussines_days.bussines_days!=False:
-                    tactendencia=(tacacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days
+                if bussines_days.bussines_days_c!=False:
+                    tactendencia=(tacacumulado/self._billed_days(options,line_id))*bussines_days.bussines_days_c
 
                 else:
                     tactendencia=(tacacumulado/self._billed_days(options,line_id))*0
