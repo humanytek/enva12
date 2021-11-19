@@ -31,6 +31,11 @@ class TrendbudgetSales(models.Model):
         store=True,
     )
 
+    kg_per_month_add=fields.Float(
+        string='Adicional Kilogramos por mes',
+        store=True,
+    )
+
     price_unit_per_month=fields.Float(
         string='Precio por mes',
         store=True,

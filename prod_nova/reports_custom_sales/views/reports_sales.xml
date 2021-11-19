@@ -16,12 +16,19 @@
       </record>
       <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="1"/>
 
+      <record id="action_reports_sales_corrug_nova" model="ir.actions.client">
+          <field name="name">Estimacion de Ventas Corrugado</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'reports.sales.corrug.nova'}" />
+      </record>
+      <menuitem id="menu_action_reports_sales_corrug_nova" name="Estimacion de Ventas Corrugado" action="action_reports_sales_corrug_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="2"/>
+
       <record id="action_report_ton_corrug_nova" model="ir.actions.client">
           <field name="name">Reporte Toneladas</field>
           <field name="tag">account_report</field>
           <field name="context" eval="{'model': 'report.ton.corrug.nova'}" />
       </record>
-      <menuitem id="menu_action_report_ton_corrug_nova" name="Reporte Toneladas" action="action_report_ton_corrug_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="2"/>
+      <menuitem id="menu_action_report_ton_corrug_nova" name="Reporte Toneladas" action="action_report_ton_corrug_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="3"/>
 
 
       <record model="ir.ui.view" id="trend_budget_sales_tree_view">
@@ -33,6 +40,7 @@
             <field name="date_from"/>
             <field name="date_to"/>
             <field name="kg_per_month"/>
+            <field name="kg_per_month_add"/>
             <field name="price_unit_per_month"/>
           </tree>
         </field>
@@ -50,7 +58,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="4" />
+      <menuitem id="menu_trend_budget_sales_list_action" name="Presupuesto de ventas Tendencia" action="trend_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="5" />
 
       <record model="ir.ui.view" id="budget_budget_sales_tree_view">
         <field name="name">Presupuesto Ventas Inicio de Año</field>
@@ -78,7 +86,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_budget_budget_sales_list_action" name="Presupuesto de ventas Inicio de año" action="budget_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="3" />
+      <menuitem id="menu_budget_budget_sales_list_action" name="Presupuesto de ventas Inicio de año" action="budget_budget_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="4" />
 
       <record model="ir.ui.view" id="project_user_sales_tree_view">
         <field name="name">Proyeccion ventas</field>
@@ -106,7 +114,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_project_user_sales_list_action" name="Proyeccion de ventas" action="project_user_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="5" />
+      <menuitem id="menu_project_user_sales_list_action" name="Proyeccion de ventas" action="project_user_sales_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="6" />
 
       <record model="ir.ui.view" id="bussines_days_tree_view">
         <field name="name">Dias Habiles</field>
@@ -132,7 +140,7 @@
         </field>
       </record>
 
-      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="6" />
+      <menuitem id="menu_bussines_day_list_action" name="Dias Habiles" action="bussines_day_list_action" parent="reports_custom_sales.menu_reports_sales_nova_account" sequence="7" />
 
       <record model="ir.ui.view" id="partner_maquila_tree_view">
         <field name="name">Cliente Maquila Archimex</field>
