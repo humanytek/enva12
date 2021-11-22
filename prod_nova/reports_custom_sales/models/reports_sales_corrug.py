@@ -320,6 +320,19 @@ class ReportsSalesCorrug(models.AbstractModel):
                     {'name':""},
             ],
             })
+            stwm3=0
+            stwmp3=0
+            stwm2=0
+            stwmp2=0
+            stwm1=0
+            stwmp1=0
+            stwm=0
+            stwmp=0
+            stwpd=0
+            stwm5=0
+            stbudget=0
+            stbudgetadd=0
+            stodoo=0
             for c in clientes:
                 totalc_weight_prom=0
                 budget=self._get_budget_sales(c['id_cliente'], fields.Date.from_string(date_from)+relativedelta(months=1),fields.Date.from_string(date_from)+relativedelta(months=2)+timedelta(days=-1))
@@ -370,6 +383,62 @@ class ReportsSalesCorrug(models.AbstractModel):
                 ],
                 })
 
+                if totalc_weight_month_3:
+                    stwm3+=totalc_weight_month_3[0]['total_weight']/1000
+                else:
+                    stwm3+=0
+
+                if totalc_weight_month_3 and bussines_days3:
+                    stwmp3+=(totalc_weight_month_3[0]['total_weight']/1000)/bussines_days3.bussines_days
+                else:
+                    stwmp3+=0
+
+                if totalc_weight_month_2:
+                    stwm2+=totalc_weight_month_2[0]['total_weight']/1000
+                else:
+                    stwm2+=0
+
+                if totalc_weight_month_2 and bussines_days2:
+                    stwmp2+=(totalc_weight_month_2[0]['total_weight']/1000)/bussines_days2.bussines_days
+                else:
+                    stwmp2+=0
+
+                if totalc_weight_month_1:
+                    stwm1+=totalc_weight_month_1[0]['total_weight']/1000
+                else:
+                    stwm1+=0
+
+                if totalc_weight_month_1 and bussines_days1:
+                    stwmp1+=(totalc_weight_month_1[0]['total_weight']/1000)/bussines_days1.bussines_days
+                else:
+                    stwmp1+=0
+
+                if totalc_weight:
+                    stwm+=totalc_weight[0]['total_weight']/1000
+                else:
+                    stwm+=0
+                if totalc_weight and bussines_days:
+                    stwmp+=(totalc_weight[0]['total_weight']/1000)/bussines_days.bussines_days
+                else:
+                    stwmp+=0
+
+                stwpd+=totalc_weight_prom/4
+                stwm5+=(totalc_weight_prom/4)*bussines_days5.bussines_days
+                if budget==False:
+                    stbudget+=0
+                else:
+                    stbudget+=budget/1000
+
+                if budget_add==False:
+                    stbudgetadd+=0
+                else:
+                    stbudgetadd+=budget_add/1000
+                if budget_add==False and budget==False:
+
+                    stodoo+=0
+                else:
+                    stodoo+=(budget+budget_add)/1000
+
                 productos=self._product_line(options,line_id,str(c['id_cliente']))
                 if productos:
                     for p in productos:
@@ -418,6 +487,28 @@ class ReportsSalesCorrug(models.AbstractModel):
                                 {'name':""},
                         ],
                         })
+            lines.append({
+            'id': 'TNOVA',
+            'name': 'TOTAL EMPAQUESNOVA' ,
+            'level': 0,
+            'class': 'total',
+            'columns':[
+                    {'name':""},
+                    {'name':"{:,}".format(round(stwm3))},
+                    {'name':"{:,}".format(round(stwmp3))},
+                    {'name':"{:,}".format(round(stwm2))},
+                    {'name':"{:,}".format(round(stwmp2))},
+                    {'name':"{:,}".format(round(stwm1))},
+                    {'name':"{:,}".format(round(stwmp1))},
+                    {'name':"{:,}".format(round(stwm))},
+                    {'name':"{:,}".format(round(stwmp))},
+                    {'name':"{:.2f}".format(stwpd)},
+                    {'name':"{:.2f}".format(stwm5)},
+                    {'name':"{:,}".format(round(stbudget))},
+                    {'name':"{:,}".format(round(stbudgetadd))},
+                    {'name':"{:,}".format(round(stodoo))},
+            ],
+            })
         if clientes_maquila:
             lines.append({
             'id': 'MAQUILA',
@@ -441,6 +532,19 @@ class ReportsSalesCorrug(models.AbstractModel):
                     {'name':""},
             ],
             })
+            stwm3=0
+            stwmp3=0
+            stwm2=0
+            stwmp2=0
+            stwm1=0
+            stwmp1=0
+            stwm=0
+            stwmp=0
+            stwpd=0
+            stwm5=0
+            stbudget=0
+            stbudgetadd=0
+            stodoo=0
             for c in clientes_maquila:
                 totalc_weight_prom=0
                 budget=self._get_budget_sales(c['id_cliente'], fields.Date.from_string(date_from)+relativedelta(months=1),fields.Date.from_string(date_from)+relativedelta(months=2)+timedelta(days=-1))
@@ -490,6 +594,62 @@ class ReportsSalesCorrug(models.AbstractModel):
                 ],
                 })
 
+                if totalc_weight_month_3:
+                    stwm3+=totalc_weight_month_3[0]['total_weight']/1000
+                else:
+                    stwm3+=0
+
+                if totalc_weight_month_3 and bussines_days3:
+                    stwmp3+=(totalc_weight_month_3[0]['total_weight']/1000)/bussines_days3.bussines_days
+                else:
+                    stwmp3+=0
+
+                if totalc_weight_month_2:
+                    stwm2+=totalc_weight_month_2[0]['total_weight']/1000
+                else:
+                    stwm2+=0
+
+                if totalc_weight_month_2 and bussines_days2:
+                    stwmp2+=(totalc_weight_month_2[0]['total_weight']/1000)/bussines_days2.bussines_days
+                else:
+                    stwmp2+=0
+
+                if totalc_weight_month_1:
+                    stwm1+=totalc_weight_month_1[0]['total_weight']/1000
+                else:
+                    stwm1+=0
+
+                if totalc_weight_month_1 and bussines_days1:
+                    stwmp1+=(totalc_weight_month_1[0]['total_weight']/1000)/bussines_days1.bussines_days
+                else:
+                    stwmp1+=0
+
+                if totalc_weight:
+                    stwm+=totalc_weight[0]['total_weight']/1000
+                else:
+                    stwm+=0
+                if totalc_weight and bussines_days:
+                    stwmp+=(totalc_weight[0]['total_weight']/1000)/bussines_days.bussines_days
+                else:
+                    stwmp+=0
+
+                stwpd+=totalc_weight_prom/4
+                stwm5+=(totalc_weight_prom/4)*bussines_days5.bussines_days
+                if budget==False:
+                    stbudget+=0
+                else:
+                    stbudget+=budget/1000
+
+                if budget_add==False:
+                    stbudgetadd+=0
+                else:
+                    stbudgetadd+=budget_add/1000
+                if budget_add==False and budget==False:
+
+                    stodoo+=0
+                else:
+                    stodoo+=(budget+budget_add)/1000
+
                 productos=self._product_line(options,line_id,str(c['id_cliente']))
                 if productos:
                     for p in productos:
@@ -538,6 +698,29 @@ class ReportsSalesCorrug(models.AbstractModel):
                                 {'name':""},
                         ],
                         })
+
+            lines.append({
+            'id': 'TMAQUILA',
+            'name': 'TOTAL MAQUILA ARCHIMEX' ,
+            'level': 0,
+            'class': 'total',
+            'columns':[
+                    {'name':""},
+                    {'name':"{:,}".format(round(stwm3))},
+                    {'name':"{:,}".format(round(stwmp3))},
+                    {'name':"{:,}".format(round(stwm2))},
+                    {'name':"{:,}".format(round(stwmp2))},
+                    {'name':"{:,}".format(round(stwm1))},
+                    {'name':"{:,}".format(round(stwmp1))},
+                    {'name':"{:,}".format(round(stwm))},
+                    {'name':"{:,}".format(round(stwmp))},
+                    {'name':"{:.2f}".format(stwpd)},
+                    {'name':"{:.2f}".format(stwm5)},
+                    {'name':"{:,}".format(round(stbudget))},
+                    {'name':"{:,}".format(round(stbudgetadd))},
+                    {'name':"{:,}".format(round(stodoo))},
+            ],
+            })
         if clientes_lamina:
             lines.append({
             'id': 'LAMINA',
@@ -561,6 +744,19 @@ class ReportsSalesCorrug(models.AbstractModel):
                     {'name':""},
             ],
             })
+            stwm3=0
+            stwmp3=0
+            stwm2=0
+            stwmp2=0
+            stwm1=0
+            stwmp1=0
+            stwm=0
+            stwmp=0
+            stwpd=0
+            stwm5=0
+            stbudget=0
+            stbudgetadd=0
+            stodoo=0
             for c in clientes_lamina:
                 totalc_weight_prom=0
                 budget=self._get_budget_sales(c['id_cliente'], fields.Date.from_string(date_from)+relativedelta(months=1),fields.Date.from_string(date_from)+relativedelta(months=2)+timedelta(days=-1))
@@ -610,6 +806,62 @@ class ReportsSalesCorrug(models.AbstractModel):
                 ],
                 })
 
+                if totalc_weight_month_3:
+                    stwm3+=totalc_weight_month_3[0]['total_weight']/1000
+                else:
+                    stwm3+=0
+
+                if totalc_weight_month_3 and bussines_days3:
+                    stwmp3+=(totalc_weight_month_3[0]['total_weight']/1000)/bussines_days3.bussines_days
+                else:
+                    stwmp3+=0
+
+                if totalc_weight_month_2:
+                    stwm2+=totalc_weight_month_2[0]['total_weight']/1000
+                else:
+                    stwm2+=0
+
+                if totalc_weight_month_2 and bussines_days2:
+                    stwmp2+=(totalc_weight_month_2[0]['total_weight']/1000)/bussines_days2.bussines_days
+                else:
+                    stwmp2+=0
+
+                if totalc_weight_month_1:
+                    stwm1+=totalc_weight_month_1[0]['total_weight']/1000
+                else:
+                    stwm1+=0
+
+                if totalc_weight_month_1 and bussines_days1:
+                    stwmp1+=(totalc_weight_month_1[0]['total_weight']/1000)/bussines_days1.bussines_days
+                else:
+                    stwmp1+=0
+
+                if totalc_weight:
+                    stwm+=totalc_weight[0]['total_weight']/1000
+                else:
+                    stwm+=0
+                if totalc_weight and bussines_days:
+                    stwmp+=(totalc_weight[0]['total_weight']/1000)/bussines_days.bussines_days
+                else:
+                    stwmp+=0
+
+                stwpd+=totalc_weight_prom/4
+                stwm5+=(totalc_weight_prom/4)*bussines_days5.bussines_days
+                if budget==False:
+                    stbudget+=0
+                else:
+                    stbudget+=budget/1000
+
+                if budget_add==False:
+                    stbudgetadd+=0
+                else:
+                    stbudgetadd+=budget_add/1000
+                if budget_add==False and budget==False:
+
+                    stodoo+=0
+                else:
+                    stodoo+=(budget+budget_add)/1000
+
                 productos=self._product_line(options,line_id,str(c['id_cliente']))
                 if productos:
                     for p in productos:
@@ -658,6 +910,29 @@ class ReportsSalesCorrug(models.AbstractModel):
                                 {'name':""},
                         ],
                         })
+
+            lines.append({
+            'id': 'TLAMINA',
+            'name': 'TOTAL LAMINA' ,
+            'level': 0,
+            'class': 'total',
+            'columns':[
+                    {'name':""},
+                    {'name':"{:,}".format(round(stwm3))},
+                    {'name':"{:,}".format(round(stwmp3))},
+                    {'name':"{:,}".format(round(stwm2))},
+                    {'name':"{:,}".format(round(stwmp2))},
+                    {'name':"{:,}".format(round(stwm1))},
+                    {'name':"{:,}".format(round(stwmp1))},
+                    {'name':"{:,}".format(round(stwm))},
+                    {'name':"{:,}".format(round(stwmp))},
+                    {'name':"{:.2f}".format(stwpd)},
+                    {'name':"{:.2f}".format(stwm5)},
+                    {'name':"{:,}".format(round(stbudget))},
+                    {'name':"{:,}".format(round(stbudgetadd))},
+                    {'name':"{:,}".format(round(stodoo))},
+            ],
+            })
         return lines
 
     @api.model
