@@ -6,8 +6,3 @@
 	path = vendor-bills
 	url = git@git.vauxoo.com:vauxoo/vendor-bills.git
 	branch = 12.0
-
-[submodule "JayVora-SerpentCS/MassEditing"]
-	path = JayVora-SerpentCS/MassEditing
-	url = git@github.com:JayVora-SerpentCS/MassEditing.git
-	branch = 8.0
