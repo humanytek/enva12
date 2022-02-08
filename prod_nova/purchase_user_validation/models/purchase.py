@@ -13,7 +13,7 @@ class PurchaseOrder(models.Model):
     date_validator = fields.Datetime(string='Authorized Date',related='requisition_id.date_validator', readonly=1, index=True, copy=False)
 
 
-    @api.multi
+
     def button_approve(self, force=False):
         res = super (PurchaseOrder, self).button_approve(force = force)
         self.write({'approver':self.env.user.id,'date_approve':fields.datetime.now()})
@@ -28,7 +28,7 @@ class PurchaseRequisition(models.Model):
     date_validator = fields.Datetime('Approval Date', readonly=1, index=True, copy=False)
 
 
-    @api.multi
+    
     def action_open(self):
         self.write({'state': 'open','validator':self.env.user.id,'date_validator':fields.datetime.now()})
         super(PurchaseRequisition, self).action_open()

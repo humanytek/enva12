@@ -26,7 +26,7 @@ class MaintenanceRequest(models.Model):
     store = True,
     )
 
-    @api.multi
+
     def name_get(self):
         result = []
         for s in self:
@@ -34,9 +34,9 @@ class MaintenanceRequest(models.Model):
             result.append((s.id, name))
         return result
 
-    @api.one
+
     def _count_rp(self):
-        results = self.env['purchase.requisition'].read_group([('maintenance_request_id', 'in', self.ids)], 'maintenance_request_id', 'maintenance_request_id')
+        results = self.env['purchase.requisition'].read_group([('maintenance_request_id', 'in', self.ids)], ['maintenance_request_id'], ['maintenance_request_id'])
         dic = {}
         for x in results: dic[x['maintenance_request_id'][0]] = x['maintenance_request_id_count']
         for record in self: record['requisitionpurchase_count'] = dic.get(record.id, 0)

@@ -17,7 +17,7 @@ class ReportsBanks(models.AbstractModel):
     _description = "Reports Banks"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
+    filter_date = {'mode': 'range', 'filter': 'this_month'}
 
     def _get_templates(self):
         templates = super(ReportsBanks, self)._get_templates()

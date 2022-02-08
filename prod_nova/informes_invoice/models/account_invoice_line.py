@@ -3,7 +3,7 @@
 from odoo import models, fields, api
 
 class Invoice_line(models.Model):
-    _inherit= 'account.invoice.line'
+    _inherit= 'account.move.line'
 
     weight=fields.Float(
         related='product_id.weight',
@@ -15,19 +15,19 @@ class Invoice_line(models.Model):
         related='product_id.standard_price',
     )
     date_invoice=fields.Date(
-        related='invoice_id.date_invoice',
+        related='account_id.invoice_date',
         store=True,
     )
     number=fields.Char(
-        related='invoice_id.number',
+        related='account_id.number',
         store=True,
     )
     name_invoice=fields.Char(
-        related='invoice_id.name',
+        related='account_id.name',
         store=True,
     )
     state=fields.Selection(
-        related='invoice_id.state',
+        related='account_id.state',
         store=True,
     )
     total_weight=fields.Float(
@@ -35,12 +35,12 @@ class Invoice_line(models.Model):
         store=True,
     )
     user_id=fields.Many2one(
-        related='invoice_id.user_id',
+        related='account_id.invoice_user_id',
         string='Vendedor',
         store=True,
     )
     type_currency = fields.Monetary(
-        related='invoice_id.type_currency',
+        related='account_id.type_currency',
         store=True,
     )
     price_subtotal_company=fields.Monetary(
@@ -58,25 +58,25 @@ class Invoice_line(models.Model):
         store=True,
     )
     re_facturado=fields.Boolean(
-        related='invoice_id.re_facturado',
+        related='account_id.re_facturado',
         string='Re-Facturado',
         store=True,
     )
 
     facturado_to=fields.Boolean(
-    related='invoice_id.facturado_to',
+    related='account_id.facturado_to',
     string='Facturado a:',
     store=True,
     )
 
     not_accumulate=fields.Boolean(
-    related='invoice_id.not_accumulate',
+    related='account_id.not_accumulate',
     string='No Acumular',
     store=True,
     )
 
     date_applied = fields.Date(
-        related='invoice_id.date_applied',
+        related='account_id.date_applied',
         string='Fecha Aplicada',
         store=True,
         )

@@ -58,7 +58,7 @@ class HumidityPurchase(models.Model):
 class PurchaseOrder_nova(models.Model):
     _inherit = 'purchase.order'
 
-    purchase_id__humidity_purchase_count=fields.Integer(
+    humidity_purchase_count=fields.Integer(
     compute='_count_criterios',
     string='Criterios count',
 
@@ -68,9 +68,11 @@ class PurchaseOrder_nova(models.Model):
     store=True,
     )
 
-    @api.one
+
+
     def _count_criterios(self):
-        results = self.env['humidity.tolerance.purchase'].read_group([('purchase_id', 'in', self.ids)], 'purchase_id', 'purchase_id')
+        results = self.env['humidity.tolerance.purchase'].read_group([('purchase_id', 'in', self.ids)], ['purchase_id'], ['purchase_id'])
         dic = {}
         for x in results: dic[x['purchase_id'][0]] = x['purchase_id_count']
-        for record in self: record['purchase_id__humidity_purchase_count'] = dic.get(record.id, 0)
+        for record in self: record['humidity_purchase_count'] = dic.get(record.id, 0)
+        

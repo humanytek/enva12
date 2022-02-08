@@ -223,8 +223,6 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(ail.name) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
-
-
                 ],
 
                 })

@@ -16,7 +16,7 @@ class ReportsAccount(models.AbstractModel):
     _description = "Reports Account"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
+    filter_date = {'mode': 'range', 'filter': 'this_month'}
     filter_all_entries = False
 
     def _get_columns_name(self, options):

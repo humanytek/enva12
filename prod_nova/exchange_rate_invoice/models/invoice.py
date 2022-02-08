@@ -3,7 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, RedirectWarning, ValidationError
 class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+    _inherit = 'account.move'
 
 
     def _get_currency_rate_date(self):
@@ -17,7 +17,7 @@ class AccountInvoice(models.Model):
         )
 
 
-    @api.multi
+
     def action_move_create(self):
         """ Creates invoice related analytics and financial move lines """
         for inv in self:
@@ -39,7 +39,7 @@ class AccountInvoice(models.Model):
 class Currency(models.Model):
     _inherit = "res.currency"
 
-    @api.multi
+
     def _get_rate(self, date=fields.Date.today()):
         self.ensure_one()
         company_id = self._context.get('company_id') or self.env['res.users']._get_company().id
