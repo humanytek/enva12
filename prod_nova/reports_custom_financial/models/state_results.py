@@ -25,23 +25,30 @@ class ReportStateResults(models.AbstractModel):
     #     templates['main_table_header_template'] = 'reports_custom_financial.template_state_result_table_header'
     #     return templates
 
-    def _get_columns_name(self, options):
-        return [
-        {'name': ''},
-        {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''},
-        {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': ''}]
+    def _get_columns(self, options):
+
+        header1 = [
+            {'name': '', 'style': 'width:40%'},
+            {'name': _('MES'),'class': 'number', 'colspan': 8},
+            {'name': _('ACUMULADO'),'class': 'number', 'colspan': 6},
+        ]
+        header2 = [ {'name': '', 'style': 'width:40%'},
+                    {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''},
+                    {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+                    {'name': ''}
+                    ]
+        return [header1,header2]
 
     def _get_cost_sales(self, ncost, date_f,date_t):
         porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',ncost),('date_from','>=',date_f),('date_to','<=',date_t)])
