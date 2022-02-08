@@ -20,10 +20,10 @@ class ReportStateResults(models.AbstractModel):
     filter_all_entries = False
 
 
-    def _get_templates(self):
-        templates = super(ReportStateResults, self)._get_templates()
-        templates['main_table_header_template'] = 'reports_custom_financial.template_state_result_table_header'
-        return templates
+    # def _get_templates(self):
+    #     templates = super(ReportStateResults, self)._get_templates()
+    #     templates['main_table_header_template'] = 'reports_custom_financial.template_state_result_table_header'
+    #     return templates
 
     def _get_columns_name(self, options):
         return [
