@@ -16,10 +16,11 @@
                   <th t-att-class="'o_account_report_column_header text-center'" colspan="2">
                       <t t-esc="options['date'].get('string')"/>
                   </th>
-                  <th t-att-class="'o_account_report_column_header text-center'" colspan="2">Total</th> 
+                  <th t-att-class="'o_account_report_column_header text-center'" colspan="2">Total</th>
               </tr>
           </xpath>
       </template>  -->
+
 
       <record id="action_account_balance_general" model="ir.actions.client">
           <field name="name">Balance General</field>
