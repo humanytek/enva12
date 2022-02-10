@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="view_maintenance_request_requisition_order_form_inherit_nova" model="ir.ui.view">
+          <field name="name">maintenance.requisition.purchase.form.inherit.nova</field>
+          <field name="model">purchase.requisition</field>
+          <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+          <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='type_id']" position="before">
+              <field name="maintenance_request_id"  />
+        </xpath>
+
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="action_requsition_purchasemantto_list">
+         <field name="name">Requisicion de Compra</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">purchase.requisition</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[('maintenance_request_id','=',active_id)]</field>
+         <field name="context">{"default_maintenance_request_id":active_id}</field>
+      </record>
+
+      <record id="view_maintenance_request_order_form_inherit_nova" model="ir.ui.view">
+          <field name="name">maintenance.request.form.inherit.nova</field>
+          <field name="model">maintenance.request</field>
+          <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+          <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='oe_right']" position="before">
+              <div class="oe_button_box" name="button_box">
+
+                <button class="oe_stat_button" type="action" name="%(action_requsition_purchasemantto_list)d" icon="fa-credit-card" >
+                    <field name="requisitionpurchase_count" string="R. Compras" widget="statinfo"/>
+                </button>
+                  </div>
+            </xpath>
+            <field name="equipment_id" position="before">
+                <field name="mantto_requisition_id" />
+            </field>
+            <field name="user_id" position="after">
+                <field name="area_id" />
+            </field>
+          </field>
+      </record>
+
+      <record model="ir.actions.act_window" id="action_maintenance_requisition_list">
+         <field name="name">Request for Maintenance</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">maintenance.request</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[('mantto_requisition_id','=',active_id)]</field>
+         <field name="context">{"default_mantto_requisition_id":active_id}</field>
+      </record>
+
+
+      <record model="ir.ui.view" id="maintenance_requisition_view">
+        <field name="name">maintenance.requisition.form</field>
+        <field name="model">maintenance.requisition</field>
+        <field name="arch" type="xml">
+          <form string="Maintenance Requitition">
+            <header>
+              <button name="%(action_maintenance_requisition_list)d" type="action"
+                    string="New Orden work"
+                    />
+              <button name="action_draft" states="cancel" string="Change to draft" type="object" class="btn-primary"/>
+              <button name="action_in_progress" states="draft" string="Confirm" type="object" class="btn-primary"/>
+              <button name="action_done" states="in_progress" string="Validate" type="object" class="btn-primary"/>
+              <!-- <button name="action_wrq_send" states="in_progress" string="Enviar Correo" type="object" class="btn-primary"/> -->
+              <button name="action_cancel" states="in_progress" string="Cancel" type="object" class="btn-primary"/>
+              <button name="action_in_progress" states="done" string="Cancel" type="object" class="btn-primary"/>
+              <field name="state" widget="statusbar" statusbar_visible="cancel,draft,in_progress,done" />
+            </header>
+            <sheet>
+              <div class="oe_button_box" name="button_box">
+                <button class="oe_stat_button" icon="fa-wrench" type="action" name="%(action_maintenance_requisition_list)d" attrs="{'invisible': [('ot_rm_count', '=', 0)]}">
+                  <field name="ot_rm_count" string="OTs" widget="statinfo"/>
+                </button>
+                   </div>
+              <div class="float-left">
+                       <label for="name" class="oe_edit_only oe_inline"/>
+                       <h2>
+                           <field name="name" readonly='1' />
+                       </h2>
+                       <h1>
+                          <field name="reference"  />
+                       </h1>
+                   </div>
+              <group>
+              <group>
+                <field name="user_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                <field name="area_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+
+              </group>
+              <group>
+                <field name="date_request" readonly='1'/>
+                <field name="priority"  widget="priority" />
+                <field name="assigned_id" />
+
+              </group>
+            </group>
+            <notebook>
+              <page string="Descripcion">
+                <field name="note" attrs="{'readonly': [('state','not in',('draft'))]}" />
+
+
+              </page>
+
+              </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                 <field name="message_follower_ids" widget="mail_followers"/>
+                 <field name="message_ids" widget="mail_thread"/>
+               </div>
+          </form>
+        </field>
+      </record>
+
+      <record model="ir.ui.view" id="maintenance_requisition_tree_view">
+        <field name="name">maintenance.requisition.tree</field>
+        <field name="model">maintenance.requisition</field>
+        <field name="arch" type="xml">
+          <tree string="Maintenance Requisition Tree">
+            <field name="name"/>
+            <field name="reference"/>
+            <field name="user_id"/>
+            <field name="area_id"/>
+            <field name="date_request"/>
+            <field name="priority"/>
+            <field name="assigned_id"/>
+            <field name="state"/>
+          </tree>
+        </field>
+      </record>
+
+    <record model="ir.actions.act_window" id="maintenance_requisition_list_action">
+      <field name="name">Requisicion de Mantenimiento</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">maintenance.requisition</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+                 No Work Receipt found. Let's create one!
+               </p>
+               <p>
+                 Las requisiciones de mantenimiento son documentos para realizar trabajos internos. Una vez asignado el mantenimiento se podra realizar el trabajo.
+               </p>
+        
+      </field>
+    </record>
+
+    <menuitem id="menu_maintenance_requisition_list_action" name="Requisicion de Mantenimiento" action="maintenance_requisition_list_action" parent="maintenance.menu_m_request" sequence="1" />
+
+
+    <record model="ir.ui.view" id="maintenance_area_view">
+      <field name="name">maintenance.area.form</field>
+      <field name="model">maintenance.area</field>
+      <field name="arch" type="xml">
+        <form string="Maintenance Area">
+
+          <sheet>
+
+            <div class="float-left">
+                     <label for="name" class="oe_edit_only oe_inline"/>
+                     <h1>
+                        <field name="name"  />
+                     </h1>
+                 </div>
+            <group>
+            <group>
+              <field name="user_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create': True}"/>
+
+
+            </group>
+
+          </group>
+
+          </sheet>
+          <!-- <div class="oe_chatter">
+               <field name="message_follower_ids" widget="mail_followers"/>
+               <field name="message_ids" widget="mail_thread"/>
+             </div> -->
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="maintenance_area_list_action">
+      <field name="name">Areas de Mantenimiento</field>
+      <field name="res_model">maintenance.area</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">Crea tu primera Area de Mantenimiento
+        </p>
+      </field>
+    </record>
+
+    <menuitem id="menu_maintenance_area_list_action" name="Areas de Mantenimiento" action="maintenance_area_list_action" parent="maintenance.menu_maintenance_configuration" sequence="1" />
+
+
+    </data>
+</odoo>

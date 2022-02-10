@@ -1,0 +1,99 @@
+.a_background_footer, .a_background_header, .a_report_layout_background {
+    font-family: 'Lato';
+    color: gray('700');
+}
+.a_background_header {
+    min-width: 900px;
+    border-bottom: 1px solid gray('200');
+    .company_address {
+        min-width: 300px;
+    }
+    img {
+        max-height: 96px;
+        max-width: 300px;
+        margin-right: 16px;
+    }
+    h3 {
+        color: $o-brand-odoo;
+        font-weight: 700;
+        font-size: 1.25rem;
+        max-width: 300px;
+    }
+}
+.a_background_footer {
+    .list-inline-item {
+        white-space: nowrap;
+    }
+    ul {
+        border-top: 1px solid $o-brand-odoo;
+        border-bottom: 1px solid $o-brand-odoo;
+        padding: 4px 0;
+        margin: 0 0 4px 0;
+        li {
+            color: $o-brand-odoo;
+        }
+    }
+}
+.a_report_layout_background_nova {
+    background-image: url(/informes_invoice/static/src/img/bg_background_template1.jpg);
+    background-size: 100% 80%;
+    background-position: bottom center;
+    background-repeat: repeat-y;
+    min-height: 620px;
+    strong {
+        color: $o-default-report-secondary-color;
+    }
+    .table {
+        border-top: 1px solid gray('300');
+    }
+
+    .table td, .table th {
+        border-top: none;
+    }
+    h2 {
+        color: $o-default-report-primary-color;
+    }
+    thead tr th {
+        color: $o-default-report-secondary-color
+    }
+    tbody {
+        color: gray('700');
+        tr {
+            &:nth-child(odd) {
+                background-color: rgba(220, 205, 216, 0.2);
+            }
+            &.o_line_section {
+                color: $o-brand-odoo;
+                background-color: rgba(73, 80, 87, 0.2) !important;
+            }
+        }
+    }
+    /*Total table*/
+    .row > div > table,
+    div#total table {
+        tr {
+            &:nth-child(odd) {
+                background-color: transparent !important;
+            }
+            /* first-child & last-child rule compat 12.0 */
+            &:first-child,
+            &:last-child,
+            &.o_subtotal,
+            &.o_total {
+                border-top: none !important;
+                td {
+                    border-top: 1px solid gray('400') !important;
+                }
+                strong {
+                    color: $o-default-report-primary-color;
+                }
+            }
+        }
+    }
+}
+
+.o_in_iframe {
+    .o_background_header {
+        min-width: 0;
+    }
+}

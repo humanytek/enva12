@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="products_receive_tree_inherit" model="ir.ui.view">
+    <field name="name">products_receive.tree</field>
+    <field name="model">stock.move</field>
+    <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+    <field name="arch" type="xml">
+      <field name="product_id" position="after">
+        <!-- Add new fields here -->
+        <field name="purchase_agreement_id"/>
+        <field name="purchase_agreement_provider"/>
+        <field name="purchase_agreement_representative_provider"/>
+        <field name="purchase_agreement_date_order"/>
+        <field name="purchase_agreement_date_requisition"/>
+      </field>
+    </field>
+  </record>
+</odoo>
