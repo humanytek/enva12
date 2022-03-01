@@ -11,7 +11,7 @@ Purchase Humidity Tolerance OCC
             'purchase',
             ],
     'data': [
-    
+
             'views/humidity_tolerance_purchase.xml',
     ],
     'qweb': [

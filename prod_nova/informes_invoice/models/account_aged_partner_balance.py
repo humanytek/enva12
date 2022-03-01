@@ -17,7 +17,7 @@ class report_account_aged_partner(models.AbstractModel):
         columns = [{}]
         columns += [
             {'name': v, 'class': 'number', 'style': 'white-space:nowrap;'}
-            for v in [_("JRNL"), _("Account"),_("Fecha Factura"),_("Moneda"),_("Monto"),_("TC"), _("Origin"), _("Reference"), _("Not due on: %s") % format_date(self.env, options['date']['date']),
+            for v in [_("JRNL"), _("Account"),_("Fecha Factura"),_("Fecha Contable"),_("Fecha Vencimiento"),_("Moneda"),_("Monto"),_("TC"), _("Origin"), _("Reference"), _("Not due on: %s") % format_date(self.env, options['date']['date']),
                       _("1 - 30"), _("31 - 60"), _("61 - 90"), _("91 - 120"), _("Older"), _("Total")]
         ]
         return columns
@@ -47,7 +47,7 @@ class report_account_aged_partner(models.AbstractModel):
                 'id': 'partner_%s' % (values['partner_id'],),
                 'name': values['name'],
                 'level': 2,
-                'columns': [{'name': ''}] * 8 + [{'name': self.format_value(sign * v)} for v in [values['direction'], values['4'],
+                'columns': [{'name': ''}] * 10 + [{'name': self.format_value(sign * v)} for v in [values['direction'], values['4'],
                                                                                                  values['3'], values['2'],
                                                                                                  values['1'], values['0'], values['total']]],
                 'trust': values['trust'],
@@ -69,7 +69,7 @@ class report_account_aged_partner(models.AbstractModel):
                         'caret_options': caret_type,
                         'level': 4,
                         'parent_id': 'partner_%s' % (values['partner_id'],),
-                        'columns': [{'name': v} for v in [aml.journal_id.code,aml.account_id.code,aml.invoice_id.date_invoice,aml.invoice_id.currency_id.name,self.format_value(aml.invoice_id.amount_total_signed), self.format_value(aml.invoice_id.type_currency),aml.invoice_id.origin,self._format_aml_name(aml)]] +\
+                        'columns': [{'name': v} for v in [aml.journal_id.code,aml.account_id.code,aml.invoice_id.date_invoice,aml.date,aml.date_maturity,aml.invoice_id.currency_id.name,self.format_value(aml.invoice_id.amount_total_signed), self.format_value(aml.invoice_id.type_currency),aml.invoice_id.origin,self._format_aml_name(aml)]] +\
                                     # [{'name': v} for v in [aml.journal_id.code, aml.account_id.code, self._format_aml_name(aml)]] +\
                                    [{'name': v} for v in [line['period'] == 6-i and self.format_value(sign * line['amount']) or '' for i in range(7)]],
                     }
@@ -80,7 +80,7 @@ class report_account_aged_partner(models.AbstractModel):
                 'name': _('Total'),
                 'class': 'total',
                 'level': 'None',
-                'columns': [{'name': ''}] * 8 + [{'name': self.format_value(sign * v)} for v in [total[6], total[4], total[3], total[2], total[1], total[0], total[5]]],
+                'columns': [{'name': ''}] * 10 + [{'name': self.format_value(sign * v)} for v in [total[6], total[4], total[3], total[2], total[1], total[0], total[5]]],
             }
             lines.append(total_line)
         return lines

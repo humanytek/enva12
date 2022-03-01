@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Stock Move Adjustment',
-    'author': 'silvau',
-    'website': 'http://zeval.com.mx',
+    'author': 'EMPAQUESNOVA',
+    'website': 'http://www.empaquesnova.com.mx',
     'category': 'Inventory Management',
     'depends': ['stock', 'account', 'stock_account'],
     'description': """

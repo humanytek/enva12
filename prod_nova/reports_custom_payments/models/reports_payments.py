@@ -17,7 +17,7 @@ class ReportsPayments(models.AbstractModel):
     _description = "Reports Payments"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '2021-05-30', 'date_to': '2021-05-30'}
+    filter_date = {'mode': 'range', 'filter':'custom','date_from': '2021-05-30', 'date_to': '2021-05-30'}
 
 
     def _get_columns_name(self, options):
@@ -44,26 +44,25 @@ class ReportsPayments(models.AbstractModel):
 
             SELECT
                     ap.id as payment_id,
-                    ap.name as name,
-                    ap.payment_date as fecha_pago,
-                    ap.communication as circular,
+                    ap.payment_reference as name,
+                    am.date as fecha_pago,
+                    am.ref as circular,
                     rp.name as partner,
                     rp.id as partner_id,
-                    ai.date_invoice as fecha_factura,
-                    ai.number as factura,
-                    ai.id as invoice_id,
+                    am.invoice_date as fecha_factura,
+                    am.name as factura,
+                    am.id as invoice_id,
                     rc.name as moneda,
                     ap.amount as monto
                     FROM account_payment ap
-                    LEFT JOIN account_invoice_payment_rel aipr ON aipr.payment_id=ap.id
-                    LEFT JOIN account_invoice ai ON ai.id=aipr.invoice_id
+                    LEFT JOIN account_move am ON am.id=ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_currency rc ON rc.id=ap.currency_id
 
-                    WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
-                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('outbound')
+                    WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                    AND ap.state in ('posted') AND ap.payment_type in ('outbound')
 
-                    ORDER BY rp.name,ap.payment_date,ap.name
+                    ORDER BY rp.name,ap.date,ap.payment_reference
 
 
         """
@@ -222,8 +221,6 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(ail.name) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
-
-
 
                 ],
 

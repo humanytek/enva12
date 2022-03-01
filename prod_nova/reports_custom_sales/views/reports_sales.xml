@@ -49,8 +49,8 @@
 
       <record model="ir.actions.act_window" id="trend_budget_sales_list_action">
         <field name="name">Presupuesto Ventas Tendencia</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">trend.budget.sales</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primer presupuesto de ventas
@@ -77,8 +77,8 @@
 
       <record model="ir.actions.act_window" id="budget_budget_sales_list_action">
         <field name="name">Presupuesto Ventas Inicio de Año</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">budget.budget.sales</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primer presupuesto de ventas de inicio de año
@@ -105,8 +105,8 @@
 
       <record model="ir.actions.act_window" id="project_user_sales_list_action">
         <field name="name">Proyeccion de ventas</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">project.user.sales</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primera proyeccion de ventas
@@ -131,8 +131,8 @@
 
       <record model="ir.actions.act_window" id="bussines_day_list_action">
         <field name="name">Dias Habiles</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">bussines.days</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primer Mes con dias Habiles
@@ -155,8 +155,8 @@
 
       <record model="ir.actions.act_window" id="partner_maquila_list_action">
         <field name="name">Cliente Maquila</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">partner.maquila</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primer Cliente Maquila Archimex
@@ -179,8 +179,8 @@
 
       <record model="ir.actions.act_window" id="partner_maquila_lamina_list_action">
         <field name="name">Cliente Maquila Lamina</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">partner.maquila.lamina</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">Crea tu primer Cliente Maquila Lamina

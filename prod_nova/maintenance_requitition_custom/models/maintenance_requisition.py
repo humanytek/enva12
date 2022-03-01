@@ -86,30 +86,29 @@ class Maintenance_requisition(models.Model):
 
     )
 
-    @api.one
+
     def _count_ot(self):
-        results = self.env['maintenance.request'].read_group([('mantto_requisition_id', 'in', self.ids)], 'mantto_requisition_id', 'mantto_requisition_id')
+        results = self.env['maintenance.request'].read_group([('mantto_requisition_id', 'in', self.ids)], ['mantto_requisition_id'], ['mantto_requisition_id'])
         dic = {}
         for x in results: dic[x['mantto_requisition_id'][0]] = x['mantto_requisition_id_count']
         for record in self: record['ot_rm_count'] = dic.get(record.id, 0)
 
-    @api.multi
+
     def action_in_progress(self):
         self.write({'state': 'in_progress'})
 
-    @api.multi
+
     def action_done(self):
         self.write({'state': 'done'})
 
-    @api.multi
+
     def action_cancel(self):
         self.write({'state': 'cancel'})
 
-    @api.multi
+
     def action_draft(self):
         self.write({'state': 'draft'})
 
-    @api.multi
     def unlink(self):
         for s in self:
             if (s.state=='done') or (s.state=='open') or (s.state=='in_progress'):

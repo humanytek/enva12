@@ -12,12 +12,12 @@ class report_client_payment_nva(models.Model):
         store=True,
     )
 
-    @api.depends('l10n_mx_edi_payment_method_id', 'currency_id', 'payment_date')
+    @api.depends('l10n_mx_edi_payment_method_id', 'currency_id', 'date')
     def _tipo_cambio(self):
         hoy = datetime.now()
         f3 = hoy.strftime("%x")
         for cp in self:
-            f1 = cp.payment_date.strftime("%x")
+            f1 = cp.date.strftime("%x")
             moneda = cp.currency_id.rate_ids
             if f1 == f3:
                 fs = f1

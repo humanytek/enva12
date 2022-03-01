@@ -17,7 +17,7 @@ class ReportsReceiptsNova(models.AbstractModel):
     _description = "Reports Receipts Box"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
+    filter_date = {'mode': 'range', 'filter': 'this_month'}
 
     def _get_columns_name(self, options):
         return [
@@ -181,12 +181,12 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(ai.amount_total_company_signed) as residual
-                    FROM account_invoice ai
-                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+                    SUM(am.amount_total_signed) as residual
+                    FROM account_move am
+                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
 
-                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
-                    AND ai.commercial_partner_id="""+partner+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
+                    AND am.commercial_partner_id="""+partner+""" AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
 
 
 

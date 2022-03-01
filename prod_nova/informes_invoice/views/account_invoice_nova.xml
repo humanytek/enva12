@@ -3,56 +3,65 @@
   <!-- Inherit Tree view -->
   <record id="relations_invoices_tree_inherit" model="ir.ui.view">
     <field name="name">relations_invoices.tree</field>
-    <field name="model">account.invoice</field>
-    <field name="inherit_id" ref="account.invoice_tree"/>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_invoice_tree"/>
     <field name="arch" type="xml">
-      <field name="origin" position="replace">
+      <field name="invoice_origin" position="after">
         <!-- Add new fields here -->
-        <field name="currency_id"/>
-        <field name="name"/>
-        <field name="amount_untaxed_signed" sum="Total"/>
-        <field name="tax_company" sum="Total"/>
-        <field name="amount_total_company_signed" sum="Total"/>
-        <field name="type_currency" widget="monetary"/>
+        <field name="type_currency" widget="monetary" optional="hide"/>
       </field>
-      <field name="user_id" position="after">
-        <field name="origin"/>
+      <field name="currency_id" position="replace">
+          <field name="currency_id" optional="hide"/>
       </field>
-      <field name="residual_signed" position="after">
-        <field name="payment_name"/>
-        <field name="payment_amount"/>
-        <field name="payment_date"/>
-        <field name="dias_transcurridos"/>
-      </field>
+
       <field name="state" position="after">
-        <field name="l10n_mx_edi_cfdi_uuid"/>
+        <field name="l10n_mx_edi_cfdi_uuid" optional="hide"/>
       </field>
     </field>
   </record>
 
-  <!-- Inherit Form view -->
+
   <record id="relations_invoices_form_inherit" model="ir.ui.view">
     <field name="name">relations_invoices.form</field>
-    <field name="model">account.invoice</field>
-    <field name="inherit_id" ref="account.invoice_form"/>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
-      <field name="user_id" position="after">
-        <!-- Add your fields or attributes here -->
-        <field name="order_purchase_id"/>
+       <xpath expr="//label[@for='l10n_mx_edi_sat_status']" position="replace">
+         <label for="l10n_mx_edi_sat_status"
+                          attrs="{'invisible': [('state', 'not in', ('posted', 'cancel'))]}"/>
+       </xpath>
+ <xpath expr="//div[@class='o_row']" position="replace">
+       <div class="o_row"
+                        attrs="{'invisible': [('state', 'not in', ('posted', 'cancel'))]}">
+                       <field name="l10n_mx_edi_sat_status"/>
+                       <button name="l10n_mx_edi_update_sat_status" type="object"
+                               string="Retry" class="oe_link"
+                               groups="account.group_account_invoice"
+                               attrs="{'invisible': [('state', 'not in', ('posted', 'cancel'))]}"/>
+                   </div>
+                    </xpath>
+      <field name="l10n_mx_edi_cfdi_uuid" position="replace">
+                           <field name="l10n_mx_edi_cfdi_uuid" attrs="{'invisible': [('state', 'not in', ('posted', 'cancel'))]}"/>
       </field>
+      <field name="l10n_mx_edi_origin" position="replace">
+                          <field name="l10n_mx_edi_origin"/>
+      </field>
+
       <notebook position="inside">
         <page string="Embarques">
             <field name="transfer_ids"
                 domain="['&amp;','&amp;',('picking_type_id.code','=','outgoing'),('state','=','done'),('picking_type_id','=',10)]"/>
         </page>
       </notebook>
-      <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='other_info']/group[1]/group[1]/field[@name='name']" position="after">
+
+    <field name="invoice_origin" position="replace">
+    <field name="invoice_origin" string="Source Document" force_save="1"/>
     <field name="re_facturado"  help="Marcar sí la factura es refacturada"/>
     <field name="facturado_to"  help="Marcar sí el tonelaje aplica para otra fecha"/>
     <field name="not_accumulate"  help="Marcar sí el tonelaje aun no se aplica"/>
     <field name="date_applied"  attrs="{'invisible': ['&amp;',('re_facturado','!=',True),('facturado_to','!=',True)]}"/>
-    <field name="sale_id" />
-  </xpath>
+    </field>
+
     </field>
   </record>
 
