@@ -17,6 +17,7 @@ PRIORITY = [
 ]
 class Maintenance_requisition(models.Model):
     _name = 'maintenance.requisition'
+    _description = "Maintenance Requisition"
     _inherit = ['mail.thread']
 
     name = fields.Char(
@@ -35,7 +36,7 @@ class Maintenance_requisition(models.Model):
 
         string="Fecha de Solicitud",
         store=True,
-        track_visibility='onchange',
+        tracking=True,
         default=fields.Date.context_today,
     )
 
@@ -62,7 +63,7 @@ class Maintenance_requisition(models.Model):
     state = fields.Selection(
     MANTTO_REQUISITION_STATES,
     'Estado',
-    track_visibility='onchange',
+    tracking=True,
     required=True,
     copy=False,
     default='draft'

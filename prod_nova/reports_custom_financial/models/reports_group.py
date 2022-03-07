@@ -17,6 +17,7 @@ NAME_TYPE_REPORTS_BALANCE=[
 ]
 class ReportsGroup(models.Model):
     _name = 'reports.group'
+    _description = "Reports Group"
 
 
     name = fields.Char(

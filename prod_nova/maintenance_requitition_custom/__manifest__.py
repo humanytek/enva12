@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Maintenance Requisition',
-    'author': 'EMPAQUES NOVA','ING.JESUS CHULIM'
+    'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Maintenance',
     'version': '1.0.0',

@@ -15,6 +15,7 @@ NAME_COST_SALE = [
 
 class PorcentCostSale(models.Model):
     _name = 'porcent.cost.sale'
+    _description = "Porcent Cost Sale"
 
 
     name = fields.Many2one(

@@ -6,7 +6,7 @@ class report_client_payment_nva(models.Model):
     _inherit= 'account.payment'
 
     tipocambio = fields.Float(
-        digits=(7, 6),
+        digits=(7,6),
         string='TipoCambio',
         compute='_tipo_cambio',
         store=True,

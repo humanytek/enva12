@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Informes Partner Invoice',
+    'name': 'Human Resources Requisition',
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
-    'category': 'Account',
+    'category': 'Human Resources',
     'version': '1.0.0',
     'depends': [
+        'hr',
+        'hr_recruitment',
         'account',
-        'account_reports',
-        'account_accountant',
     ],
     'data': [
-    'views/account_partner_invoice.xml',
+    'views/rh_requisition.xml',
+
     ],
+     'application': True,
 }

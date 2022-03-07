@@ -14,7 +14,7 @@ class ProductTemplateNova(models.Model):
     fsc = fields.Selection(
     FSC,
     'FSC',
-    track_visibility='onchange',
+    tracking=True,
     # required=True,
     copy=False,
     default='no_aplica'

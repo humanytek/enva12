@@ -23,9 +23,10 @@ class Account_invoice_nova(models.Model):
 
 
     type_currency = fields.Monetary(
+        digits = (8,6),
         # string='Type Currency',
         compute='_get_type_currency',
-        digits=(8,6),
+
 
     )
 

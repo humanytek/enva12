@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Stock Move Analytic',
-    'author': 'Empaques Nova',
+    'author': 'EMPAQUES NOVA',
     'website': 'https://www.empaquesnova.com.mx',
     'category': 'Inventory Management',
     'depends': ['stock', 'account', 'stock_account'],

@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 from datetime import datetime, time
-from openerp import models, fields, api, _, netsvc
+from odoo import models, fields, api, _, netsvc
 
 class purchase_requisition_line(models.Model):
     _inherit = "purchase.requisition.line"

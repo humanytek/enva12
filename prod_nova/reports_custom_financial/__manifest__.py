@@ -3,7 +3,7 @@
 
 {
     'name': 'Accounting Reports - Custom Financial Reports',
-    'author': 'EMPAQUES NOVA','ING.JESUS CHULIM'
+    'author': 'EMPAQUES NOVA',
     'version': '2.5',
     'category': 'reporting',
     'description': """

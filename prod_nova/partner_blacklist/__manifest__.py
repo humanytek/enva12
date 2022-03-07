@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Partner LIST 69-b  SAT',
-    'author': 'EMPAQUES NOVA, ING.JESUS CHULIM',
+    'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Partner',
     'version': '1.0.0',

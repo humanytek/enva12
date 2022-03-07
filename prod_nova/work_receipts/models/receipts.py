@@ -12,6 +12,7 @@ WORK_RECEIPS_STATES = [
 
 class Receipts(models.Model):
     _name = 'work.receipts'
+    _description = "Work Receipts"
     _inherit = ['mail.thread']
     name = fields.Char(
         required=True,
@@ -36,7 +37,7 @@ class Receipts(models.Model):
     receipts_date= fields.Date(
         required=True,
         string='Reception Date',
-        track_visibility='onchange',
+        tracking=True,
         default=fields.Date.context_today,
     )
     user_id = fields.Many2one(
@@ -48,7 +49,7 @@ class Receipts(models.Model):
     state = fields.Selection(
     WORK_RECEIPS_STATES,
     'Estado',
-    track_visibility='onchange',
+    tracking=True,
     required=True,
     copy=False,
     default='draft'
@@ -74,7 +75,7 @@ class Receipts(models.Model):
     column1='account_invoice_id',
     column2='work_receips_id',
     string='Invoices',
-    track_visibility='onchange',
+    tracking=True,
     store=True,
     domain="['&',('move_type', '=', 'in_invoice'),('invoice_origin','ilike',purchase_name)]",
     )
@@ -83,7 +84,7 @@ class Receipts(models.Model):
     string='Order purchase lines',
     store=True,
     domain="[('order_id', '=', purchase_id)]",
-    track_visibility='onchange',
+    tracking=True,
     )
     advance = fields.Boolean(
     string='Advance',

@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class HumidityPurchase(models.Model):
     _name = 'humidity.tolerance.purchase'
+    _description = "Humidity Tolerance Purchase"
 
 
     name = fields.Char(
@@ -75,4 +76,3 @@ class PurchaseOrder_nova(models.Model):
         dic = {}
         for x in results: dic[x['purchase_id'][0]] = x['purchase_id_count']
         for record in self: record['humidity_purchase_count'] = dic.get(record.id, 0)
-        

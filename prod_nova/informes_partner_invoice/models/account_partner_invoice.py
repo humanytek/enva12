@@ -40,7 +40,7 @@ class AccountPartnerInvoice(models.Model):
             ('no_autorizado','Sin Autorizar'),
             ('autorizado', 'Autorizado'),
         ], string='Estado de pago', index=True, readonly=True, default='no_autorizado',
-        track_visibility='onchange', copy=False,store=True)
+        tracking=True, copy=False,store=True)
 
 
 
