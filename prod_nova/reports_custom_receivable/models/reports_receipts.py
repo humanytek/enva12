@@ -66,11 +66,12 @@ class ReportsReceiptsNova(models.AbstractModel):
                     rp.name as partner,
                     rp.id as partner_id
                     FROM account_payment ap
+                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
-                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
+                    WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
                     AND rpc.name='CORRUGADO'
                     AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
                     GROUP BY rp.id,rp.name
@@ -113,11 +114,12 @@ class ReportsReceiptsNova(models.AbstractModel):
                     rp.name as partner,
                     rp.id as partner_id
                     FROM account_payment ap
+                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
-                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
+                    WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
                     AND rpc.name='CORRUGADO'
                     AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
                     GROUP BY rp.id,rp.name
@@ -155,10 +157,10 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
+                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
-
-                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
-                    AND rp.name = '"""+partner+"""' AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
+                    AND rp.name = '"""+partner+"""' AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
 
 
         """
