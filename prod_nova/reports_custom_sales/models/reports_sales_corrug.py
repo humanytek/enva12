@@ -161,7 +161,7 @@ class ReportsSalesCorrug(models.AbstractModel):
             SELECT
                     aml.partner_id as id_cliente,
                     rp.name as cliente,
-                    COALESCE(SUM(aml.total_weight),0) as total_weight
+                    COALESCE(SUM(pt.weight*aml.quantity),0) as total_weight
                     FROM account_move_line aml
                     LEFT JOIN res_partner rp ON rp.id=aml.partner_id
                     LEFT JOIN product_product pp ON pp.id=aml.product_id
@@ -233,7 +233,7 @@ class ReportsSalesCorrug(models.AbstractModel):
 
                 SELECT
 
-                        COALESCE(SUM(aml.total_weight),0) as total_weight
+                        COALESCE(SUM(pt.weight*aml.quantity),0) as total_weight
                         FROM account_move_line aml
                         LEFT JOIN product_product pp ON pp.id=aml.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
