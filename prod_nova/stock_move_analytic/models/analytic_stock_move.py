@@ -29,7 +29,7 @@ class ASMStockPicking(models.Model):
         self.ensure_one()
         product=self.move_ids_without_package
         if self.picking_type_code == 'outgoing':
-            if self.location_id.id != 21:
+            if self.location_id.id != 21 or self.location_id.id != 8:
                 for r in product:
                     if not r.analytic_account_id:
                         msg = 'No tiene Cuentas analiticas '
