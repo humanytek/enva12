@@ -43,7 +43,7 @@
       </field>
 
       <xpath expr="//field[@name='picking_type_id']" position="replace">
-        <field name="picking_type_id" widget="selection" groups="stock.group_adv_location" attrs="{'readonly': [('state', '!=', 'draft')]}" domain="['|', ('name', '=like', 'incoming'), ('name', '=like', 'Recepción')]" />
+        <field name="picking_type_id" widget="selection" groups="stock.group_adv_location" attrs="{'readonly': [('state', '!=', 'draft')]}" domain="['|', ('code', '=like', 'incoming'), ('name', '=like', 'Recepción')]" />
       </xpath>
 
     </field>
