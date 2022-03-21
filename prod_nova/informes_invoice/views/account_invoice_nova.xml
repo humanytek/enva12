@@ -6,15 +6,17 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_invoice_tree"/>
     <field name="arch" type="xml">
+      <field name="invoice_date_due" position="replace">
+          <field name="invoice_date_due" optional="show" attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>
+      </field>
+
       <field name="invoice_origin" position="after">
         <!-- Add new fields here -->
         <field name="type_currency" widget="monetary" optional="hide"/>
       </field>
       <field name="currency_id" position="replace">
           <field name="currency_id" optional="hide"/>
-          <field name="payment_name" optional="hide"/>
-          <field name="payment_amount" optional="hide"/>
-          <field name="payment_date" optional="hide"/>
+
       </field>
 
       <field name="state" position="after">
