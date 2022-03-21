@@ -12,6 +12,9 @@
       </field>
       <field name="currency_id" position="replace">
           <field name="currency_id" optional="hide"/>
+          <field name="payment_name" optional="hide"/>
+          <field name="payment_amount" optional="hide"/>
+          <field name="payment_date" optional="hide"/>
       </field>
 
       <field name="state" position="after">
