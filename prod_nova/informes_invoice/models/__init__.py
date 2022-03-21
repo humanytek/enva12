@@ -2,4 +2,4 @@
 
 from . import account_invoice_line
 from . import account_invoice_nova
-# from . import account_aged_partner_balance
+from . import account_aged_partner_balance
