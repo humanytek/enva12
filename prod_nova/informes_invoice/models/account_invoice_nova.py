@@ -30,6 +30,19 @@ class Account_invoice_nova(models.Model):
 
     )
 
+    payment_name=fields.Char(
+        related='payment_id.name',
+        string='Referencia de Pago',
+    )
+    payment_amount=fields.Monetary(
+        related='payment_id.amount',
+        string='Monto Pagado',
+    )
+    payment_date=fields.Date(
+        related='payment_id.date',
+        string='Fecha de Pago',
+    )
+
     transfer_ids=fields.Many2many(
     comodel_name='stock.picking',
     relation='invoice_transfer_rel',
