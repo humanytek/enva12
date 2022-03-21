@@ -17,6 +17,6 @@
     'data': [
         'reports/invoice_reports_sale.xml',
         'views/account_invoice_nova.xml',
-        # 'views/account_invoice_line.xml',
+        'views/account_invoice_line.xml',
     ],
 }
