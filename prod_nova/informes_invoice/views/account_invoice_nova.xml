@@ -48,7 +48,7 @@
       </field> -->
 
       <notebook position="inside">
-        <page string="Embarques" attrs="{('move_type','=','out_invoice')}">
+        <page string="Embarques" attrs="{'invisible': [('move_type','!=','out_invoice')]}">
             <field name="transfer_ids"
                 domain="['&amp;','&amp;',('picking_type_id.code','=','outgoing'),('state','=','done'),('picking_type_id','=',10)]"/>
         </page>
