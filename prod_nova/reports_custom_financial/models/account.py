@@ -48,5 +48,4 @@ class AccountGroup(models.Model):
         else:
             criteria_operator = ['|'] if operator not in expression.NEGATIVE_TERM_OPERATORS else ['&', '!']
             domain = criteria_operator + [('code_prefix', '=ilike', name + '%'), ('name', operator, name)]
-        group_ids = self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
-        return self.browse(group_ids).name_get()
+        return self._search(expression.AND([domain, args]), limit=limit, access_rights_uid=name_get_uid)
