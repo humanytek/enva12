@@ -31,12 +31,12 @@ class PorcentCostSale(models.Model):
         required=True,
     )
 
-    group_id = fields.Many2one(
-        comodel_name = 'account.group',
+    group_finantial_id = fields.Many2one(
+        comodel_name = 'account.group.nova',
         string = 'Group',
         store = True,
         required=True,
-
+        default =False,
     )
 
     date_from=fields.Date(
@@ -72,8 +72,8 @@ class PorcentCostSale(models.Model):
                 COALESCE(sum(aml.credit),0) as credit,COALESCE(sum(aml.balance),0) as balance
                 FROM account_move_line aml
                 LEFT JOIN account_account aa on aa.id=aml.account_id
-                WHERE aa.group_id = %s AND aml.date >= %s AND aml.date <= %s
-                GROUP BY aa.group_id
+                WHERE aa.group_finantial_id = %s AND aml.date >= %s AND aml.date <= %s
+                GROUP BY aa.group_finantial_id
         """
         params =[group,date_from,date_to]
         self.env.cr.execute(sql_query, params)

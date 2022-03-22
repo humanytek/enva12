@@ -10,7 +10,8 @@
         A custom report to get Financial Reports Empaques Nova
     """,
     'depends': [
-        'account_reports'
+        'account',
+        'account_reports',
     ],
     'data': [
         'views/custom_financial_reports.xml',
@@ -20,6 +21,7 @@
         'views/list_cost_sale.xml',
         'views/cost_sale.xml',
         'views/sale_volumen.xml',
+        'views/account_view.xml',
     ],
     'installable': True,
     'auto_install': False,

@@ -45,8 +45,8 @@ class ReportsGroup(models.Model):
     store=True,
     )
 
-    group_id = fields.Many2one(
-        comodel_name = 'account.group',
+    group_finantial_id = fields.Many2one(
+        comodel_name = 'account.group.nova',
         string = 'Group',
         store = True
 
