@@ -52,11 +52,12 @@ class ReportStateResults(models.AbstractModel):
 
     def _get_cost_sales(self, ncost, date_f,date_t):
         porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',ncost),('date_from','>=',date_f),('date_to','<=',date_t)])
-
+        porcentajeacum=0
         if porcentaje:
-            porcentajeacum=0
             for p in porcentaje:
                 porcentajeacum+=p.porcent_per_month
+        else:
+            porcentajeacum=0
 
         return porcentajeacum
 
