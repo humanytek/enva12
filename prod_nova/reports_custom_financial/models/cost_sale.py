@@ -51,17 +51,17 @@ class PorcentCostSale(models.Model):
         store=True,
     )
 
-    # cost_per_month=fields.Float(
-    # compute='_cost_month',
-    # string='Costo por mes',
-    #
-    # )
-    #
-    # porcent_per_month=fields.Float(
-    # compute='_porcent_cost_month',
-    # string='Porcentaje por mes',
-    #
-    # )
+    cost_per_month=fields.Float(
+    compute='_cost_month',
+    string='Costo por mes',
+
+    )
+
+    porcent_per_month=fields.Float(
+    compute='_porcent_cost_month',
+    string='Porcentaje por mes',
+
+    )
 
 
 
@@ -84,17 +84,17 @@ class PorcentCostSale(models.Model):
         return result
 
 
-    # @api.depends('date_from','date_to','cost_per_month','group_id')
-    # def _cost_month(self):
-    #     for cm in self:
-    #         if cm.group_id:
-    #             if cm.date_from and cm.date_to:
-    #                 # cost_month=self._post_account(cm.group_id.id,cm.date_from,cm.date_to)
-    #                 cm.cost_per_month=2
-    #
-    #
-    #
-    # @api.depends('cost_per_month','porcent_per_month','porcent')
-    # def _porcent_cost_month(self):
-    #     for pcm in self:
-    #         pcm.porcent_per_month=(pcm.cost_per_month*pcm.porcent)/100
+    @api.depends('date_from','date_to','cost_per_month','group_finantial_id')
+    def _cost_month(self):
+        for cm in self:
+            if cm.group_id:
+                if cm.date_from and cm.date_to:
+                    # cost_month=self._post_account(cm.group_id.id,cm.date_from,cm.date_to)
+                    cm.cost_per_month=2
+
+
+
+    @api.depends('cost_per_month','porcent_per_month','porcent')
+    def _porcent_cost_month(self):
+        for pcm in self:
+            pcm.porcent_per_month=(pcm.cost_per_month*pcm.porcent)/100
