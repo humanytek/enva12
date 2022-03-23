@@ -52,7 +52,7 @@ class ReportsAccount(models.AbstractModel):
             SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
-                LEFT JOIN account_account_type aat on aat.id=\"account_move_line\".user_type_id
+                LEFT JOIN account_account_type aat on aat.id=aa.internal_type
                 WHERE aat.include_initial_balance = False AND """+where_clause+"""
                 GROUP BY aat.include_initial_balance
         """
