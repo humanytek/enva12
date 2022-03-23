@@ -89,8 +89,8 @@ class PorcentCostSale(models.Model):
         for cm in self:
             if cm.group_finantial_id:
                 if cm.date_from and cm.date_to:
-                    # cost_month=self._post_account(cm.group_id.id,cm.date_from,cm.date_to)
-                    cm.cost_per_month=2
+                    cost_month=self._post_account(cm.group_id.id,cm.date_from,cm.date_to)
+                    cm.cost_per_month=cost_month[2]
 
 
 
