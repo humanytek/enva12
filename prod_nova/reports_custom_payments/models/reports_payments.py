@@ -71,7 +71,7 @@ class ReportsPayments(models.AbstractModel):
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND am.state in ('posted') AND ap.payment_type in ('outbound')
-                    
+                    AND ap.partner_type in ('supplier')
                     ORDER BY ap.id,rp.name,am.date,ap.payment_reference,am.ref,rp.name,rp.id,invoice.invoice_date,invoice.name,invoice.id,rc.name,ap.amount
 
 
