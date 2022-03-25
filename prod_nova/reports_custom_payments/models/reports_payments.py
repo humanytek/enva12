@@ -49,20 +49,30 @@ class ReportsPayments(models.AbstractModel):
                     am.ref as circular,
                     rp.name as partner,
                     rp.id as partner_id,
-                    am.invoice_date as fecha_factura,
-                    am.name as factura,
-                    am.id as invoice_id,
+                    invoice.invoice_date as fecha_factura,
+                    invoice.name as factura,
+                    invoice.id as invoice_id,
                     rc.name as moneda,
                     ap.amount as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id=ap.move_id
-                    LEFT JOIN res_partner rp ON rp.id=ap.partner_id
-                    LEFT JOIN res_currency rc ON rc.id=ap.currency_id
+                    JOIN account_move am ON am.id=ap.move_id
+                    JOIN account_move_line line ON line.move_id = am.id
+                    JOIN account_partial_reconcile part ON
+                        part.debit_move_id = line.id
+                        OR
+                        part.credit_move_id = line.id
+                    JOIN account_move_line counterpart_line ON
+                        part.debit_move_id = counterpart_line.id
+                        OR
+                        part.credit_move_id = counterpart_line.id
+                    JOIN account_move invoice ON invoice.id = counterpart_line.move_id
+                    JOIN res_partner rp ON rp.id=ap.partner_id
+                    JOIN res_currency rc ON rc.id=ap.currency_id
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND ap.state in ('posted') AND ap.payment_type in ('outbound')
-
-                    ORDER BY rp.name,ap.date,ap.payment_reference
+                    AND am.state in ('posted') AND ap.payment_type in ('outbound')
+                    AND invoice.move_type in ('in_invoice', 'in_refund')
+                    ORDER BY rp.name,am.date,ap.payment_reference
 
 
         """
@@ -85,7 +95,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.id as aml_id ,
                       aml.full_reconcile_id as full_reconcile_id
                       FROM account_move_line aml
-                      WHERE aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
+                      WHERE aml.credit > 0 AND aml.debit = 0 AND aml.move_id="""+invoice_id+"""
                       AND aml.full_reconcile_id is not NULL
                       limit 1
                                 """
@@ -104,7 +114,8 @@ class ReportsPayments(models.AbstractModel):
                       aml.debit as debit,
                       aml.amount_currency as amount_currency
                       FROM account_move_line aml
-                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+""" AND aml.credit = 0 AND aml.debit > 0 """
+                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+"""
+                      AND aml.credit = 0 AND aml.debit > 0 """
 
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
@@ -149,10 +160,12 @@ class ReportsPayments(models.AbstractModel):
         if pagos:
             for p in pagos:
                 caret_type ='account.move'
+
+
                 if p['factura'] != None:
                     caret_type = 'account.invoice.in'
                     aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
-                    ail=self.env['account.invoice.line'].search([('invoice_id','=',p['invoice_id'])], limit=1)
+                    ail=self.env['account.move.line'].search([('move_id','=',p['invoice_id'])], limit=1)
                     if aml:
                         aml_id=aml[0][0]
                         monto=0
