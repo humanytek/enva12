@@ -54,7 +54,7 @@ class ReportsPayments(models.AbstractModel):
                     invoice.id as invoice_id,
                     rc.name as moneda,
                     ap.amount as monto,
-                    line.name as descripcion,
+                    line.name as descripcion
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN account_move_line line ON line.move_id = am.id
@@ -73,7 +73,7 @@ class ReportsPayments(models.AbstractModel):
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND am.state in ('posted') AND ap.payment_type in ('outbound')
                     AND ap.partner_type in ('supplier')
-                    ORDER BY ap.id,rp.name,am.date,ap.payment_reference,am.ref,rp.name,rp.id,invoice.invoice_date,invoice.name,invoice.id,rc.name,ap.amount,line.name 
+                    ORDER BY ap.id,rp.name,am.date,ap.payment_reference,am.ref,rp.name,rp.id,invoice.invoice_date,invoice.name,invoice.id,rc.name,ap.amount,line.name
 
 
         """
