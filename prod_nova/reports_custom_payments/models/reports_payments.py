@@ -59,12 +59,8 @@ class ReportsPayments(models.AbstractModel):
                     JOIN account_move_line line ON line.move_id = am.id
                     JOIN account_partial_reconcile part ON
                         part.debit_move_id = line.id
-                        OR
-                        part.credit_move_id = line.id
                     JOIN account_move_line counterpart_line ON
                         part.debit_move_id = counterpart_line.id
-                        OR
-                        part.credit_move_id = counterpart_line.id
                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
@@ -72,7 +68,7 @@ class ReportsPayments(models.AbstractModel):
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND am.state in ('posted') AND ap.payment_type in ('outbound')
                     AND invoice.move_type in ('in_invoice', 'in_refund')
-                    ORDER BY ap.id,rp.name,am.date,ap.payment_reference,am.ref
+                    ORDER BY rp.name,am.date,ap.payment_reference
 
 
         """
