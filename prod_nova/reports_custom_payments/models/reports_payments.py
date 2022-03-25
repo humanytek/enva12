@@ -58,9 +58,9 @@ class ReportsPayments(models.AbstractModel):
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN account_move_line line ON line.move_id = am.id
                     JOIN account_partial_reconcile part ON
-                        part.debit_move_id = line.id
+                        part.credit_move_id = line.id
                     JOIN account_move_line counterpart_line ON
-                        part.debit_move_id = counterpart_line.id
+                        part.credit_move_id = counterpart_line.id
                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
