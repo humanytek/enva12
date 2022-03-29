@@ -10,29 +10,7 @@ class AccountInvoice(models.Model):
         return self.date_invoice or self.date
 
 
-    def _get_accounting_date(self, invoice_date, has_tax):
-        """Get correct accounting date for previous periods, taking tax lock date into account.
-
-        When registering an invoice in the past, we still want the sequence to be increasing.
-        We then take the last day of the period, depending on the sequence format.
-        If there is a tax lock date and there are taxes involved, we register the invoice at the
-        last date of the first open period.
-
-        :param invoice_date (datetime.date): The invoice date
-        :param has_tax (bool): Iff any taxes are involved in the lines of the invoice
-        :return (datetime.date):
-        """
-        tax_lock_date = self.company_id.tax_lock_date
-        today = fields.Date.today()
-        if invoice_date and tax_lock_date and has_tax and invoice_date <= tax_lock_date:
-            invoice_date = tax_lock_date + timedelta(days=1)
-
-        if self.is_sale_document(include_receipts=True):
-            return invoice_date
-        elif self.is_purchase_document(include_receipts=True):
-            return invoice_date
-        return invoice_date
-        super (AccountInvoice, self)._get_accounting_date()
+    
 
     # def action_move_create(self):
     #     """ Creates invoice related analytics and financial move lines """
