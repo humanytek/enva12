@@ -277,7 +277,7 @@ class AccountInvoice(models.Model):
             move.invoice_outstanding_credits_debits_widget = json.dumps(payments_widget_vals)
             move.invoice_has_outstanding = True
 
-        super(AccountInvoice, self)._inverse_amount_total()
+        super(AccountInvoice, self)._compute_payments_widget_to_reconcile_info()
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
