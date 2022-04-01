@@ -1,12 +1,27 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, RedirectWarning, ValidationError
+from odoo.exceptions import RedirectWarning, UserError, ValidationError, AccessError
+from odoo.tools import float_compare, date_utils, email_split, email_re
+from odoo.tools.misc import formatLang, format_date, get_lang
+
+from datetime import date, timedelta
+from collections import defaultdict
+from itertools import zip_longest
+from hashlib import sha256
+from json import dumps
+
+import ast
+import json
+import re
+import warnings
+
+#forbidden fields
+INTEGRITY_HASH_MOVE_FIELDS = ('date', 'journal_id', 'company_id')
+INTEGRITY_HASH_LINE_FIELDS = ('debit', 'credit', 'account_id', 'partner_id')
+
 class AccountInvoice(models.Model):
     _inherit = 'account.move'
-
-
-
 
     def _compute_base_line_taxes(base_line):
         ''' Compute taxes amounts both in company currency / foreign currency as the ratio between
