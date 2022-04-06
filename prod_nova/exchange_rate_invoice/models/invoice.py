@@ -23,6 +23,24 @@ INTEGRITY_HASH_LINE_FIELDS = ('debit', 'credit', 'account_id', 'partner_id')
 class AccountInvoice(models.Model):
     _inherit = 'account.move'
 
+
+    @api.onchange('invoice_date', 'highest_name', 'company_id')
+    def _onchange_invoice_date(self):
+        if self.invoice_date:
+            if not self.invoice_payment_term_id and (not self.invoice_date_due or self.invoice_date_due < self.invoice_date):
+                self.invoice_date_due = self.invoice_date
+
+            has_tax = bool(self.line_ids.tax_ids or self.line_ids.tax_tag_ids)
+            accounting_date = self._get_accounting_date(self.invoice_date, has_tax)
+            if accounting_date != self.date:
+                self.date = accounting_date
+                self._onchange_currency()
+                self._onchange_recompute_dynamic_lines()
+            else:
+                self._onchange_recompute_dynamic_lines()
+        super(AccountInvoice, self)._onchange_invoice_date()
+
+
     def _compute_base_line_taxes(base_line):
         ''' Compute taxes amounts both in company currency / foreign currency as the ratio between
         amount_currency & balance could not be the same as the expected currency rate.
