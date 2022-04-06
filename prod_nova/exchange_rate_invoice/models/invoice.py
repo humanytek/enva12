@@ -40,6 +40,22 @@ class AccountInvoice(models.Model):
                 self._onchange_recompute_dynamic_lines()
         super(AccountInvoice, self)._onchange_invoice_date()
 
+    @api.onchange('date', 'currency_id','invoice_date')
+    def _onchange_currency(self):
+        currency = self.currency_id or self.company_id.currency_id
+
+        if self.is_invoice(include_receipts=True):
+            for line in self._get_lines_onchange_currency():
+                line.currency_id = currency
+                line._onchange_currency()
+        else:
+            for line in self.line_ids:
+                line._onchange_currency()
+
+        self._recompute_dynamic_lines(recompute_tax_base_amount=True)
+        super(AccountInvoice, self)._onchange_currency()
+
+
 
     def _compute_base_line_taxes(base_line):
         ''' Compute taxes amounts both in company currency / foreign currency as the ratio between
