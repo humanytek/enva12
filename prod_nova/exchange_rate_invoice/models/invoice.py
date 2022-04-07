@@ -56,7 +56,6 @@ class AccountInvoice(models.Model):
         super(AccountInvoice, self)._onchange_currency()
 
 
-
     def _compute_base_line_taxes(base_line):
         ''' Compute taxes amounts both in company currency / foreign currency as the ratio between
         amount_currency & balance could not be the same as the expected currency rate.
@@ -619,23 +618,6 @@ class AccountMoveLine(models.Model):
         return partials_vals_list
         super(AccountMoveLine, self)._prepare_reconciliation_partials()
 
-
-
-    # def action_move_create(self):
-    #     """ Creates invoice related analytics and financial move lines """
-    #     for inv in self:
-    #         today=fields.Date.context_today(self)
-    #         if not inv.date:
-    #             inv.date=today
-    #
-    #         if (inv.currency_id.id != inv.company_id.currency_id.id) :
-    #             fecha_t_cambio=inv.invoice_date or today
-    #             rate=self.company_id.currency_id._get_rate(fecha_t_cambio)
-    #             # if not rate or rate == 1.0 :
-    #             if not rate :
-    #                 raise ValidationError(_('An exchange rate for invoice date : %s must be specified ' % fecha_t_cambio))
-    #     res=super (AccountInvoice, self).action_move_create()
-    #     return res
 
 
 
