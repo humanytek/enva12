@@ -44,7 +44,7 @@ class ReportsPayments(models.AbstractModel):
 
             SELECT
                     ap.id as payment_id,
-                    ap.payment_reference as name,
+                    ap.payment_reference as pname,
                     am.date as fecha_pago,
                     am.ref as circular,
                     rp.name as partner,
@@ -227,7 +227,7 @@ class ReportsPayments(models.AbstractModel):
                 'class': 'payment',
                 'caret_options': caret_type,
                 'columns':[
-                        {'name':str(p['name']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['pname']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
