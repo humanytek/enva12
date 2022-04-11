@@ -235,7 +235,8 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
                 ],
 
