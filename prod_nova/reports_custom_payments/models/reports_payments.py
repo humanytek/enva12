@@ -227,6 +227,7 @@ class ReportsPayments(models.AbstractModel):
                 'class': 'payment',
                 # 'caret_options': caret_type,
                 'columns':[
+                        {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['pname']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(p['monto'])},
