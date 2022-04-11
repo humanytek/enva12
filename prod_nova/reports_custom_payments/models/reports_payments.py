@@ -160,64 +160,64 @@ class ReportsPayments(models.AbstractModel):
         pagos = self._payment_line(options,line_id,False)
         if pagos:
             for p in pagos:
-                caret_type ='account.move'
-
-
-                if p['factura'] != None:
-                    caret_type = 'account.invoice.in'
-                    aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
-                    ail=self.env['account.move.line'].search([('move_id','=',p['invoice_id'])], limit=1)
-                    if aml:
-                        aml_id=aml[0][0]
-                        monto=0
-                        if aml[0][1] != None:
-                            aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
-                            if p['moneda']=='MXN':
-                                if aml2:
-                                    for a in aml2:
-                                        monto=a['debit']
-                                else:
-                                    monto=0
-                            else:
-                                if aml2:
-                                    for a in aml2:
-                                        monto=a['amount_currency']
-                                else:
-                                    monto=0
-                        else:
-                            aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
-                            if p['moneda']=='MXN':
-                                if aml3:
-                                    for am in aml3:
-                                        monto+=am['debit']
-                                else:
-                                    monto=1
-                            else:
-                                if aml3:
-                                    for am in aml3:
-                                        monto+=am['amount_currency']
-                                else:
-                                    monto=0
-                    # else:
-                    #     aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
-                    #     aml_id = aml3[0]['aml_id']
-                    #     if p['moneda']=='MXN':
-                    #         if aml3:
-                    #             for am in aml3:
-                    #                 monto+=am['debit']
-                    #         else:
-                    #             monto=0
-                    #     else:
-                    #         if aml3:
-                    #             for am in aml3:
-                    #                 monto+=am['amount_currency']
-                    #         else:
-                    #             monto=0
-                else:
-                    ail=False
-                    aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
-                    caret_type = 'account.payment'
-                    aml_id = aml3[0][0]
+                # caret_type ='account.move'
+                #
+                #
+                # if p['factura'] != None:
+                #     caret_type = 'account.invoice.in'
+                #     aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
+                #     ail=self.env['account.move.line'].search([('move_id','=',p['invoice_id'])], limit=1)
+                #     if aml:
+                #         aml_id=aml[0][0]
+                #         monto=0
+                #         if aml[0][1] != None:
+                #             aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
+                #             if p['moneda']=='MXN':
+                #                 if aml2:
+                #                     for a in aml2:
+                #                         monto=a['debit']
+                #                 else:
+                #                     monto=0
+                #             else:
+                #                 if aml2:
+                #                     for a in aml2:
+                #                         monto=a['amount_currency']
+                #                 else:
+                #                     monto=0
+                #         else:
+                #             aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
+                #             if p['moneda']=='MXN':
+                #                 if aml3:
+                #                     for am in aml3:
+                #                         monto+=am['debit']
+                #                 else:
+                #                     monto=1
+                #             else:
+                #                 if aml3:
+                #                     for am in aml3:
+                #                         monto+=am['amount_currency']
+                #                 else:
+                #                     monto=0
+                #     # else:
+                #     #     aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
+                #     #     aml_id = aml3[0]['aml_id']
+                #     #     if p['moneda']=='MXN':
+                #     #         if aml3:
+                #     #             for am in aml3:
+                #     #                 monto+=am['debit']
+                #     #         else:
+                #     #             monto=0
+                #     #     else:
+                #     #         if aml3:
+                #     #             for am in aml3:
+                #     #                 monto+=am['amount_currency']
+                #     #         else:
+                #     #             monto=0
+                # else:
+                #     ail=False
+                #     aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
+                #     caret_type = 'account.payment'
+                #     aml_id = aml3[0][0]
 
                 lines.append({
                 'id': aml_id,
@@ -225,7 +225,7 @@ class ReportsPayments(models.AbstractModel):
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
-                'caret_options': caret_type,
+                # 'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['pname']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
