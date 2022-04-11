@@ -229,7 +229,8 @@ class ReportsPayments(models.AbstractModel):
                 'columns':[
                         {'name':str(p['pname']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
+                        {'name':self.format_value(p['monto'])},
+                        # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
                         {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
