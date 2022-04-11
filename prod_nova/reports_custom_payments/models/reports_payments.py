@@ -220,7 +220,7 @@ class ReportsPayments(models.AbstractModel):
                 #     aml_id = aml3[0][0]
 
                 lines.append({
-                'id': aml_id,
+                'id': p['payment_id'],
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
