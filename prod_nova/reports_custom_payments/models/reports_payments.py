@@ -48,7 +48,7 @@ class ReportsPayments(models.AbstractModel):
                     ap.payment_reference,
                     am.date as fecha_pago,
                     am.name as poliza,
-                    rp.name as partner,
+                    rp.name as partner
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
