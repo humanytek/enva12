@@ -53,13 +53,18 @@ class ReportsPayments(models.AbstractModel):
                     line.id as aml_id,
                     line.name as aml_nombre,
                     line.debit as debit,
-                    line.credit as credit
+                    line.credit as credit,
+                    invoice.name as factura
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     JOIN account_move_line line ON line.move_id = am.id
-
+                    JOIN account_partial_reconcile part ON
+                        part.debit_move_id = line.id
+                    JOIN account_move_line counterpart_line ON
+                        part.debit_move_id = counterpart_line.id
+                    JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND line.credit = 0 AND line.debit > 0
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
@@ -221,9 +226,10 @@ class ReportsPayments(models.AbstractModel):
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
                         {'name':str(p['aml_id'])},
+                        {'name':str(p['factura'])},
                         {'name':str(p['aml_nombre'])},
                         {'name':self.format_value(p['debit'])},
-                        {'name':self.format_value(p['credit'])},
+
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
                         # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
