@@ -45,9 +45,8 @@ class ReportsPayments(models.AbstractModel):
 
             SELECT
                     ap.id as payment_id,
-                    ap.payment_reference,
+                    am.name as referencia_pago,
                     am.date as fecha_pago,
-                    am.name as poliza,
                     rp.name as partner
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
@@ -209,10 +208,9 @@ class ReportsPayments(models.AbstractModel):
                 # 'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['payment_reference']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['poliza']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
-                        # {'name':self.format_value(p['monto'])},
+                        {'name':self.format_value(p['monto'])},
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
                         # {'name':str(p['moneda'])},
                         # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
