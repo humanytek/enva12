@@ -46,30 +46,18 @@ class ReportsPayments(models.AbstractModel):
                     ap.id as payment_id,
                     am.name as referencia_pago,
                     am.date as fecha_pago,
+                    am.ref as circular,
                     rp.name as partner,
                     ap.amount as monto,
                     rc.name as moneda,
-                    line.id as aml_id,
-                    line.name as aml_nombre,
-                    line.debit as debit,
-                    line.credit as credit
+                    line.id as aml_id
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     JOIN account_move_line line ON line.move_id = am.id
                     JOIN account_account account ON account.id = line.account_id
-                    JOIN account_partial_reconcile part ON
-                        part.debit_move_id = line.id
-                        OR
-                        part.credit_move_id = line.id
-                    JOIN account_move_line counterpart_line ON
-                        part.debit_move_id = counterpart_line.id
-                        OR
-                        part.credit_move_id = counterpart_line.id
-                    JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND line.id != counterpart_line.id
                     AND am.state in ('posted') AND account.internal_type IN ('payable')
         """
         self.env.cr.execute(sql_query)
@@ -79,7 +67,7 @@ class ReportsPayments(models.AbstractModel):
 
         return result
 
-    def _invoice_aml(self,options,line_id,payment_id):
+    def _invoice_aml(self,options,line_id):
 
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         # if where_clause:
@@ -89,7 +77,10 @@ class ReportsPayments(models.AbstractModel):
         sql_query ="""
               SELECT
                      ap.id as payment_id,
-                     invoice.id
+                     line.id as aml_id,
+                     invoice.id as invoice_id,
+                     invoice.name as invoice_name,
+                     invoice.invoice_date as fecha_factura
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
@@ -105,7 +96,7 @@ class ReportsPayments(models.AbstractModel):
                          part.credit_move_id = counterpart_line.id
                      JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                      JOIN account_account account ON account.id = line.account_id
-                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                     WHERE line.id= """+line_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND account.internal_type IN ('payable')
                      Limit 1
@@ -170,87 +161,40 @@ class ReportsPayments(models.AbstractModel):
         pagos = self._payment_line(options,line_id,False)
         if pagos:
             for p in pagos:
-                # caret_type ='account.move'
-                #
-                #
-                # if p['factura'] != None:
-                #     caret_type = 'account.invoice.in'
-                #     aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
-                #     ail=self.env['account.move.line'].search([('move_id','=',p['invoice_id'])], limit=1)
-                #     if aml:
-                #         aml_id=aml[0][0]
-                #         monto=0
-                #         if aml[0][1] != None:
-                #             aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
-                #             if p['moneda']=='MXN':
-                #                 if aml2:
-                #                     for a in aml2:
-                #                         monto=a['debit']
-                #                 else:
-                #                     monto=0
-                #             else:
-                #                 if aml2:
-                #                     for a in aml2:
-                #                         monto=a['amount_currency']
-                #                 else:
-                #                     monto=0
-                #         else:
-                #             aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
-                #             if p['moneda']=='MXN':
-                #                 if aml3:
-                #                     for am in aml3:
-                #                         monto+=am['debit']
-                #                 else:
-                #                     monto=1
-                #             else:
-                #                 if aml3:
-                #                     for am in aml3:
-                #                         monto+=am['amount_currency']
-                #                 else:
-                #                     monto=0
-                #     # else:
-                #     #     aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
-                #     #     aml_id = aml3[0]['aml_id']
-                #     #     if p['moneda']=='MXN':
-                #     #         if aml3:
-                #     #             for am in aml3:
-                #     #                 monto+=am['debit']
-                #     #         else:
-                #     #             monto=0
-                #     #     else:
-                #     #         if aml3:
-                #     #             for am in aml3:
-                #     #                 monto+=am['amount_currency']
-                #     #         else:
-                #     #             monto=0
-                # else:
-                #     ail=False
-                #     aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
-                #     caret_type = 'account.payment'
-                #     aml_id = aml3[0][0]
+                caret_type ='account.move'
+                aml = self._invoice_aml(options,str(p['aml_id']))
+                if aml[0][2] != None:
+                    caret_type = 'account.invoice.in'
+                    ail=aml[0][2]
+                else:
+                    ail=False
+                    caret_type = 'account.payment'
+                    aml_id = p['aml_id']
+
+
 
                 lines.append({
-                'id': p['payment_id'],
+                'id':aml_id,
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
-                # 'caret_options': caret_type,
+                'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
-                        {'name':str(p['aml_id'])},
-                        {'name':str(p['aml_nombre'])},
-                        {'name':self.format_value(p['debit'])},
+                        {'name':str(aml[0][3])},
+                        {'name':str(aml[0][4])},
+                        {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
 
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
                         # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
                         # {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
-                        # {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
+
                         # {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
                         # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
