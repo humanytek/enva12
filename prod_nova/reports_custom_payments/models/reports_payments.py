@@ -42,7 +42,6 @@ class ReportsPayments(models.AbstractModel):
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
         sql_query ="""
-
             SELECT
                     ap.id as payment_id,
                     am.name as referencia_pago,
@@ -74,7 +73,6 @@ class ReportsPayments(models.AbstractModel):
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND line.id != counterpart_line.id
                     AND am.state in ('posted') AND account.internal_type IN ('payable')
-
         """
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
