@@ -50,9 +50,10 @@ class ReportsPayments(models.AbstractModel):
                     rp.name as partner,
                     ap.amount as monto,
                     rc.name as moneda,
+                    line.id as aml_id,
                     line.name as aml_nombre,
                     line.debit as debit,
-                    line.debit as credit
+                    line.credit as credit
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
@@ -218,6 +219,7 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
+                        {'name':str(p['aml_id'])},
                         {'name':str(p['aml_nombre'])},
                         {'name':self.format_value(p['debit'])},
                         {'name':self.format_value(p['credit'])},
