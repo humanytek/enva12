@@ -52,7 +52,7 @@ class ReportsPayments(models.AbstractModel):
                     rc.name as moneda,
                     invoice.invoice_date as fecha_factura,
                     invoice.name as factura,
-                    invoice.id as invoice_id,
+                    invoice.id as invoice_id
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
