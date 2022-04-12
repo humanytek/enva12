@@ -220,12 +220,12 @@ class ReportsPayments(models.AbstractModel):
                 #     aml_id = aml3[0][0]
 
                 lines.append({
-                'id': aml_id,
+                'id': p['payment_id'],
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
-                'caret_options': caret_type,
+                # 'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
