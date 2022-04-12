@@ -45,37 +45,13 @@ class ReportsPayments(models.AbstractModel):
 
             SELECT
                     ap.id as payment_id,
-                    ap.payment_reference as pname,
-                    am.date as fecha_pago,
-                    am.ref as circular,
-                    rp.name as partner,
-                    rp.id as partner_id,
-                    invoice.invoice_date as fecha_factura,
-                    invoice.name as factura,
-                    invoice.id as invoice_id,
-                    rc.name as moneda,
-                    ap.amount as monto,
-                    line.name as descripcion
+                    ap.payment_reference,
+                    am.date as fecha_pago
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
-                    JOIN account_move_line line ON line.move_id = am.id
-                    JOIN account_partial_reconcile part ON
-                        part.debit_move_id = line.id
-                        OR
-                        part.credit_move_id = line.id
-                    JOIN account_move_line counterpart_line ON
-                        part.debit_move_id = counterpart_line.id
-                        OR
-                        part.credit_move_id = counterpart_line.id
-                    JOIN account_move invoice ON invoice.id = counterpart_line.move_id
-                    JOIN res_partner rp ON rp.id=ap.partner_id
-                    JOIN res_currency rc ON rc.id=ap.currency_id
+
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND am.state in ('posted') AND ap.payment_type in ('outbound')
-                    AND ap.partner_type in ('supplier')
-                    ORDER BY payment_id,rp.name,pname,fecha_pago,am.ref,rp.name,rp.id,invoice.invoice_date,invoice.name,invoice.id,rc.name,ap.amount,line.name
-
 
         """
         self.env.cr.execute(sql_query)
@@ -229,15 +205,15 @@ class ReportsPayments(models.AbstractModel):
                 # 'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['pname']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':self.format_value(p['monto'])},
-                        # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
-                        {'name':str(p['moneda'])},
-                        {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['payment_reference']), 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':self.format_value(p['monto'])},
+                        # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
+                        # {'name':str(p['moneda'])},
+                        # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
+                        # {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
                         # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
                 ],
