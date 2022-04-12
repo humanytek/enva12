@@ -48,11 +48,12 @@ class ReportsPayments(models.AbstractModel):
                     am.name as referencia_pago,
                     am.date as fecha_pago,
                     rp.name as partner,
-                    ap.amount as monto
+                    ap.amount as monto,
+                    rc.name as moneda
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
-
+                    JOIN res_currency rc ON rc.id=ap.currency_id
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
