@@ -67,7 +67,7 @@ class ReportsPayments(models.AbstractModel):
 
         return result
 
-    def _invoice_aml(self,options,line_id):
+    def _invoice_aml(self,options,line_id,aml_id):
 
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         # if where_clause:
@@ -96,7 +96,7 @@ class ReportsPayments(models.AbstractModel):
                          part.credit_move_id = counterpart_line.id
                      JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                      JOIN account_account account ON account.id = line.account_id
-                     WHERE line.id= """+line_id+"""
+                     WHERE line.id= """+aml_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND account.internal_type IN ('payable')
                      Limit 1
@@ -162,7 +162,7 @@ class ReportsPayments(models.AbstractModel):
         if pagos:
             for p in pagos:
                 caret_type ='account.move'
-                aml = self._invoice_aml(options,str(p['aml_id']))
+                aml = self._invoice_aml(options,line_id,str(p['aml_id']))
                 # if aml[0][2] != None:
                 #     caret_type = 'account.invoice.in'
                 #     ail=aml[0][2]
