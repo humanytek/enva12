@@ -71,7 +71,6 @@ class ReportsPayments(models.AbstractModel):
                         part.credit_move_id = counterpart_line.id
                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND line.credit > 0 AND line.debit = 0
                     AND line.id != counterpart_line.id
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
 
