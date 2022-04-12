@@ -53,8 +53,8 @@ class ReportsPayments(models.AbstractModel):
                     line.id as aml_id,
                     line.name as aml_nombre,
                     line.debit as debit,
-                    line.credit as credit,
-                    
+                    line.credit as credit
+
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
