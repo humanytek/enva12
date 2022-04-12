@@ -169,12 +169,11 @@ class ReportsPayments(models.AbstractModel):
                 else:
                     ail=False
                     caret_type = 'account.payment'
-                    aml_id = p['aml_id']
 
 
 
                 lines.append({
-                'id':aml_id,
+                'id':p['aml_id'],
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
