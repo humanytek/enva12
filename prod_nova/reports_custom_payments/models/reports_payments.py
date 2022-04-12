@@ -61,6 +61,7 @@ class ReportsPayments(models.AbstractModel):
                     JOIN account_move_line line ON line.move_id = am.id
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                    AND line.credit = 0 AND line.debit > 0
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
 
         """
