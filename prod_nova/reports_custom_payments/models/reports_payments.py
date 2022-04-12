@@ -70,9 +70,10 @@ class ReportsPayments(models.AbstractModel):
                         OR
                         part.credit_move_id = counterpart_line.id
                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
+                    JOIN account_account account ON account.id = line.account_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND line.id != counterpart_line.id
-                    AND am.state in ('posted') AND ap.partner_type in ('supplier')
+                    AND am.state in ('posted') AND account.internal_type IN ('receivable', 'payable')
 
         """
         self.env.cr.execute(sql_query)
