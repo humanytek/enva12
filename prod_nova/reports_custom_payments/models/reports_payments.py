@@ -221,7 +221,6 @@ class ReportsPayments(models.AbstractModel):
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
                         {'name':str(p['aml_id'])},
-                        {'name':str(p['factura'])},
                         {'name':str(p['aml_nombre'])},
                         {'name':self.format_value(p['debit'])},
 
