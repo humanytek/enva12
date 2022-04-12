@@ -163,12 +163,12 @@ class ReportsPayments(models.AbstractModel):
             for p in pagos:
                 caret_type ='account.move'
                 aml = self._invoice_aml(options,str(p['aml_id']))
-                if aml[0][2] != None:
-                    caret_type = 'account.invoice.in'
-                    ail=aml[0][2]
-                else:
-                    ail=False
-                    caret_type = 'account.payment'
+                # if aml[0][2] != None:
+                #     caret_type = 'account.invoice.in'
+                #     ail=aml[0][2]
+                # else:
+                #     ail=False
+                #     caret_type = 'account.payment'
 
 
 
