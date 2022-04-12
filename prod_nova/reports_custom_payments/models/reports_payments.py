@@ -53,10 +53,11 @@ class ReportsPayments(models.AbstractModel):
                     line.id as aml_id,
                     line.name as aml_nombre,
                     line.debit as debit,
-                    line.credit as credit
-
+                    line.credit as credit,
+                    invoice.name as factura
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
+                    JOIN account_move invoice ON invoice.payment_id=ap.id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     JOIN account_move_line line ON line.move_id = am.id
@@ -222,6 +223,7 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['moneda'])},
                         {'name':str(p['aml_id'])},
                         {'name':str(p['aml_nombre'])},
+                        {'name':str(p['factura'])},
                         {'name':self.format_value(p['debit'])},
 
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
