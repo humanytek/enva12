@@ -54,19 +54,14 @@ class ReportsPayments(models.AbstractModel):
                     line.name as aml_nombre,
                     line.debit as debit,
                     line.credit as credit,
-                    invoice.name as factura
+                    
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     JOIN account_move_line line ON line.move_id = am.id
-                    JOIN account_partial_reconcile part ON
-                        part.credit_move_id = line.id
-                    JOIN account_move_line counterpart_line ON
-                        part.credit_move_id = counterpart_line.id
-                    JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND line.credit > 0 AND line.debit = 0
+                    AND line.credit = 0 AND line.debit > 0
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
 
         """
