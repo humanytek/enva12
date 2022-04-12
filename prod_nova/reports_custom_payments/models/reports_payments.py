@@ -96,7 +96,7 @@ class ReportsPayments(models.AbstractModel):
                          part.credit_move_id = counterpart_line.id
                      JOIN account_move invoice ON invoice.id = counterpart_line.move_id
                      JOIN account_account account ON account.id = line.account_id
-                     WHERE line.id= """+aml_id+"""
+                     WHERE line.id = """+aml_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND account.internal_type IN ('payable')
                      Limit 1
