@@ -53,6 +53,7 @@ class ReportsPayments(models.AbstractModel):
 
 
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                    AND am.state in ('posted')
 
         """
         self.env.cr.execute(sql_query)
