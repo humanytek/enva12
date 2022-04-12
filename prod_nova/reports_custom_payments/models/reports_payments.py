@@ -69,7 +69,7 @@ class ReportsPayments(models.AbstractModel):
 
         return result
 
-    def _invoice_aml(self,options,line_id,invoice_id):
+    def _invoice_aml(self,options,line_id,payment_id):
 
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         # if where_clause:
@@ -78,12 +78,27 @@ class ReportsPayments(models.AbstractModel):
         date_to = options['date']['date_to']
         sql_query ="""
               SELECT
-                      aml.id as aml_id ,
-                      aml.full_reconcile_id as full_reconcile_id
-                      FROM account_move_line aml
-                      WHERE aml.credit > 0 AND aml.debit = 0 AND aml.move_id="""+invoice_id+"""
-                      AND aml.full_reconcile_id is not NULL
-                      limit 1
+                     ap.id as payment_id,
+                     invoice.id
+                     FROM account_payment ap
+                     JOIN account_move am ON am.id=ap.move_id
+                     JOIN res_partner rp ON rp.id=ap.partner_id
+                     JOIN res_currency rc ON rc.id=ap.currency_id
+                     JOIN account_move_line line ON line.move_id = am.id
+                     JOIN account_partial_reconcile part ON
+                         part.debit_move_id = line.id
+                         OR
+                         part.credit_move_id = line.id
+                     JOIN account_move_line counterpart_line ON
+                         part.debit_move_id = counterpart_line.id
+                         OR
+                         part.credit_move_id = counterpart_line.id
+                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
+                     JOIN account_account account ON account.id = line.account_id
+                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
+                     AND line.id != counterpart_line.id
+                     AND am.state in ('posted') AND account.internal_type IN ('payable')
+                     Limit 1
                                 """
 
 
@@ -205,12 +220,12 @@ class ReportsPayments(models.AbstractModel):
                 #     aml_id = aml3[0][0]
 
                 lines.append({
-                'id': p['payment_id'],
+                'id': aml_id,
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
-                # 'caret_options': caret_type,
+                'caret_options': caret_type,
                 'columns':[
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
