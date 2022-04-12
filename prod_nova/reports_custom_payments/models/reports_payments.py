@@ -23,6 +23,7 @@ class ReportsPayments(models.AbstractModel):
     def _get_columns_name(self, options):
         return [
         {'name': _('FECHA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('ID'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('FOLIO'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('PROVEEDOR'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('MONTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
