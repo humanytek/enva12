@@ -23,7 +23,6 @@ class ReportsPayments(models.AbstractModel):
     def _get_columns_name(self, options):
         return [
         {'name': _('FECHA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('ID'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('FOLIO'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('PROVEEDOR'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('MONTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -182,7 +181,6 @@ class ReportsPayments(models.AbstractModel):
                 'class': 'payment',
                 'caret_options': caret_type,
                 'columns':[
-                        {'name':str(p['aml_id'])},
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
