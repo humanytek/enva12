@@ -163,6 +163,9 @@ class ReportsPayments(models.AbstractModel):
             for p in pagos:
                 caret_type ='account.move'
                 aml = self._invoice_aml(options,line_id,str(p['aml_id']))
+                factura=''
+                if aml[0][2] != None:
+                    factura=str(aml[0][3])
                 # if aml[0][2] != None:
                 #     caret_type = 'account.invoice.in'
                 #     ail=aml[0][2]
@@ -186,7 +189,7 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
-                        # {'name':str(aml[0][3])},
+                        {'name':factura},
                         # {'name':str(aml[0][4])},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
 
