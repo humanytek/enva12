@@ -81,7 +81,8 @@ class ReportsPayments(models.AbstractModel):
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
                      iline.id as iaml_id,
-                     invoice.ref as referencia
+                     invoice.ref as referencia,
+                     iline.name as iaml_name
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
@@ -169,12 +170,14 @@ class ReportsPayments(models.AbstractModel):
                 factura = ''
                 fecha_factura = ''
                 referencia = ''
+                producto = ''
                 if aml:
                     aml_id=aml[0][5]
                     caret_type = 'account.move'
                     factura=str(aml[0][3])
                     fecha_factura=str(aml[0][4])
                     referencia=str(aml[0][6])
+                    producto=str(aml[0][7])
                 else:
                     aml_id=p['aml_id']
                     caret_type = 'account.payment'
@@ -196,7 +199,7 @@ class ReportsPayments(models.AbstractModel):
                         {'name':factura},
                         {'name':fecha_factura},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':referencia},
+                        {'name':producto},
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
                         # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
