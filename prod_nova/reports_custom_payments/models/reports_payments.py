@@ -164,7 +164,7 @@ class ReportsPayments(models.AbstractModel):
                 caret_type ='account.move'
                 aml = self._invoice_aml(options,line_id,str(p['aml_id']))
                 factura=''
-                if aml[0][2] != None:
+                if aml:
                     factura=str(aml[0][3])
                 # if aml[0][2] != None:
                 #     caret_type = 'account.invoice.in'
