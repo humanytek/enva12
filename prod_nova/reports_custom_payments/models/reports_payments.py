@@ -165,7 +165,7 @@ class ReportsPayments(models.AbstractModel):
                 factura=''
                 fecha_factura=''
                 if aml:
-                    aml_id=aml[0][2]
+                    aml_id=p['aml_id']
                     caret_type = 'account.move'
                     factura=str(aml[0][3])
                     fecha_factura=str(aml[0][4])
