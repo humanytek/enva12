@@ -81,7 +81,7 @@ class ReportsPayments(models.AbstractModel):
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
                      iline.id as iaml_id,
-                     invoice.ref as referencia,
+                     invoice.ref as referencia
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
