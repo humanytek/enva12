@@ -79,7 +79,8 @@ class ReportsPayments(models.AbstractModel):
                      line.id as aml_id,
                      invoice.id as invoice_id,
                      invoice.name as invoice_name,
-                     invoice.invoice_date as fecha_factura
+                     invoice.invoice_date as fecha_factura,
+                     iline.id as iaml_id
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
@@ -94,7 +95,9 @@ class ReportsPayments(models.AbstractModel):
                          OR
                          part.credit_move_id = counterpart_line.id
                      JOIN account_move invoice ON invoice.id = counterpart_line.move_id
+                     JOIN account_move_line iline ON iline.move_id = invoice.id
                      JOIN account_account account ON account.id = line.account_id
+
                      WHERE line.id = """+aml_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND account.internal_type IN ('payable')
@@ -165,7 +168,7 @@ class ReportsPayments(models.AbstractModel):
                 factura=''
                 fecha_factura=''
                 if aml:
-                    aml_id=p['aml_id']
+                    aml_id=aml[0][5]
                     caret_type = 'account.move'
                     factura=str(aml[0][3])
                     fecha_factura=str(aml[0][4])
