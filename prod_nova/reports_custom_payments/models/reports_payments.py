@@ -165,16 +165,18 @@ class ReportsPayments(models.AbstractModel):
                 factura=''
                 fecha_factura=''
                 if aml:
+                    aml_id=aml[0][2]
                     caret_type = 'account.move'
                     factura=str(aml[0][3])
                     fecha_factura=str(aml[0][4])
                 else:
+                    aml_id=p['aml_id']
                     caret_type = 'account.payment'
 
 
 
                 lines.append({
-                'id':p['aml_id'],
+                'id':aml_id,
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
