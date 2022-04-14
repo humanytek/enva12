@@ -180,13 +180,14 @@ class ReportsPayments(models.AbstractModel):
                 'class': 'payment',
                 'caret_options': caret_type,
                 'columns':[
+                        {'name':str(p['aml_id'])},
                         {'name':str(p['payment_id']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
-                        {'name':str(aml[0][3])},
-                        {'name':str(aml[0][4])},
+                        # {'name':str(aml[0][3])},
+                        # {'name':str(aml[0][4])},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
 
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
