@@ -80,7 +80,8 @@ class ReportsPayments(models.AbstractModel):
                      invoice.id as invoice_id,
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
-                     iline.id as iaml_id
+                     iline.id as iaml_id,
+                     invoice.ref as referencia,
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
@@ -165,13 +166,15 @@ class ReportsPayments(models.AbstractModel):
             for p in pagos:
                 caret_type ='account.move'
                 aml = self._invoice_aml(options,line_id,str(p['aml_id']))
-                factura=''
-                fecha_factura=''
+                factura = ''
+                fecha_factura = ''
+                referencia = ''
                 if aml:
                     aml_id=aml[0][5]
                     caret_type = 'account.move'
                     factura=str(aml[0][3])
                     fecha_factura=str(aml[0][4])
+                    referencia=str(aml[0][5])
                 else:
                     aml_id=p['aml_id']
                     caret_type = 'account.payment'
@@ -192,10 +195,8 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['moneda'])},
                         {'name':factura},
                         {'name':fecha_factura},
-                        {'name':aml_id},
-                        {'name':str(p['aml_id'])},
-                        # {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-
+                        {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':referencia},
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
                         # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
