@@ -190,7 +190,9 @@ class ReportsPayments(models.AbstractModel):
                         {'name':str(p['moneda'])},
                         {'name':factura},
                         {'name':fecha_factura},
-                        {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':aml_id},
+                        {'name':str(p['aml_id'])},
+                        # {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
 
                         # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
