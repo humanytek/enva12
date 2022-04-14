@@ -103,6 +103,7 @@ class ReportsPayments(models.AbstractModel):
                      WHERE line.id = """+aml_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND account.internal_type IN ('payable')
+                     AND iline.exclude_from_invoice_tab = False
                      Limit 1
                                 """
 
