@@ -7,7 +7,7 @@ RH_REQUISITION_STATES = [
     ('cancel', 'Rechazado'),
     ('draft', 'Borrador'),
     ('in_progress', 'Confirmado'),
-    ('aprovee_ri', 'Aprobado SubGerencia RI'),
+    ('aprovee_ri', 'Aprobado Gerencia RI'),
     ('aprovee_dg', 'Aprobado Direccion General'),
     ('done', 'Cerrado'),
 ]
