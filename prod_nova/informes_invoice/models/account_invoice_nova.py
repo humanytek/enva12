@@ -64,6 +64,11 @@ class Account_invoice_nova(models.Model):
         index=True,
         copy=False)
 
+    cfdi_uuid_enva = fields.Char(
+        string='Folio Fiscal',
+        store=True,
+        copy=False
+    )
 
     def _post(self, soft=True):
 
