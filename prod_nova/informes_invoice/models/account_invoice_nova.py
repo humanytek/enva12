@@ -69,6 +69,11 @@ class Account_invoice_nova(models.Model):
         store=True,
         copy=False
     )
+    cfdi_origin_enva = fields.Char(
+        string='CFDI Origen',
+        store=True,
+        copy=False
+    )
 
     def _post(self, soft=True):
 
