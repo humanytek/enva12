@@ -32,8 +32,8 @@
     <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
       <xpath expr="//div[@name='journal_div']" position="after">
-           <field name="cfdi_uuid_enva" attrs="{'invisible': [('move_type','!=','in_invoice')]}"/>
-           <field name="cfdi_origin_enva" attrs="{'invisible': [('move_type','!=','in_invoice')]}"/>
+           <field name="cfdi_uuid_enva" attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
+           <field name="cfdi_origin_enva" attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
       </xpath>
        <!-- <xpath expr="//label[@for='l10n_mx_edi_sat_status']" position="replace">
          <label for="l10n_mx_edi_sat_status"
