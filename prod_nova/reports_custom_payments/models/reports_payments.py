@@ -17,7 +17,7 @@ class ReportsPayments(models.AbstractModel):
     _description = "Reports Payments"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '2021-05-30', 'date_to': '2021-05-30'}
+    filter_date = {'date_from': '2022-05-29', 'date_to': '2021-05-29'}
 
 
     def _get_columns_name(self, options):
