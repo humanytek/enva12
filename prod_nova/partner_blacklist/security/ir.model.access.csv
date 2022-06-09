@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_partner_list_69,black.list.partner.user,model_partner_blacklist,,1,1,1,1

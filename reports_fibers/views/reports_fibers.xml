@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+    <record id="action_report_fibers_nova" model="ir.actions.client">
+        <field name="name">Reporte Consumo de fibras</field>
+        <field name="tag">account_report</field>
+        <field name="context" eval="{'model': 'reports.fibers'}" />
+    </record>
+    <menuitem id="menu_action_report_fibers_nova" name="Consumo de Fibras" action="action_report_fibers_nova" parent="account.account_reports_management_menu" groups="account.group_account_user"/>
+
+</data>
+</odoo>

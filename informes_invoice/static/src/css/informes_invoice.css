@@ -1,0 +1,80 @@
+.Rotate-90
+{
+ -webkit-transform: rotate(-90deg);
+ -moz-transform: rotate(-90deg);
+ -ms-transform: rotate(-90deg);
+ -o-transform: rotate(-90deg);
+ transform: rotate(-90deg);
+
+ -webkit-transform-origin: 50% 50%;
+ -moz-transform-origin: 50% 50%;
+ -ms-transform-origin: 50% 50%;
+ -o-transform-origin: 50% 50%;
+ transform-origin: 50% 50%;
+
+ font-size: 8px;
+ text-align: center;
+ width: 900px;
+ height: 10px;
+ padding-left: 0px;
+ bottom: 100px;
+ left:0px;
+ border:1px blue solid;
+ position: absolute;
+ z-index: 1;
+ }
+
+.leyend{
+   font-size: 8px;
+}
+ .marcaagua
+ {
+   position:absolute;
+   text-align:center;
+   z-index:-1;
+   border:0;
+   opacity:0.1;
+   padding-top:200px;
+ }
+
+
+ .encabezado_derecho{
+  width: 25rem;
+  text-align: center;
+  margin-top: 6px;
+}
+.pintar {
+  font-weight: bold;
+  font-size: 25px;
+}
+#imglogo{
+  max-height: 150px;
+  max-width: 230px;
+  height: 150px;
+  width: 230px;
+  margin-right: 16px;
+}
+
+
+
+/* .table {
+  border-top: 1px solid gray('300');
+}
+.table td, .table th {
+  border-top: none;
+} */
+
+
+
+
+
+
+.marco{
+  border: 1px blue solid;
+}
+.info{
+  font-size: 9px;
+}
+.datoscoorp{
+  font-size: 11px;
+}

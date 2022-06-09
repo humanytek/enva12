@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+<data>
+
+        <record model="ir.ui.view" id="view_purchase_order_inherit2">
+            <field name="name">view.purchase.order.inherit2</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                    <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                        <field name="date_approve"/>
+                        <field name="approver"/>
+                        <field name="petition_date"/>
+                        <field name="petitioner"/>
+                        <field name="date_validator"/>
+                        <field name="validator"/>
+                        <field name="create_date"/>
+                        <field name="create_uid"/>
+                    </xpath>
+	    </field>
+        </record>
+
+    </data>
+</odoo>
