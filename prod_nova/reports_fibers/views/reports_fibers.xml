@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <template id="template_reports_fibers_table_header" inherit_id="account_reports.main_table_header" primary="True">
+          <xpath expr="//thead//tr[hasclass('o_account_report_column_header')]" position="before">
+              <tr>
+                  <th t-att-class="'o_account_report_column_header'" colspan="1"/>
+                  <th t-att-class="'o_account_report_column_header text-center'" colspan="2">
+                    <t t-esc="options['date'].get('string')"/>
+                  </th>
+                  <th t-att-class="'o_account_report_column_header text-center'" colspan="2">MES ANTERIOR</th>
+                    <th t-att-class="'o_account_report_column_header text-center'" colspan="2">MES PREVIO ANTERIOR</th>
+
+                  <!-- <t t-foreach="model.reverse(options['comparison'].get('periods'))" t-as="column_header">
+                      <th t-att-class="'o_account_report_column_header text-center'" colspan="2">
+                          <t t-esc="column_header.get('string')"/>
+                      </th>
+                  </t> -->
+                  <!-- <th t-att-class="'o_account_report_column_header text-center'" colspan="2">
+                      <t t-esc="options['date'].get('string')"/>
+                  </th>
+                  <th t-att-class="'o_account_report_column_header text-center'" colspan="2">Total</th> -->
+              </tr>
+          </xpath>
+      </template>
+<record id="action_report_fibers_nova" model="ir.actions.client">
+    <field name="name">Reporte Consumo de fibras</field>
+    <field name="tag">account_report</field>
+    <field name="context" eval="{'model': 'reports.fibers'}" />
+</record>
+<menuitem id="menu_action_report_fibers_nova" name="Consumo de Fibras" action="action_report_fibers_nova" parent="account.account_reports_management_menu" groups="account.group_account_user"/>
+
+</data>
+</odoo>

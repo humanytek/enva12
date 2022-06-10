@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <record id="requisitions_analysis_list_view_tree" model="ir.ui.view">
+    <field name="name">requisition.tree</field>
+    <field name="model">purchase.requisition.line</field>
+    <field name="arch" type="xml">
+        <tree string="Análisis de Requisiciones">
+        <field name="requisition_id"/>
+        <field name="responsable"/>
+        <field name="estado"/>
+        <field name="product_id"/>
+        <field name="description"/>
+        <field name="product_qty"/>
+        <field name="qty_ordered"/>
+        <field name="fecha"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="requisitions_analysis_list_action">
+    <field name="name">Purchase Requisition Analysis</field>
+    <field name="res_model">purchase.requisition.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">Create the first course
+      </p>
+    </field>
+  </record>
+
+  <menuitem id="item_requisition_informes_menu" name="Analisis Requisiciones" action="requisitions_analysis_list_action" parent="purchase.purchase_report"/>
+</odoo>

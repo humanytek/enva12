@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<data>
+
+  <record model="ir.ui.view" id="porcentcostsale_tree_view2">
+    <field name="name">Porcent Cost Sale</field>
+    <field name="model">porcent.cost.sale</field>
+    <field name="arch" type="xml">
+      <tree string="Porcent Cost Sale">
+        <field name="name"/>
+        <field name="date_from"/>
+        <field name="date_to"/>
+        <field name="porcent"/>
+        <field name="group_id"/>
+        <field name="cost_per_month"/>
+        <field name="porcent_per_month"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.actions.act_window" id="porcentcostsale_list_action">
+    <field name="name">Porcent Cost Sale</field>
+    <field name="res_model">porcent.cost.sale</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">Create the first Porcents Cost Sale
+      </p>
+    </field>
+  </record>
+    <menuitem id="menu_action_porcentcostsale_list" name="Porcentaje Costo Venta" action="porcentcostsale_list_action" parent="account_reports.account_reports_partners_reports_menu" groups="account.group_account_user"/>
+  </data>
+</odoo>

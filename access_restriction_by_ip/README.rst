@@ -1,4 +1,4 @@
-Access Restriction By IP V14
+Access Restriction By IP V11
 ============================
 
 This module will restrict users access to his account from the specified IP only. If user access his
@@ -14,5 +14,4 @@ Cybrosys Techno Solutions
 
 Author
 ------
-* Niyas Raphy <odoo@cybrosys.com>
-* V14 Muhammad P <odoo@cybrosys.com>
+* Niyas Raphy <niyas@cybrosys.in>

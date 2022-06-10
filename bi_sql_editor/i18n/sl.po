@@ -20,39 +20,28 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:463
 #, python-format
 msgid "%m/%d/%Y %H:%M:%S UTC"
 msgstr ""
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:234
 #, python-format
 msgid "%s (Copy)"
 msgstr "%s (kopija)"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:337
 #, python-format
 msgid "%s Access %s"
 msgstr "%s Dostop %s"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:365
 #, python-format
 msgid "Access %s"
 msgstr "Dostop %s"
-
-#. module: bi_sql_editor
-#: model:ir.model.fields,field_description:bi_sql_editor.field_bi_sql_view__action_context
-msgid "Action Context"
-msgstr ""
-
-#. module: bi_sql_editor
-#: model_terms:ir.ui.view,arch_db:bi_sql_editor.view_bi_sql_view_form
-#, fuzzy
-msgid "Action Settings"
-msgstr "Opcije izbire"
 
 #. module: bi_sql_editor
 #: model:ir.model.fields,field_description:bi_sql_editor.field_bi_sql_view__group_ids
@@ -73,19 +62,14 @@ msgid ""
 msgstr ""
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__tree_visibility__available
+#: selection:bi.sql.view.field,tree_visibility:0
 msgid "Available"
 msgstr "Na voljo"
 
 #. module: bi_sql_editor
-#: model:ir.model,name:bi_sql_editor.model_bi_sql_view
-#, fuzzy
-msgid "BI SQL View"
-msgstr "SQL prikaz"
-
-#. module: bi_sql_editor
 #: model:ir.model,name:bi_sql_editor.model_bi_sql_view_field
 #, fuzzy
+#| msgid "SQL Fields"
 msgid "Bi SQL View Field"
 msgstr "SQL polja"
 
@@ -106,18 +90,13 @@ msgstr ""
 "priporočeno za iskalna in združevalna polja, da se zmanjša trajanje"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__graph_type__col
+#: selection:bi.sql.view.field,graph_type:0
 msgid "Column"
 msgstr "Stolpec"
 
 #. module: bi_sql_editor
 #: model:ir.model.fields,help:bi_sql_editor.field_bi_sql_view__view_order
 msgid "Comma-separated text. Possible values: \"graph\", \"pivot\" or \"tree\""
-msgstr ""
-
-#. module: bi_sql_editor
-#: model_terms:ir.ui.view,arch_db:bi_sql_editor.view_bi_sql_view_form
-msgid "Context"
 msgstr ""
 
 #. module: bi_sql_editor
@@ -153,12 +132,6 @@ msgid "Database Size"
 msgstr "Velikost podatkovne baze"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields,help:bi_sql_editor.field_bi_sql_view__action_context
-msgid ""
-"Define here a context that will be used by default, when creating the action."
-msgstr ""
-
-#. module: bi_sql_editor
 #: model:ir.model.fields,help:bi_sql_editor.field_bi_sql_view__domain_force
 msgid ""
 "Define here access restriction to data.\n"
@@ -179,6 +152,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:bi_sql_editor.field_bi_sql_view_field__display_name
 msgid "Display Name"
 msgstr "Prikazni naziv"
+
+#. module: bi_sql_editor
+#: selection:bi.sql.view,state:0
+msgid "Draft"
+msgstr "Osnutek"
 
 #. module: bi_sql_editor
 #: model:ir.model.fields,field_description:bi_sql_editor.field_bi_sql_view__domain_force
@@ -240,7 +218,7 @@ msgid "Has Group Changed"
 msgstr "Se je skupina spremenila"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__tree_visibility__hidden
+#: selection:bi.sql.view.field,tree_visibility:0
 msgid "Hidden"
 msgstr ""
 
@@ -295,7 +273,7 @@ msgid "Materialized Text"
 msgstr "Materializirano besedilo"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__graph_type__measure
+#: selection:bi.sql.view.field,graph_type:0
 msgid "Measure"
 msgstr "Izmera"
 
@@ -317,7 +295,7 @@ msgid "Name"
 msgstr "Naziv"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:617
 #, python-format
 msgid ""
 "No Column was found.\n"
@@ -372,7 +350,7 @@ msgid "Odoo Tree View"
 msgstr ""
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:182
 #, python-format
 msgid "Only graph, pivot or tree views are supported"
 msgstr ""
@@ -399,13 +377,13 @@ msgid "Refresh Materialized View"
 msgstr "Osveži materializirani prikaz"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:352
 #, python-format
 msgid "Refresh Materialized View %s"
 msgstr "Osveži materializirani prikaz %s"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__graph_type__row
+#: selection:bi.sql.view.field,graph_type:0
 msgid "Row"
 msgstr "Vrstica"
 
@@ -415,7 +393,7 @@ msgid "Rule Definition"
 msgstr "Definicija pravila"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:496
 #, python-format
 msgid ""
 "SQL Error while creating %s VIEW %s :\n"
@@ -466,12 +444,17 @@ msgid "SQL Type in the database"
 msgstr "SQL tip v bazi"
 
 #. module: bi_sql_editor
+#: selection:bi.sql.view,state:0
+msgid "SQL Valid"
+msgstr "SQL veljaven"
+
+#. module: bi_sql_editor
 #: model:ir.model.fields,field_description:bi_sql_editor.field_bi_sql_view_field__bi_sql_view_id
 msgid "SQL View"
 msgstr "SQL prikaz"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view__state__model_valid
+#: selection:bi.sql.view,state:0
 msgid "SQL View and Model Created"
 msgstr "SQL prikaz in model ustvarjena"
 
@@ -563,7 +546,7 @@ msgid ""
 msgstr ""
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__tree_visibility__unavailable
+#: selection:bi.sql.view.field,tree_visibility:0
 msgid "Unavailable"
 msgstr "Ni na voljo"
 
@@ -603,25 +586,25 @@ msgid "View Order"
 msgstr ""
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view__state__ui_valid
+#: selection:bi.sql.view,state:0
 msgid "Views, Action and Menu Created"
 msgstr ""
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
-#: code:addons/bi_sql_editor/models/bi_sql_view_field.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:172
+#: code:addons/bi_sql_editor/models/bi_sql_view_field.py:110
 #, fuzzy, python-format
 msgid "You can not create indexes on non materialized views"
 msgstr "Cron opravilo, ki bo osvežilo materializirani prikaz"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:244
 #, python-format
 msgid "You can only process this action on SQL Valid items"
 msgstr "To dejanje lahko obdelate le na SQL veljavnih postavkah"
 
 #. module: bi_sql_editor
-#: code:addons/bi_sql_editor/models/bi_sql_view.py:0
+#: code:addons/bi_sql_editor/models/bi_sql_view.py:225
 #, python-format
 msgid ""
 "You can only unlink draft views.If you want to delete them, first set them "
@@ -629,42 +612,47 @@ msgid ""
 msgstr ""
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__boolean
+#: model:ir.model,name:bi_sql_editor.model_bi_sql_view
+msgid "bi.sql.view"
+msgstr ""
+
+#. module: bi_sql_editor
+#: selection:bi.sql.view.field,ttype:0
 msgid "boolean"
 msgstr "boolean"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__char
+#: selection:bi.sql.view.field,ttype:0
 msgid "char"
 msgstr "char"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__date
+#: selection:bi.sql.view.field,ttype:0
 msgid "date"
 msgstr "date"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__datetime
+#: selection:bi.sql.view.field,ttype:0
 msgid "datetime"
 msgstr "datetime"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__float
+#: selection:bi.sql.view.field,ttype:0
 msgid "float"
 msgstr "float"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__integer
+#: selection:bi.sql.view.field,ttype:0
 msgid "integer"
 msgstr "integer"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__many2one
+#: selection:bi.sql.view.field,ttype:0
 msgid "many2one"
 msgstr "many2one"
 
 #. module: bi_sql_editor
-#: model:ir.model.fields.selection,name:bi_sql_editor.selection__bi_sql_view_field__ttype__selection
+#: selection:bi.sql.view.field,ttype:0
 msgid "selection"
 msgstr "selection"
 
@@ -678,12 +666,6 @@ msgstr "sequence"
 #: model_terms:ir.ui.view,arch_db:bi_sql_editor.view_bi_sql_view_form
 msgid "this will refresh the materialized view"
 msgstr "osvežitev materializiranega prikaza"
-
-#~ msgid "Draft"
-#~ msgstr "Osnutek"
-
-#~ msgid "SQL Valid"
-#~ msgstr "SQL veljaven"
 
 #~ msgid "You can only unlink draft views"
 #~ msgstr "Razvezujete lahko le osnutke prikazov"
