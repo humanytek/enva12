@@ -157,7 +157,7 @@ class PartnerBlacklist(models.Model):
 
 
 class Account_invoice_nova(models.Model):
-    _inherit = 'account.invoice'
+    _inherit = 'account.move'
 
     state_list_sat=fields.Selection(
     related='partner_id.state_list_sat',
@@ -166,7 +166,7 @@ class Account_invoice_nova(models.Model):
     )
 
 
-    @api.multi
+
     def action_autorizar_pago(self):
 
         to_draft_invoices = self.filtered(lambda inv: inv.state != 'draft')
@@ -176,7 +176,7 @@ class Account_invoice_nova(models.Model):
         to_draft_invoices.write({'state_payment': 'autorizado','user_autoriza': self.env.user.id,'fecha_aprobacion':fields.datetime.now()})
         super(Account_invoice_nova, self).action_autorizar_pago()
 
-    @api.multi
+
     def check_autorizar_pago(self):
         partner_obj = self.env['partner.blacklist']
         for r in self:
@@ -187,7 +187,7 @@ class Account_invoice_nova(models.Model):
         return
 
 
-    @api.multi
+
     def action_autorizar_list_pago(self):
         partner_obj = self.env['partner.blacklist']
         exist_supplier = partner_obj.search(
@@ -196,7 +196,7 @@ class Account_invoice_nova(models.Model):
         self.write({'state_payment': 'autorizado','user_autoriza': self.env.user.id,'fecha_aprobacion':fields.datetime.now()})
         self.message_post(body=('La empresa con RFC <b>%s</b> de Nombre <b>%s</b> Se encuentra en la Lista del 69B con estatus <b>%s</b> y fue autorizado por el Usuario : <b>%s</b> Fecha Publicacion: <b>%s</b>'%(self.partner_id.vat,self.partner_id.name,exist_supplier.situacion_contribuyente,self.env.user.name,exist_supplier.publi_date)),message_type ='email',partner_ids = [753,2189,758,self.env.user])
 
-    @api.multi
+
     def action_invoice_open(self):
 
         partner_obj = self.env['partner.blacklist']
@@ -220,7 +220,7 @@ class Account_invoice_nova(models.Model):
         return to_open_invoices.invoice_validate()
         super(Account_invoice_nova, self).action_invoice_open()
 
-    @api.multi
+
     def action_invoice_list_open(self):
 
         partner_obj = self.env['partner.blacklist']
@@ -322,7 +322,7 @@ class Account_invoice_nova(models.Model):
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    @api.multi
+
     def button_confirm(self):
         partner_obj = self.env['partner.blacklist']
         partner = self.partner_id
@@ -351,7 +351,7 @@ class PurchaseOrder(models.Model):
         return True
         super(PurchaseOrder, self).button_confirm()
 
-    @api.multi
+
     def button_list_confirm(self):
         partner_obj = self.env['partner.blacklist']
         exist_supplier = partner_obj.search(
@@ -460,7 +460,7 @@ class SaleOrder(models.Model):
         super(SaleOrder, self).onchange_partner_id_warning()
 
 
-    @api.multi
+
     def action_confirm(self):
         partner_obj = self.env['partner.blacklist']
         exist_supplier = partner_obj.search(

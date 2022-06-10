@@ -17,26 +17,29 @@ class ReportsFibers(models.AbstractModel):
     _description = "Reports Fibers"
     _inherit = 'account.report'
 
-    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
+    filter_date = {'mode': 'range', 'filter': 'this_month'}
 
-    def _get_templates(self):
-        templates = super(ReportsFibers, self)._get_templates()
-        templates['main_table_header_template'] = 'reports_fibers.template_reports_fibers_table_header'
-        return templates
+    
 
-    def _get_columns_name(self, options):
-        columns_header=[
-        {'name': ''},
-        {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
+    def _get_columns(self, options):
+
+        header1=[
+            {'name': '', 'style': 'width:40%'},
+            {'name': _('MES ACTUAL'), 'class': 'number', 'colspan': 2},
+            {'name': _('MES ANTERIOR'),'class': 'number', 'colspan': 2},
+            {'name': _('MES PREVIO ANTERIOR'),'class': 'number', 'colspan': 2},
+        ]
+        header2=[
+            {'name': ''},
+            {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
+            {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
+            {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
+            {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
+            {'name': _('VOLUMEN'), 'class': 'number', 'style': 'white-space:nowrap;'},
+            {'name': _('% DE PARTICIPACION'), 'class': 'number', 'style': 'white-space:nowrap;'},
         ]
 
-
-        return columns_header
+        return [header1,header2]
 
 
 

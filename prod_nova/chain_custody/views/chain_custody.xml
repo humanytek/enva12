@@ -8,8 +8,7 @@
             <xpath expr="//page[@name='general_information']" position="after">
                 <page name="fsc" string="FSC">
                   <group>
-                    <field name="fsc" />
-                    <field name="fsc_tipo" />
+                    <field name="fsc" readonly="1" />
                 </group>
                 </page>
             </xpath>
