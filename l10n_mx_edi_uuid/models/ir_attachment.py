@@ -3,7 +3,6 @@
 import base64
 
 from lxml import etree
-
 from odoo import api, fields, models
 
 FIELDS = ['store_fname', 'res_model', 'res_id', 'name', 'datas']
@@ -34,7 +33,7 @@ class IrAttachment(models.Model):
             model = self.env[attach.res_model].browse(attach.res_id)
             try:
                 tree = (model if model._name == 'account.move' else model.move_id)._l10n_mx_edi_decode_cfdi(cfdi)
-            except etree.XMLSyntaxError:
+            except (etree.XMLSyntaxError, AttributeError):
                 # it is a invalid xml
                 attachments_skipped |= attach
                 continue
