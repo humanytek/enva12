@@ -75,6 +75,18 @@ class Account_invoice_nova(models.Model):
         copy=False
     )
 
+    l10n_mx_edi_sat_status_enva = fields.Selection(
+        selection=[
+            ('none', "State not defined"),
+            ('undefined', "Not Synced Yet"),
+            ('not_found', "Not Found"),
+            ('cancelled', "Cancelled"),
+            ('valid', "Valid"),
+        ],
+        string="SAT status", readonly=True, copy=False, required=True, tracking=True,
+        default='undefined',
+        help="Refers to the status of the journal entry inside the SAT system.")
+
     def _post(self, soft=True):
 
         self.write({'date_applied': fields.Date.context_today(self)})
