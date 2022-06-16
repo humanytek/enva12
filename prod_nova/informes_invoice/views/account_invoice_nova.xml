@@ -33,6 +33,10 @@
     <field name="arch" type="xml">
       <xpath expr="//div[@name='journal_div']" position="after">
           <field name="l10n_mx_edi_sat_status_enva" attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
+          <button name="l10n_mx_edi_update_sat_status_enva" type="object"
+                  string="Retry" class="oe_link"
+                  groups="account.group_account_invoice"
+                  attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
            <field name="cfdi_uuid_enva" attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
            <field name="cfdi_origin_enva" attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}"/>
       </xpath>
