@@ -12,7 +12,7 @@ WORK_RECEIPS_STATES = [
 
 class Receipts(models.Model):
     _name = 'work.receipts'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     name = fields.Char(
         required=True,
         default='New',
