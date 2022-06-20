@@ -2,7 +2,8 @@
 
 import base64
 
-from lxml import etree
+from lxml import et
+
 from odoo import api, fields, models
 
 FIELDS = ['store_fname', 'res_model', 'res_id', 'name', 'datas']

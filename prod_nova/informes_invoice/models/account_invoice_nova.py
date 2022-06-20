@@ -75,10 +75,49 @@ class Account_invoice_nova(models.Model):
         copy=False
     )
 
+    l10n_mx_edi_sat_status_enva = fields.Selection(
+        selection=[
+            ('none', "State not defined"),
+            ('undefined', "Not Synced Yet"),
+            ('not_found', "Not Found"),
+            ('cancelled', "Cancelled"),
+            ('valid', "Valid"),
+        ],
+        string="SAT status", readonly=True, copy=False, required=True, tracking=True,
+        default='undefined',
+        help="Refers to the status of the journal entry inside the SAT system.")
+
+    # -------------------------------------------------------------------------
+    # SAT
+    # -------------------------------------------------------------------------
+
+    def l10n_mx_edi_update_sat_status_enva(self):
+        '''Synchronize both systems: Odoo & SAT to make sure the invoice is valid.
+        '''
+        for move in self:
+            supplier_rfc = move.partner_id.vat
+            customer_rfc = move.company_id.vat
+            total = float_repr(move.amount_total, precision_digits=move.currency_id.decimal_places)
+            uuid = move.cfdi_uuid_enva
+
+
+            try:
+                status = self.env['account.edi.format']._l10n_mx_edi_get_sat_status(supplier_rfc, customer_rfc, total, uuid)
+            except Exception as e:
+                move.message_post(body=_("Failure during update of the SAT status: %(msg)s", msg=str(e)))
+                continue
+
+            if status == 'Vigente':
+                move.l10n_mx_edi_sat_status_enva = 'valid'
+            elif status == 'Cancelado':
+                move.l10n_mx_edi_sat_status_enva = 'cancelled'
+            elif status == 'No Encontrado':
+                move.l10n_mx_edi_sat_status_enva = 'not_found'
+            else:
+                move.l10n_mx_edi_sat_status_enva = 'none'
+
     def _post(self, soft=True):
-
         self.write({'date_applied': fields.Date.context_today(self)})
-
         return super()._post(soft=soft)
 
 
