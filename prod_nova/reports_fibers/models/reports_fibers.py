@@ -49,13 +49,13 @@ class ReportsFibers(models.AbstractModel):
         params=""
         if concepto:
             if concepto=="OCC NACIONAL":
-                params = "AND (pt.default_code = 'MAP0009' OR pt.default_code = 'OCCPAC002')"
+                params = "AND (pt.default_code = 'MAP0009' OR pt.default_code = 'OCCPAC002' OR pt.default_code = 'MAP0011' OR pt.default_code = 'MAP0013')"
             if concepto=="DKL NACIONAL":
                 params = "AND pt.default_code = 'MAP0001'"
             if concepto=="DKL OBSOLETOS":
                 params = "AND pt.default_code = 'MAP0006'"
             if concepto=="OCC IMPORTADO":
-                params = "AND pt.default_code='MAP0008'"
+                params = "AND (pt.default_code='MAP0008' OR pt.default_code = 'MAP0015')"
             if concepto=="OCC ACOPIO":
                 params = "AND pt.default_code='OCCPAC001'"
             if concepto=="GALLETA SIN COSTO":
