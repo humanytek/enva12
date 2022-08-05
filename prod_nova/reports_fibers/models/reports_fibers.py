@@ -51,7 +51,7 @@ class ReportsFibers(models.AbstractModel):
             if concepto=="OCC NACIONAL":
                 params = "AND (pt.default_code = 'MAP0009' OR pt.default_code = 'OCCPAC002' OR pt.default_code = 'MAP0011' OR pt.default_code = 'MAP0013')"
             if concepto=="DKL NACIONAL":
-                params = "AND pt.default_code = 'MAP0001'"
+                params = "AND (pt.default_code = 'MAP0001' OR pt.default_code = 'MAP0007')"
             if concepto=="DKL OBSOLETOS":
                 params = "AND pt.default_code = 'MAP0006'"
             if concepto=="OCC IMPORTADO":
@@ -112,7 +112,7 @@ class ReportsFibers(models.AbstractModel):
                     LEFT JOIN account_account aa ON aa.id=aal.general_account_id
                     LEFT JOIN product_product pp ON pp.id=aal.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                    WHERE aal.date >= '"""+str(date_from)+"""' AND aal.date <= '"""+str(date_to)+"""' AND aa.code='115.03.002' AND (pt.default_code IN ('MAP0001','MAP0003','MAP0008','MAP0009','OCCPAC001','OCCPAC002','MAP0005','MAP0006','MAP0011','MAP0013','MAP0015') OR pt.categ_id IN (70,124,71,72))
+                    WHERE aal.date >= '"""+str(date_from)+"""' AND aal.date <= '"""+str(date_to)+"""' AND aa.code='115.03.002' AND (pt.default_code IN ('MAP0001','MAP0003','MAP0008','MAP0009','OCCPAC001','OCCPAC002','MAP0005','MAP0006','MAP0007','MAP0011','MAP0013','MAP0015') OR pt.categ_id IN (70,124,71,72))
 
         """
 
