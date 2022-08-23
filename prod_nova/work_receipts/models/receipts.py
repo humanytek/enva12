@@ -57,6 +57,7 @@ class Receipts(models.Model):
     comodel_name='purchase.order',
     string='Order Purchase',
     store=True,
+    domain = [('state','=','purchase')],
     )
     vendor_id=fields.Many2one(
     related='purchase_id.partner_id',
