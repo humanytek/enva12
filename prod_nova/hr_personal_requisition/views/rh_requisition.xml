@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <data>
+        <record id="crm_case_form_view_job_inherit_nova" model="ir.ui.view">
+            <field name="name">crm.case.form.view.job.inherit.nova</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+            <field name="arch" type="xml">
+
+              <xpath expr="//field[@name='job_id']" position="before">
+                <field name="hr_requisition_personal_id"  />
+          </xpath>
+          <xpath expr="//group//group[3]" position="after">
+            <group>
+                <field name="ref_job" widget="radio" options="{'horizontal': true}" />
+                <field name="psiconometric" widget="radio" options="{'horizontal': true}" />
+                <field name="alcoholimetria" widget="radio" options="{'horizontal': true}" />
+                <field name="antidoping" widget="radio" options="{'horizontal': true}" />
+                <field name="p_confianza" widget="radio" options="{'horizontal': true}" />
+                <field name="test_driver" widget="radio" options="{'horizontal': true}" />
+                <field name="v_psicologic" widget="radio" options="{'horizontal': true}" />
+                <field name="v_medica" widget="radio" options="{'horizontal': true}" />
+              </group>
+          </xpath>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hr_requisition_personal_list">
+           <field name="name">Seleccion de Personal</field>
+           <field name="type">ir.actions.act_window</field>
+           <field name="res_model">hr.applicant</field>
+           <field name="view_mode">tree,form</field>
+           <field name="domain">[('hr_requisition_personal_id','=',active_id)]</field>
+           <field name="context">{"default_hr_requisition_personal_id":active_id}</field>
+        </record>
+        <record model="ir.ui.view" id="hr_personal_requisition__form_view">
+          <field name="name">hr.requisition.personal.form</field>
+          <field name="model">hr.requisition.personal</field>
+          <field name="arch" type="xml">
+            <form string="Hr Requisition">
+              <header>
+                <button name="action_draft" states="cancel" string="Cambiar a Borrador" type="object" class="btn-primary"/>
+                <button name="action_in_progress" states="draft" string="Confirmar" type="object" class="btn-primary"/>
+                <button name="action_aprovee_rh" states="in_progress" string="Aprobacion" type="object" class="btn-primary"/>
+                <button name="action_aprovee_ri" states="aprovee_rh" string="Aprobacion" type="object" class="btn-primary"/>
+                <button name="action_aprovee_dg" attrs="{'invisible':['|',('state','in',('aprovee_rh','in_progress','draft','cancel','select_progress','done','aprovee_dg','aprovee_jf')),('motive_requisition','=','vacante')]}" string="Aprobacion Direccion" type="object" class="btn-primary"/>
+                <button name="action_select_progress" attrs="{'invisible':['|',('state','in',('aprovee_dg','select_progress','aprovee_rh','in_progress','draft','cancel','done')),('motive_requisition','!=','vacante')]}" string="Seleccion de Personal" type="object" class="btn-primary"/>
+                <button name="action_select_progress" attrs="{'invisible':['|',('state','not in',('aprovee_dg','aprovee_jf')),('motive_requisition','=','vacante')]}" string="Seleccion de Personal" type="object" class="btn-primary"/>
+                <button name="action_aprovee_jf" attrs="{'invisible':['|','|',('internal_promotion','=',False),('state','in',('aprovee_dg','aprovee_jf','select_progress','aprovee_rh','in_progress','draft','cancel','done')),('motive_requisition','!=','vacante')]}" string="Aprobacion Jefatura" type="object" class="btn-primary"/>
+                <button name="action_aprovee_jf" attrs="{'invisible':['|','|',('internal_promotion','=',False),('state','!=','aprovee_dg'),('motive_requisition','=','vacante')]}" string="Aprobacion Jefatura" type="object" class="btn-primary"/>
+                <button name="action_done" states="select_progress" string="Cerrar" type="object" class="btn-primary"/>
+                <button name="action_cancel" states="in_progress,aprovee_rh,aprovee_ri,aprovee_dg,select_progress" string="Cancelar" type="object" class="btn-primary"/>
+
+                <field name="state" widget="statusbar" statusbar_visible="cancel,draft,in_progress,aprovee_rh,aprovee_ri,aprovee_dg,select_progress,done" />
+              </header>
+              <sheet>
+                <div class="oe_button_box" name="button_box">
+                  <button class="oe_stat_button" type="action" name="%(action_hr_requisition_personal_list)d" icon="fa-users" attrs="{'invisible':['|',('state','in',('aprovee_dg','aprovee_rh','aprovee_ri','in_progress','draft','cancel')),('motive_requisition','!=','vacante')]}" >
+                      <field name="hr_applicant_id__rh_requisition_count" string="Seleccion" widget="statinfo"/>
+                  </button>
+
+                  <button class="oe_stat_button" type="action" name="%(action_hr_requisition_personal_list)d" icon="fa-users" attrs="{'invisible':['|',('state','not in',('select_progress','done')),('motive_requisition','=','vacante')]}" >
+                      <field name="hr_applicant_id__rh_requisition_count" string="Seleccion" widget="statinfo"/>
+                  </button>
+
+                </div>
+                <div class="float-left">
+                         <label for="name" class="oe_edit_only oe_inline"/>
+                         <h1>
+                             <field name="name" readonly='1' />
+                         </h1>
+                     </div>
+                <group>
+                <group>
+                  <field name="user_id" attrs="{'readonly':1}"/>
+
+                  <field name="department_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                  <field name="hr_job_id" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+
+                </group>
+                <group>
+                  <field name="account_analytic_account_id" attrs="{'readonly': [('state','not in',('draft'))]}" options="{'no_create': True}"/>
+                  <field name="requisition_date"  readonly='1' />
+
+                </group>
+              </group>
+              <group>
+                <group>
+                <field name="motive_requisition" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                  </group>
+                  <group>
+                      <field name="hr_employee_id" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','vacante')]}"/>
+                      <field name="type_payroll" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nuevo_puesto')]}"/>
+                      <field name="type_contract" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nuevo_puesto')]}"/>
+                      <field name="duration_contract" attrs="{'readonly': [('state','not in',('draft'))],'invisible':['|',('motive_requisition','!=','nuevo_puesto'),('type_contract','!=','temporal')]}"/>
+                      <field name="motive_replace" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','vacante')]}"/>
+
+                      <field name="duration_incapacity" attrs="{'readonly': [('state','not in',('draft'))],'invisible':['|',('motive_requisition','!=','vacante'),('motive_replace','!=','incapacidad')]}"/>
+
+                        <field name="others" attrs="{'readonly': [('state','not in',('draft'))],'invisible':['|',('motive_requisition','!=','vacante'),('motive_replace','!=','otros')]}"/>
+
+                      <field name="working_hours" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nuevo_puesto')]}"/>
+                      <field name="salary" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nuevo_puesto')]}"/>
+                      <field name="workforce_current" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nueva_plaza')]}"/>
+                      <field name="workforce_new" attrs="{'readonly': [('state','not in',('draft'))],'invisible':[('motive_requisition','!=','nueva_plaza')]}"/>
+
+                  </group>
+                  <group>
+                    <group>
+                    <field name="internal_promotion" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                  </group>
+                  <group>
+                  <field name="authorize_id" attrs="{'readonly': [('state','not in',('draft'))],'required': [('internal_promotion','=',True)]}"/>
+                </group>
+
+                  </group>
+                  <group>
+                    <field name="internal_nominee" widget="many2many_tags" options="{'color_field': 'color', 'no_create': True}"/>
+                  </group>
+              </group>
+              <notebook>
+                <page string="Observaciones/Justificacion">
+                  <field name="justify" attrs="{'readonly': [('state','not in',('draft'))]}" />
+
+
+                </page>
+
+                </notebook>
+
+              </sheet>
+              <div class="oe_chatter">
+                   <field name="message_follower_ids" widget="mail_followers"/>
+                   <field name="message_ids" widget="mail_thread"/>
+                 </div>
+            </form>
+          </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_personal_requisition_tree_view">
+          <field name="name">hr.requisition.personal.tree</field>
+          <field name="model">hr.requisition.personal</field>
+          <field name="arch" type="xml">
+            <tree string="Hr Requisitions Tree">
+              <field name="name"/>
+              <field name="requisition_date"/>
+              <field name="user_id"/>
+              <field name="department_id"/>
+              <field name="hr_job_id"/>
+              <field name="motive_requisition"/>
+              <field name="state"/>
+            </tree>
+          </field>
+        </record>
+    <record model="ir.actions.act_window" id="hr_personal_requisition_list_action">
+      <field name="name">Solicitudes</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">hr.requisition.personal</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">Create the first Human Resources Requisition
+        </p>
+      </field>
+    </record>
+
+
+
+    <menuitem id="menu_hr_personal_requisition_list_action" name="Solicitud de Requisicion de Personal" action="hr_personal_requisition_list_action" parent="hr_recruitment.menu_crm_case_categ0_act_job"/>
+
+
+    </data>
+</odoo>

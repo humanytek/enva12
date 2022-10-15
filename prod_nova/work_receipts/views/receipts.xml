@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+   <menuitem  name="Work Receipt"
+      id="main_workreceipts_menu"
+      web_icon="work_receipts,static/src/img/logo.png"
+      sequence="25" />
+   <menuitem id="workreceipt_menu" name="Work Receipt"
+     parent="main_workreceipts_menu" sequence="1"/>
+
   <record model="ir.ui.view" id="workreceipt_form_view">
     <field name="name">receipts.form</field>
     <field name="model">work.receipts</field>
@@ -80,7 +87,7 @@
     </field>
   </record>
 
-  <record model="ir.ui.view" id="workreceipt_search_view">
+  <!-- <record model="ir.ui.view" id="workreceipt_search_view">
     <field name="name">receipts.search</field>
     <field name="model">work.receipts</field>
     <field name="arch" type="xml">
@@ -93,28 +100,32 @@
         <field name="user_id"/>
       </search>
     </field>
-  </record>
+  </record> -->
 
   <record model="ir.actions.act_window" id="workreceipt_list_action">
     <field name="name">Receipts</field>
+    <field name="type">ir.actions.act_window</field>
     <field name="res_model">work.receipts</field>
-    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
     <field name="help" type="html">
-      <p class="oe_view_nocontent_create">Create the first Work Receipt
-      </p>
+      <p class="o_view_nocontent_smiling_face">
+               No Work Receipt found. Let's create one!
+             </p>
+             <p>
+               Las recepciones de trabajo son documentos que se enviaran a los proveedores para poder recepcionar sus facturas de Servicios. Una vez que el proveedor tenga su documumento podra pasar a pago sus servicios.
+             </p>
+
     </field>
   </record>
 
-  <menuitem id="main_workreceipts_menu" name="Work Receipt" icon="work_receipts,static/src/img/logo.png" web_icon="work_receipts,static/src/img/logo.png" web_icon_hover="work_receipts,static/src/img/logo.png"/>
-  <menuitem id="workreceipt_menu" name="Work Receipt" parent="main_workreceipts_menu"/>
+
   <menuitem id="receipts_menu" name="Receipts" parent="workreceipt_menu" action="workreceipt_list_action"/>
 
   <record model="ir.actions.act_window" id="workreceipt_form_action">
     <field name="name">Receipts</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">work.receipts</field>
-    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
     <field name="domain">[('purchase_id','=',active_id)]</field>
     <field name="context">{"search_default_purchase_id": active_id,"default_purchase_id": active_id}</field>
@@ -126,14 +137,15 @@
       <field name="model">purchase.order</field>
       <field name="inherit_id" ref="purchase.purchase_order_form"/>
       <field name="arch" type="xml">
-        <xpath expr="//form[1]/sheet[1]/div[@name='button_box']/button[@name='action_view_picking']" position="after">
+        <xpath expr="//button[@name='action_view_invoice']" position="after">
             <button class="oe_stat_button" icon="fa-pencil-square" type="action" name="%(workreceipt_form_action)d" attrs="{'invisible': ['|',('service', '=', False),('state','not in', ('purchase','done'))]}">
               <field name="purchase_id__work_receipts_count" string="Recep. Trabajo" widget="statinfo"/>
             </button>
           </xpath>
-          <xpath expr="//field[@name='date_order']" position="after">
+          <xpath expr="//field[@name='origin']" position="after">
             <field name="service"/>
           </xpath>
       </field>
   </record>
+
 </odoo>

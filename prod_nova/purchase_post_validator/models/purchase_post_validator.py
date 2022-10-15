@@ -15,10 +15,10 @@ class PurchaseOrder(models.Model):
         ('purchase', 'Purchase Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled')
-    ], string='Status', readonly=True, index=True, copy=False, default='draft', track_visibility='onchange')
+    ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
 
 
-    @api.multi
+
     def button_confirm(self):
         for order in self:
             if order.state not in ['draft', 'sent']:
@@ -29,17 +29,20 @@ class PurchaseOrder(models.Model):
                 if order.company_id.po_double_validation == 'one_step'\
                     or (order.company_id.po_double_validation == 'two_step'\
                         and order.amount_total < self.env.user.company_id.currency_id._convert(
-                            order.company_id.po_double_validation_amount, order.currency_id, order.company_id, order.date_order or fields.Date.today()))\
+                            order.company_id.po_double_validation_amount, order.currency_id, order.company_id,
+                            order.date_order or fields.Date.today()))\
                     or order.user_has_groups('purchase.group_purchase_manager'):
                     order.button_check()
                 else:
                     order.write({'state': 'administration'})
             else:
                 order.write({'state': 'management'})
+            if order.partner_id not in order.message_partner_ids:
+                order.message_subscribe([order.partner_id.id])
         return True
         super(PurchaseOrder, self).button_confirm()
 
-    @api.multi
+
     def button_check(self):
         self.write({'state': 'to approve'})
 

@@ -3,7 +3,7 @@
 
 {
     'name': 'Bank Reports - Custom Bank Reports',
-    'author': 'ING.JESUS CHULIM',
+    'author': 'EMPAQUES NOVA',
     'version': '1.0.0',
     'category': 'reporting',
     'description': """

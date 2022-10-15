@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 
 class MaintenanceArea(models.Model):
     _name = 'maintenance.area'
+    _description = "Maintenance Area"
 
     name = fields.Char(
 

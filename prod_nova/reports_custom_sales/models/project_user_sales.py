@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 
 class ProjectUserSales(models.Model):
     _name = 'project.user.sales'
+    _description = "Project User Sales"
 
     name = fields.Many2one(
         comodel_name = 'res.partner',
