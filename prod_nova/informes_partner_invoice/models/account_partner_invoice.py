@@ -33,7 +33,6 @@ class AccountPartnerInvoice(models.Model):
         related='partner_bank_id.currency_id',
         string='Moneda Cuenta',
         readonly=True,
-        store=True
     )
 
     state_payment = fields.Selection([
