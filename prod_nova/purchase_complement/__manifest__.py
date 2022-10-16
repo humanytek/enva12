@@ -12,11 +12,11 @@
         'purchase_user_validation',
     ],
     'data': [
-        # 'reports/orden.xml',
-        # 'views/to_receive.xml',
-        # 'views/analysis.xml',
-        # 'views/requisition.xml',
-        # 'views/agreement.xml',
-        # 'reports/licitacion.xml',
+        'reports/orden.xml',
+        'views/to_receive.xml',
+        'views/analysis.xml',
+        'views/requisition.xml',
+        'views/agreement.xml',
+        'reports/licitacion.xml',
     ],
 }
