@@ -1,8 +1,8 @@
 # coding: utf-8
 {
     "name": "Purchase User Validator",
-    "version": "14.0",
-    "author": "EMPAQUES NOVA",
+    "version": "10.0",
+    "author": "silvau",
     "category": "",
     "website": "",
     "license": "",

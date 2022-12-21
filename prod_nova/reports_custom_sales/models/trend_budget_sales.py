@@ -6,7 +6,6 @@ from odoo.exceptions import UserError
 
 class TrendbudgetSales(models.Model):
     _name = 'trend.budget.sales'
-    _description = "Trend Budget Sales"
 
     name = fields.Many2one(
         comodel_name = 'res.partner',

@@ -17,7 +17,6 @@ NAME_TYPE_REPORTS_BALANCE=[
 ]
 class ReportsGroup(models.Model):
     _name = 'reports.group'
-    _description = "Reports Group"
 
 
     name = fields.Char(
@@ -45,8 +44,8 @@ class ReportsGroup(models.Model):
     store=True,
     )
 
-    group_finantial_id = fields.Many2one(
-        comodel_name = 'account.group.nova',
+    group_id = fields.Many2one(
+        comodel_name = 'account.group',
         string = 'Group',
         store = True
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!-- Aged partner balance templates -->
+<template id="template_aged_partner_balance_line_report_sale" inherit_id="account_reports.line_template" primary="True">
+    <xpath expr="//span[hasclass('o_account_reports_caret_icon')]" position="before">
+        <t t-if="line.get('trust') == 'good'">
+            <span class="fa fa-circle color-green trust-partner" role="img" aria-label="Balance is good" title="Balance is good"></span>
+        </t>
+        <t t-if="line.get('trust') == 'bad'">
+            <span class="fa fa-circle color-red trust-partner" role="img" aria-label="Balance is bad" title="Balance is bad"></span>
+        </t>
+        <t t-if="line.get('trust') == 'normal'">
+            <span class="fa fa-circle color-transparent trust-partner" role="img" aria-label="Balance is normal" title="Balance is normal"></span>
+        </t>
+    </xpath>
+</template>
+
+<template id="template_aged_partner_balance_report_sale" inherit_id="account_reports.main_template" primary="True">
+    <xpath expr="//table" position="attributes">
+        <attribute name="class">o_account_reports_table table-striped</attribute>
+    </xpath>
+</template>
+
+<!-- Business Statements Aged receivable templates  -->
+ <template id="line_template_aged_receivable_report_sale" inherit_id="informes_invoice_sales.template_aged_partner_balance_line_report_sale" primary="True">
+     <xpath expr="//div[hasclass('o_account_reports_domain_dropdown')]/*[last()]" position="before">
+        <a role="menuitem" tabindex="-1" t-att-data-id="line['id']" action="open_document" groups="account.group_account_user" class="dropdown-item">View Journal Entry</a>
+     </xpath>
+ </template>
+
+</data>
+</odoo>

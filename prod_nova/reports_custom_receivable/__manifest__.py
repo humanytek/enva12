@@ -3,7 +3,7 @@
 
 {
     'name': 'Receivable Reports - Custom Payments Reports',
-    'author': 'EMPAQUES NOVA',
+    'author': 'ING.JESUS CHULIM',
     'version': '1.0.0',
     'category': 'reporting',
     'description': """

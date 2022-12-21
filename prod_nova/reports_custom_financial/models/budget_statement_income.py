@@ -22,7 +22,6 @@ NAME_STATE_INCOME=[
 
 class BudgetStatementIncome(models.Model):
     _name = 'budget.statement.income'
-    _description = "Budget Statement Income"
 
 
     # name = fields.Selection(

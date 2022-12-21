@@ -15,7 +15,6 @@ NAME_COST_SALE = [
 
 class PorcentCostSale(models.Model):
     _name = 'porcent.cost.sale'
-    _description = "Porcent Cost Sale"
 
 
     name = fields.Many2one(
@@ -31,12 +30,12 @@ class PorcentCostSale(models.Model):
         required=True,
     )
 
-    group_finantial_id = fields.Many2one(
-        comodel_name = 'account.group.nova',
+    group_id = fields.Many2one(
+        comodel_name = 'account.group',
         string = 'Group',
         store = True,
         required=True,
-        default =False,
+
     )
 
     date_from=fields.Date(
@@ -60,7 +59,7 @@ class PorcentCostSale(models.Model):
     porcent_per_month=fields.Float(
     compute='_porcent_cost_month',
     string='Porcentaje por mes',
-
+    
     )
 
 
@@ -72,8 +71,8 @@ class PorcentCostSale(models.Model):
                 COALESCE(sum(aml.credit),0) as credit,COALESCE(sum(aml.balance),0) as balance
                 FROM account_move_line aml
                 LEFT JOIN account_account aa on aa.id=aml.account_id
-                WHERE aa.group_finantial_id = %s AND aml.date >= %s AND aml.date <= %s
-                GROUP BY aa.group_finantial_id
+                WHERE aa.group_id = %s AND aml.date >= %s AND aml.date <= %s
+                GROUP BY aa.group_id
         """
         params =[group,date_from,date_to]
         self.env.cr.execute(sql_query, params)
@@ -84,12 +83,12 @@ class PorcentCostSale(models.Model):
         return result
 
 
-    @api.depends('date_from','date_to','cost_per_month','group_finantial_id')
+    @api.depends('date_from','date_to','cost_per_month','group_id')
     def _cost_month(self):
         for cm in self:
-            if cm.group_finantial_id:
+            if cm.group_id:
                 if cm.date_from and cm.date_to:
-                    cost_month=self._post_account(cm.group_finantial_id.id,cm.date_from,cm.date_to)
+                    cost_month=self._post_account(cm.group_id.id,cm.date_from,cm.date_to)
                     cm.cost_per_month=cost_month[2]
 
 

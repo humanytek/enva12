@@ -10,9 +10,6 @@
         'sale',
         'account_reports',
         'account_accountant',
-        'l10n_mx',
-        'l10n_mx_edi',
-        'web',
     ],
     'data': [
         'reports/invoice_reports_sale.xml',

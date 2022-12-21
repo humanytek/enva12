@@ -4,8 +4,8 @@ from odoo import api, fields, models,_
 
 FSC = [
     ('no_aplica', 'No Aplica'),
-    ('reciclado', 'Reciclado'),
-    ('Mixto', 'Mixto'),
+    ('reciclado', 'FSC RECICLADO 100%'),
+    ('mixto', 'FSC MIXTO'),
 ]
 
 FSC_TIPO = [
@@ -20,16 +20,14 @@ class ProductTemplateNova(models.Model):
     fsc = fields.Selection(
     FSC,
     'FSC',
-    tracking=True,
-    # required=True,
+    track_visibility='onchange',
     copy=False,
     default='no_aplica'
     )
 
-
     fsc_tipo = fields.Selection(
     FSC_TIPO,
     'Tipo',
-    tracking=True,
+    track_visibility='onchange',
     copy=False,
     )

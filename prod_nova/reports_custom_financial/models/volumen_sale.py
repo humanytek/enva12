@@ -10,7 +10,6 @@ NAME_VOLUMEN_SALE=[
 
 class VolumenSales(models.Model):
     _name = 'volumen.sales'
-    _description = "Volumen Sales"
 
 
     name = fields.Selection(

@@ -16,7 +16,7 @@
 
            <xpath expr="//div[@t-if='o.amount']" position="replace">
            </xpath>
-           <xpath expr="//div[@t-if='o.ref']" position="replace">
+           <xpath expr="//div[@t-if='o.communication']" position="replace">
            </xpath>
 
            <xpath expr="//table" position="before">
@@ -61,8 +61,8 @@
                        </thead>
                        <tbody>
                            <tr>
-                               <td><span t-field="o.ref"/></td>
-                               <td><span t-field="o.date"/></td>
+                               <td><span t-field="o.communication"/></td>
+                               <td><span t-field="o.payment_date"/></td>
                                <td><span t-field="o.l10n_mx_edi_time_payment"/></td>
                                <td><span t-field="o.l10n_mx_edi_payment_method_id"/></td>
                                <td><span t-field="o.tipocambio"/></td>

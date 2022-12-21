@@ -16,7 +16,7 @@ class ReportsAccount(models.AbstractModel):
     _description = "Reports Account"
     _inherit = 'account.report'
 
-    filter_date = {'mode': 'range', 'filter': 'this_month'}
+    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
     filter_all_entries = False
 
     def _get_columns_name(self, options):
@@ -31,8 +31,8 @@ class ReportsAccount(models.AbstractModel):
             SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
-                WHERE aa.group_finantial_id = %s """+where_clause+"""
-                GROUP BY aa.group_finantial_id
+                WHERE aa.group_id = %s """+where_clause+"""
+                GROUP BY aa.group_id
         """
         params = [str(arg)] + where_params
 
@@ -52,7 +52,7 @@ class ReportsAccount(models.AbstractModel):
             SELECT COALESCE(SUM(\"account_move_line\".balance),0) as balance
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
-                LEFT JOIN account_account_type aat on aat.id=aa.user_type_id
+                LEFT JOIN account_account_type aat on aat.id=\"account_move_line\".user_type_id
                 WHERE aat.include_initial_balance = False AND """+where_clause+"""
                 GROUP BY aat.include_initial_balance
         """
@@ -82,7 +82,7 @@ class ReportsAccount(models.AbstractModel):
                     if form[0]=="C":
                         newvalue.append(groups_month.get(form[1],0))
                     elif form[0]=="G":
-                        group=self.env['account.group.nova'].search([('code_prefix','=',form[1])],order='code_prefix')
+                        group=self.env['account.group'].search([('code_prefix','=',form[1])],order='code_prefix')
                         if group:
                             balance=self.with_context(date_from=date_from, date_to=date_to)._balance_initial(options,line_id,str(group.id))
                             if balance:
@@ -117,7 +117,7 @@ class ReportsAccount(models.AbstractModel):
                     if form[0]=="C":
                         newvalue.append(groups_month.get(form[1],0))
                     elif form[0]=="G":
-                        group=self.env['account.group.nova'].search([('code_prefix','=',form[1])],order='code_prefix')
+                        group=self.env['account.group'].search([('code_prefix','=',form[1])],order='code_prefix')
 
                         if group:
                             balance=self.with_context(date_from=date_from, date_to=date_to)._balance_initial(options,line_id,str(group.id))
@@ -168,13 +168,13 @@ class ReportsAccount(models.AbstractModel):
                         'class': 'activo',
                         'columns':[{'name':''},{'name':''},{'name':''}],
                         })
-                    elif g.type_balance=="RESULTADO EJ. ANT" and g.group_finantial_id.id:
+                    elif g.type_balance=="RESULTADO EJ. ANT" and g.group_id.id:
                         if g.acum_invisible and g.title==False:
                             date_to_prev=fields.Date.from_string(date_from)
 
-                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
                             balance_init_earning_month=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
                             if date_to_prev.month == 1:
                                 balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
@@ -197,9 +197,9 @@ class ReportsAccount(models.AbstractModel):
                         else:
                             date_to_prev=fields.Date.from_string(date_from)
 
-                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from) + timedelta(days=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from) + timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
                             balance_init_earning_month=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial_earning(options,line_id)
                             if date_to_prev.month == 1:
                                 balance_init_earning=self.with_context(date_from=False, date_to=last_day_previous_fy+relativedelta(years=-1))._balance_initial_earning(options,line_id)
@@ -231,7 +231,7 @@ class ReportsAccount(models.AbstractModel):
                             ],
                             })
 
-                    elif g.type_balance=="RESULTADO DEL EJERCICIO" and g.group_finantial_id.id==False:
+                    elif g.type_balance=="RESULTADO DEL EJERCICIO" and g.group_id.id==False:
                         if g.acum_invisible and g.title==False:
                             date_to_prev=fields.Date.from_string(date_from)
                             balance_init_earning=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial_earning(options,line_id)
@@ -279,9 +279,9 @@ class ReportsAccount(models.AbstractModel):
 
                     else:
                         if g.acum_invisible and g.title==False:
-                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
                             if balance_init:
                                 groups_prev_month[g.code]=balance_init[0]
                             if balance:
@@ -289,9 +289,9 @@ class ReportsAccount(models.AbstractModel):
                             if balance_ejer_ant:
                                 groups_dec_prev_year[g.code]=balance_ejer_ant[0]
                         else:
-                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                            balance_init=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from)+ timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                            balance_ejer_ant=self.with_context(date_from=False, date_to=last_day_previous_fy)._balance_initial(options,line_id,str(g.group_id.id))
                             if balance_init:
                                 groups_prev_month[g.code]=balance_init[0]
                             if balance:

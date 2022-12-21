@@ -17,7 +17,7 @@ class ReportsReceiptsNova(models.AbstractModel):
     _description = "Reports Receipts"
     _inherit = 'account.report'
 
-    filter_date = {'mode': 'range', 'filter': 'this_month'}
+    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
 
     def _get_columns_name(self, options):
         return [
@@ -146,13 +146,13 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(am.amount_total_signed) as residual
-                    FROM account_move am
-                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
-                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=am.commercial_partner_id
+                    SUM(ai.amount_total_company_signed) as residual
+                    FROM account_invoice ai
+                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ai.commercial_partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                    AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND rpc.name in ('CORRUGADO','PAPEL')
 
 
@@ -177,13 +177,13 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(am.amount_total_signed) as residual
-                    FROM account_move am
-                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
-                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=am.commercial_partner_id
+                    SUM(ai.amount_total_company_signed) as residual
+                    FROM account_invoice ai
+                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ai.commercial_partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                    AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND rpc.name in ('CORRUGADO') AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
 
 
@@ -208,13 +208,13 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(am.amount_total_signed) as residual
-                    FROM account_move am
-                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
-                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=am.commercial_partner_id
+                    SUM(ai.amount_total_company_signed) as residual
+                    FROM account_invoice ai
+                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ai.commercial_partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                    AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND rpc.name in ('CORRUGADO') AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
 
 
@@ -239,13 +239,13 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(am.amount_total_signed) as residual
-                    FROM account_move am
-                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
-                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=am.commercial_partner_id
+                    SUM(ai.amount_total_company_signed) as residual
+                    FROM account_invoice ai
+                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+                    LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ai.commercial_partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                    AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
                     AND rpc.name in ('PAPEL')
 
 
@@ -267,12 +267,11 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
-                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
                     AND rpc.name in ('CORRUGADO','PAPEL')
 
 
@@ -293,12 +292,11 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
-                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
                     AND rpc.name in ('CORRUGADO') AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
 
 
@@ -319,12 +317,11 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
-                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
                     AND rpc.name in ('CORRUGADO') AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.')
 
 
@@ -345,12 +342,11 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
-                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
                     AND rpc.name in ('PAPEL')
 
 

@@ -3,15 +3,14 @@
 
 {
     'name': 'Accounting Reports - Custom Financial Reports',
-    'author': 'EMPAQUES NOVA',
+    'author': 'EMPAQUES NOVA','ING.JESUS CHULIM'
     'version': '2.5',
     'category': 'reporting',
     'description': """
         A custom report to get Financial Reports Empaques Nova
     """,
     'depends': [
-        'account',
-        'account_reports',
+        'account_reports'
     ],
     'data': [
         'views/custom_financial_reports.xml',
@@ -21,7 +20,6 @@
         'views/list_cost_sale.xml',
         'views/cost_sale.xml',
         'views/sale_volumen.xml',
-        'views/account_view.xml',
     ],
     'installable': True,
     'auto_install': False,

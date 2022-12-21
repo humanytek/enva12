@@ -15,7 +15,7 @@ class AccountMove_nova(models.Model):
         return move
         super(AccountMove_nova, self).create()
 
-
+    @api.multi
     def write(self, vals):
         if 'line_ids' in vals:
             res = super(AccountMove_nova, self.with_context(check_move_validity=False)).write(vals)

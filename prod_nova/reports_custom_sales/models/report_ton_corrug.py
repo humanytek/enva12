@@ -17,7 +17,7 @@ class ReportsTonCorrug(models.AbstractModel):
     _description = "Reports Sales"
     _inherit = 'account.report'
 
-    filter_date = {'mode': 'range', 'filter': 'this_month'}
+    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
 
 
     def _get_columns_name(self, options):
@@ -50,19 +50,18 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
-                        AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND am.date_applied >= '"""+str(new_date_from)+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)
-                        AND aml.exclude_from_invoice_tab=False
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice'
+                        AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+str(new_date_from)+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3)
                         AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%'
                         AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
@@ -74,18 +73,17 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.date_applied >= '"""+str(new_date_from)+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+str(new_date_from)+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
 
 
@@ -112,18 +110,17 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
 
 
@@ -133,18 +130,17 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
 
 
@@ -171,27 +167,26 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        am.invoice_user_id as id_usuario,
+                        ai.user_id as id_usuario,
                         rusp.name as vendedor,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
-                        GROUP BY rusp.name,am.invoice_user_id
+                        GROUP BY rusp.name,ai.user_id
                         ORDER BY rusp.name ASC
 
             """
@@ -199,27 +194,26 @@ class ReportsTonCorrug(models.AbstractModel):
             sql_query ="""
 
                 SELECT
-                        am.invoice_user_id as id_usuario,
+                        ai.user_id as id_usuario,
                         rusp.name as vendedor,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
-                        GROUP BY rusp.name,am.invoice_user_id
+                        GROUP BY rusp.name,ai.user_id
                         ORDER BY rusp.name ASC
 
             """
@@ -245,26 +239,25 @@ class ReportsTonCorrug(models.AbstractModel):
 
                 SELECT
                         rp.name as cliente,
-                        aml.partner_id as id_cliente,
+                        ail.partner_id as id_cliente,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.invoice_user_id = """+user_id+""" AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.user_id = """+user_id+""" AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
-                        GROUP BY rp.name,aml.partner_id
+                        GROUP BY rp.name,ail.partner_id
                         ORDER BY rp.name ASC
 
             """
@@ -273,26 +266,25 @@ class ReportsTonCorrug(models.AbstractModel):
 
                 SELECT
                         rp.name as cliente,
-                        aml.partner_id as id_cliente,
+                        ail.partner_id as id_cliente,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND am.invoice_user_id = """+user_id+""" AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.user_id = """+user_id+""" AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
-                        GROUP BY rp.name,aml.partner_id
+                        GROUP BY rp.name,ail.partner_id
                         ORDER BY rp.name ASC
 
             """
@@ -321,22 +313,21 @@ class ReportsTonCorrug(models.AbstractModel):
                         pp.default_code as codep,
                         pt.name as producto,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND aml.partner_id = """+partner_id+""" AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ail.partner_id = """+partner_id+""" AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                         GROUP BY pp.default_code,pt.name
                         ORDER BY pp.default_code ASC
@@ -349,22 +340,21 @@ class ReportsTonCorrug(models.AbstractModel):
                         pp.default_code as codep,
                         pt.name as producto,
                         SUM(CASE
-                            WHEN aml.product_uom_id = 1 THEN aml.quantity/1000
-                            WHEN aml.product_uom_id = 20 THEN aml.quantity
+                            WHEN ail.uom_id = 1 THEN ail.quantity/1000
+                            WHEN ail.uom_id = 20 THEN ail.quantity
                         END) as cantidad,
-                        SUM(aml.quantity*(aml.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.invoice_date AND rcr.currency_id=am.currency_id AND rcr.company_id=am.company_id)))) as subtotal,
-                        SUM(pt.weight*aml.quantity) as total_weight
-                        FROM account_move_line aml
-                        LEFT JOIN product_product pp ON pp.id=aml.product_id
+                        SUM(ail.quantity*(ail.price_unit*(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=ai.date_invoice AND rcr.currency_id=ai.currency_id AND rcr.company_id=ai.company_id)))) as subtotal,
+                        SUM(ail.total_weight) as total_weight
+                        FROM account_invoice_line ail
+                        LEFT JOIN product_product pp ON pp.id=ail.product_id
                         LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
-                        LEFT JOIN account_move am ON am.id=aml.move_id
-                        LEFT JOIN res_partner rp ON rp.id=aml.partner_id
-                        LEFT JOIN res_users rus ON rus.id=am.invoice_user_id
+                        LEFT JOIN account_invoice ai ON ai.id=ail.invoice_id
+                        LEFT JOIN res_partner rp ON rp.id=ail.partner_id
+                        LEFT JOIN res_users rus ON rus.id=ai.user_id
                         LEFT JOIN res_partner rusp ON rusp.id=rus.partner_id
-                        WHERE am.state!='draft' AND am.state!='cancel' AND aml.partner_id = """+partner_id+""" AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                        AND aml.exclude_from_invoice_tab=False
-                        AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
-                        AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
+                        WHERE ai.state!='draft' AND ai.state!='cancel' AND ail.partner_id = """+partner_id+""" AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                        AND ai.type='out_invoice' AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
+                        AND pt.categ_id IN (65,66,67,68,139,147) AND ail.uom_id not in (24,3)AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                         AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
                         GROUP BY pp.default_code,pt.name
                         ORDER BY pp.default_code ASC

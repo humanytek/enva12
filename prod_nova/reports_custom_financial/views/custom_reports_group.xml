@@ -20,7 +20,7 @@
                   <field name="type_balance" attrs="{'invisible': [('type','!=','BALANCE GENERAL')]}"/>
                   <field name="title"  attrs="{'invisible': ['|','|','|','|',('titulo_porcent','=',True),('caculate_especial_cventa','=',True),('volumen','=',True),('has_a_group','=',True),('formula','=',True)]}" />
                   <field name="has_a_group" attrs="{'invisible': ['|','|','|','|',('title','=',True),('titulo_porcent','=',True),('caculate_especial_cventa','=',True),('formula','=',True),('volumen','=',True)]}"  />
-                  <field name="group_finantial_id"  attrs="{'invisible': ['|',('has_a_group','=',False),('caculate_especial_cventa','=',True)],'required':[('has_a_group','=',True)]}" />
+                  <field name="group_id"  attrs="{'invisible': ['|',('has_a_group','=',False),('caculate_especial_cventa','=',True)],'required':[('has_a_group','=',True)]}" />
                   <field name="formula" attrs="{'invisible': ['|','|','|','|',('title','=',True),('titulo_porcent','=',True),('volumen','=',True),('has_a_group','=',True),('caculate_especial_cventa','=',True)]}" />
                   <field name="expresion" attrs="{'invisible': [('formula','=',False)]}" />
 
@@ -61,7 +61,7 @@
       <tree string="Reports Group Tree">
         <field name="name"/>
         <field name="code"/>
-        <field name="group_finantial_id"/>
+        <field name="group_id"/>
         <field name="type"/>
         <field name="order"/>
       </tree>
@@ -70,8 +70,8 @@
 
   <record model="ir.actions.act_window" id="reportsgroup_list_action">
     <field name="name">Lineas de Reportes</field>
-    <field name="type">ir.actions.act_window</field>
     <field name="res_model">reports.group</field>
+    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
     <field name="help" type="html">
       <p class="oe_view_nocontent_create">Create the first Linea de Reporte

@@ -12,7 +12,6 @@ WORK_RECEIPS_STATES = [
 
 class Receipts(models.Model):
     _name = 'work.receipts'
-    _description = "Work Receipts"
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     name = fields.Char(
         required=True,
@@ -37,7 +36,7 @@ class Receipts(models.Model):
     receipts_date= fields.Date(
         required=True,
         string='Reception Date',
-        tracking=True,
+        track_visibility='onchange',
         default=fields.Date.context_today,
     )
     user_id = fields.Many2one(
@@ -49,7 +48,7 @@ class Receipts(models.Model):
     state = fields.Selection(
     WORK_RECEIPS_STATES,
     'Estado',
-    tracking=True,
+    track_visibility='onchange',
     required=True,
     copy=False,
     default='draft'
@@ -71,21 +70,21 @@ class Receipts(models.Model):
     store=True,
     )
     invoice_ids=fields.Many2many(
-    comodel_name='account.move',
+    comodel_name='account.invoice',
     relation='account_invoice__id_work_receipts_id_rel',
     column1='account_invoice_id',
     column2='work_receips_id',
     string='Invoices',
-    tracking=True,
+    track_visibility='onchange',
     store=True,
-    domain="['&',('move_type', '=', 'in_invoice'),('invoice_origin','ilike',purchase_name)]",
+    domain="['&',('type', '=', 'in_invoice'),('origin','ilike',purchase_name)]",
     )
     order_line_ids=fields.Many2many(
     comodel_name='purchase.order.line',
     string='Order purchase lines',
     store=True,
     domain="[('order_id', '=', purchase_id)]",
-    tracking=True,
+    track_visibility='onchange',
     )
     advance = fields.Boolean(
     string='Advance',
@@ -120,24 +119,24 @@ class Receipts(models.Model):
         for p in self:
             p.porcent=p.progress
 
-
+    @api.multi
     def action_in_progress(self):
         self.write({'state': 'in_progress','user_confirm': self.env.user.id})
 
 
-
+    @api.multi
     def action_done(self):
         self.write({'state': 'done','user_validate': self.env.user.id})
 
-
+    @api.multi
     def action_cancel(self):
         self.write({'state': 'cancel'})
 
-
+    @api.multi
     def action_draft(self):
         self.write({'state': 'draft'})
 
-
+    @api.multi
     def unlink(self):
         for s in self:
             if (s.state=='done') or (s.state=='open') or (s.state=='in_progress'):
@@ -152,7 +151,7 @@ class Receipts(models.Model):
         return super(Receipts, self).create(vals)
 
 
-
+    @api.multi
     def action_wrq_send(self):
         '''
         This function opens a window to compose an email, with the edi purchase template message loaded by default
@@ -172,8 +171,6 @@ class Receipts(models.Model):
         ctx = dict(self.env.context or {})
         ctx.update({
             'default_model': 'work.receipts',
-            'active_model': 'work.receipts',
-            'active_id': self.ids[0],
             'default_res_id': self.ids[0],
             'default_use_template': bool(template_id),
             'default_template_id': template_id,
@@ -188,8 +185,7 @@ class Receipts(models.Model):
         if {'default_template_id', 'default_model', 'default_res_id'} <= ctx.keys():
             template = self.env['mail.template'].browse(ctx['default_template_id'])
             if template and template.lang:
-                lang = template._render_lang([ctx['default_res_id']])[ctx['default_res_id']]
-                # lang = template._render_template(template.lang, ctx['default_model'], ctx['default_res_id'])
+                lang = template._render_template(template.lang, ctx['default_model'], ctx['default_res_id'])
 
         self = self.with_context(lang=lang)
         if self.state in ['draft', 'sent']:
@@ -200,6 +196,7 @@ class Receipts(models.Model):
         return {
             'name': _('Compose Email'),
             'type': 'ir.actions.act_window',
+            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'mail.compose.message',
             'views': [(compose_form_id, 'form')],
@@ -221,10 +218,9 @@ class Account_invoice_nova(models.Model):
     string='Service',
     store=True,
     )
-
-
+    @api.one
     def _count_receipts(self):
-        results = self.env['work.receipts'].read_group([('purchase_id', 'in', self.ids)], ['purchase_id'], ['purchase_id'])
+        results = self.env['work.receipts'].read_group([('purchase_id', 'in', self.ids)], 'purchase_id', 'purchase_id')
         dic = {}
         for x in results: dic[x['purchase_id'][0]] = x['purchase_id_count']
         for record in self: record['purchase_id__work_receipts_count'] = dic.get(record.id, 0)

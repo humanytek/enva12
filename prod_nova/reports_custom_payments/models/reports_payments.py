@@ -17,7 +17,7 @@ class ReportsPayments(models.AbstractModel):
     _description = "Reports Payments"
     _inherit = 'account.report'
 
-    filter_date = {'mode': 'range', 'filter':'custom','date_from': '2021-05-30', 'date_to': '2021-05-30'}
+    filter_date = {'date_from': '2022-05-29', 'date_to': '2022-05-29'}
 
 
     def _get_columns_name(self, options):
@@ -41,23 +41,31 @@ class ReportsPayments(models.AbstractModel):
         date_from = options['date']['date_from']
         date_to = options['date']['date_to']
         sql_query ="""
+
             SELECT
                     ap.id as payment_id,
-                    am.name as referencia_pago,
-                    am.date as fecha_pago,
-                    am.ref as circular,
+                    ap.name as name,
+                    ap.payment_date as fecha_pago,
+                    ap.communication as circular,
                     rp.name as partner,
-                    ap.amount as monto,
+                    rp.id as partner_id,
+                    ai.date_invoice as fecha_factura,
+                    ai.number as factura,
+                    ai.id as invoice_id,
                     rc.name as moneda,
-                    line.id as aml_id
+                    ap.amount as monto
                     FROM account_payment ap
-                    JOIN account_move am ON am.id=ap.move_id
-                    JOIN res_partner rp ON rp.id=ap.partner_id
-                    JOIN res_currency rc ON rc.id=ap.currency_id
-                    JOIN account_move_line line ON line.move_id = am.id
-                    JOIN account_account account ON account.id = line.account_id
-                    WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND am.state in ('posted') AND account.internal_type IN ('payable')
+                    LEFT JOIN account_invoice_payment_rel aipr ON aipr.payment_id=ap.id
+                    LEFT JOIN account_invoice ai ON ai.id=aipr.invoice_id
+                    LEFT JOIN res_partner rp ON rp.id=ap.partner_id
+                    LEFT JOIN res_currency rc ON rc.id=ap.currency_id
+
+                    WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('outbound')
+
+                    ORDER BY rp.name,ap.payment_date,ap.name
+
+
         """
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
@@ -66,7 +74,7 @@ class ReportsPayments(models.AbstractModel):
 
         return result
 
-    def _invoice_aml(self,options,line_id,aml_id):
+    def _invoice_aml(self,options,line_id,invoice_id):
 
         # tables, where_clause, where_params = self.env['account.move.line'].with_context(strict_range=True)._query_get()
         # if where_clause:
@@ -75,36 +83,12 @@ class ReportsPayments(models.AbstractModel):
         date_to = options['date']['date_to']
         sql_query ="""
               SELECT
-                     ap.id as payment_id,
-                     line.id as aml_id,
-                     invoice.id as invoice_id,
-                     invoice.name as invoice_name,
-                     invoice.invoice_date as fecha_factura,
-                     iline.id as iaml_id,
-                     invoice.ref as referencia,
-                     iline.name as iaml_name
-                     FROM account_payment ap
-                     JOIN account_move am ON am.id=ap.move_id
-                     JOIN res_partner rp ON rp.id=ap.partner_id
-                     JOIN res_currency rc ON rc.id=ap.currency_id
-                     JOIN account_move_line line ON line.move_id = am.id
-                     JOIN account_partial_reconcile part ON
-                         part.debit_move_id = line.id
-                         OR
-                         part.credit_move_id = line.id
-                     JOIN account_move_line counterpart_line ON
-                         part.debit_move_id = counterpart_line.id
-                         OR
-                         part.credit_move_id = counterpart_line.id
-                     JOIN account_move invoice ON invoice.id = counterpart_line.move_id
-                     JOIN account_move_line iline ON iline.move_id = invoice.id
-                     JOIN account_account account ON account.id = line.account_id
-
-                     WHERE line.id = """+aml_id+"""
-                     AND line.id != counterpart_line.id
-                     AND am.state in ('posted') AND account.internal_type IN ('payable')
-                     AND iline.exclude_from_invoice_tab = False
-                     Limit 1
+                      aml.id as aml_id ,
+                      aml.full_reconcile_id as full_reconcile_id
+                      FROM account_move_line aml
+                      WHERE aml.credit > 0 AND aml.debit = 0 AND aml.invoice_id="""+invoice_id+"""
+                      AND aml.full_reconcile_id is not NULL
+                      limit 1
                                 """
 
 
@@ -121,8 +105,7 @@ class ReportsPayments(models.AbstractModel):
                       aml.debit as debit,
                       aml.amount_currency as amount_currency
                       FROM account_move_line aml
-                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+"""
-                      AND aml.credit = 0 AND aml.debit > 0 """
+                      WHERE aml.payment_id = """+payment_id+""" AND aml.full_reconcile_id = """+full_reconcile_id+""" AND aml.credit = 0 AND aml.debit > 0 """
 
         self.env.cr.execute(sql_query)
         result = self.env.cr.dictfetchall()
@@ -167,47 +150,80 @@ class ReportsPayments(models.AbstractModel):
         if pagos:
             for p in pagos:
                 caret_type ='account.move'
-                aml = self._invoice_aml(options,line_id,str(p['aml_id']))
-                factura = ''
-                fecha_factura = ''
-                referencia = ''
-                producto = ''
-                if aml:
-                    aml_id=aml[0][5]
-                    caret_type = 'account.move'
-                    factura=str(aml[0][3])
-                    fecha_factura=str(aml[0][4])
-                    referencia=str(aml[0][6])
-                    producto=str(aml[0][7])
+                if p['factura'] != None:
+                    caret_type = 'account.invoice.in'
+                    aml = self._invoice_aml(options,line_id,str(p['invoice_id']))
+                    ail=self.env['account.invoice.line'].search([('invoice_id','=',p['invoice_id'])], limit=1)
+                    if aml:
+                        aml_id=aml[0][0]
+                        monto=0
+                        if aml[0][1] != None:
+                            aml2 = self._payment_aml(options,line_id,str(p['payment_id']),str(aml[0][1]))
+                            if p['moneda']=='MXN':
+                                if aml2:
+                                    for a in aml2:
+                                        monto=a['debit']
+                                else:
+                                    monto=0
+                            else:
+                                if aml2:
+                                    for a in aml2:
+                                        monto=a['amount_currency']
+                                else:
+                                    monto=0
+                        else:
+                            aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
+                            if p['moneda']=='MXN':
+                                if aml3:
+                                    for am in aml3:
+                                        monto+=am['debit']
+                                else:
+                                    monto=1
+                            else:
+                                if aml3:
+                                    for am in aml3:
+                                        monto+=am['amount_currency']
+                                else:
+                                    monto=0
+                    # else:
+                    #     aml3 = self._payment_amlf(options,line_id,str(p['payment_id']),str(p['factura']))
+                    #     aml_id = aml3[0]['aml_id']
+                    #     if p['moneda']=='MXN':
+                    #         if aml3:
+                    #             for am in aml3:
+                    #                 monto+=am['debit']
+                    #         else:
+                    #             monto=0
+                    #     else:
+                    #         if aml3:
+                    #             for am in aml3:
+                    #                 monto+=am['amount_currency']
+                    #         else:
+                    #             monto=0
                 else:
-                    aml_id=p['aml_id']
+                    ail=False
+                    aml3 = self._payment_aml2(options,line_id,str(p['payment_id']))
                     caret_type = 'account.payment'
-
-
+                    aml_id = aml3[0][0]
 
                 lines.append({
-                'id':aml_id,
+                'id': aml_id,
                 'name': str(p['fecha_pago']),
                 'style': 'text-align: left; white-space:nowrap;',
                 'level': 2,
                 'class': 'payment',
                 'caret_options': caret_type,
                 'columns':[
-                        {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['name']), 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':self.format_value(p['monto'])},
+                        {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
                         {'name':str(p['moneda'])},
-                        {'name':factura},
-                        {'name':fecha_factura},
+                        {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
+                        {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
                         {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                        {'name':producto},
-                        # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
+                        {'name':str(ail.name) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
-                        # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
-                        # {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
 
-                        # {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
-                        # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
                 ],
 

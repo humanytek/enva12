@@ -6,7 +6,6 @@ from odoo.exceptions import UserError
 
 class BudgetBudgetSales(models.Model):
     _name = 'budget.budget.sales'
-    _description = "Budget Budget Sales"
 
     name = fields.Many2one(
         comodel_name = 'res.partner',

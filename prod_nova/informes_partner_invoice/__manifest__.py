@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Informes Partner Invoice',
-    'author': 'EMPAQUES NOVA',
+    'author': 'EMPAQUES NOVA, Ing.Jesus Chulim',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Account',
     'version': '1.0.0',

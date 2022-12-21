@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Stock Move Analytic',
-    'author': 'EMPAQUES NOVA',
-    'website': 'https://www.empaquesnova.com.mx',
+    'author': 'ERP Ukraine',
+    'website': 'https://erp.co.ua',
+    'support': 'support@erp.co.ua',
     'category': 'Inventory Management',
     'depends': ['stock', 'account', 'stock_account'],
-    'version': '14.0.0',
-    'license': '',
+    'version': '3.0',
+    'license': 'Other proprietary',
+    'price': 20.00,
+    'currency': 'EUR',
     'description': """
 Include analytic account in stock accounting entries
 ======================================================

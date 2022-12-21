@@ -17,7 +17,7 @@ class ReportsReceiptsNova(models.AbstractModel):
     _description = "Reports Receipts Paper"
     _inherit = 'account.report'
 
-    filter_date = {'mode': 'range', 'filter': 'this_month'}
+    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
 
     def _get_columns_name(self, options):
         return [
@@ -66,12 +66,11 @@ class ReportsReceiptsNova(models.AbstractModel):
                     rp.name as partner,
                     rp.id as partner_id
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     LEFT JOIN res_partner_res_partner_category_rel rpcr ON rpcr.partner_id=ap.partner_id
                     LEFT JOIN res_partner_category rpc ON rpc.id=rpcr.category_id
-                    WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
+                    WHERE ap.payment_date >= '"""+date_from+"""' AND ap.payment_date <= '"""+date_to+"""'
+                    AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound') AND rp.id is not NULL
                     AND rpc.name='PAPEL'
                     GROUP BY rp.id,rp.name
                     )
@@ -107,10 +106,10 @@ class ReportsReceiptsNova(models.AbstractModel):
 
                     SUM(ap.amount*ap.tipocambio) as monto
                     FROM account_payment ap
-                    LEFT JOIN account_move am ON am.id = ap.move_id
                     LEFT JOIN res_partner rp ON rp.id=ap.partner_id
-                    WHERE am.date >= '"""+datefrom+"""' AND am.date <= '"""+dateto+"""'
-                    AND rp.name = '"""+partner+"""' AND am.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
+
+                    WHERE ap.payment_date >= '"""+datefrom+"""' AND ap.payment_date <= '"""+dateto+"""'
+                    AND rp.name = '"""+partner+"""' AND ap.state in ('posted','reconciled') AND ap.payment_type in ('inbound')
 
 
         """
@@ -133,11 +132,12 @@ class ReportsReceiptsNova(models.AbstractModel):
 
             SELECT
 
-                    SUM(am.amount_total_signed) as residual
-                    FROM account_move am
-                    LEFT JOIN res_partner rp ON rp.id=am.commercial_partner_id
-                    WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND am.commercial_partner_id="""+partner+""" AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
+                    SUM(ai.amount_total_company_signed) as residual
+                    FROM account_invoice ai
+                    LEFT JOIN res_partner rp ON rp.id=ai.commercial_partner_id
+
+                    WHERE ai.state!='draft' AND ai.state!='cancel' AND ai.type='out_invoice' AND (ai.not_accumulate=False OR ai.not_accumulate is NULL )
+                    AND ai.commercial_partner_id="""+partner+""" AND ai.date_applied >= '"""+date_from+"""' AND ai.date_applied <= '"""+date_to+"""'
 
 
 

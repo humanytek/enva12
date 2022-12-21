@@ -16,39 +16,32 @@ class ReportStateResults(models.AbstractModel):
     _description = "Estado de Resultados Empaquesnova"
     _inherit = 'report.account.nova'
 
-    filter_date = {'mode': 'range', 'filter': 'this_month'}
+    filter_date = {'date_from': '', 'date_to': '', 'filter': 'this_month'}
     filter_all_entries = False
 
 
-    # def _get_templates(self):
-    #     templates = super(ReportStateResults, self)._get_templates()
-    #     templates['main_table_header_template'] = 'reports_custom_financial.template_state_result_table_header'
-    #     return templates
+    def _get_templates(self):
+        templates = super(ReportStateResults, self)._get_templates()
+        templates['main_table_header_template'] = 'reports_custom_financial.template_state_result_table_header'
+        return templates
 
-    def _get_columns(self, options):
-
-        header1 = [
-            {'name': '', 'style': 'width:40%'},
-            {'name': _('MES'),'class': 'number', 'colspan': 8},
-            {'name': _('ACUMULADO'),'class': 'number', 'colspan': 6},
-        ]
-        header2 = [ {'name': '', 'style': 'width:40%'},
-                    {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''},
-                    {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
-                    {'name': ''}
-                    ]
-        return [header1,header2]
+    def _get_columns_name(self, options):
+        return [
+        {'name': ''},
+        {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('AÑO ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('REAL'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('PRESUPUESTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''},
+        {'name': _('ANTERIOR'), 'class': 'number', 'style': 'white-space:nowrap;'},
+        {'name': ''}]
 
     def _get_cost_sales(self, ncost, date_f,date_t):
         porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',ncost),('date_from','>=',date_f),('date_to','<=',date_t)])
@@ -56,8 +49,6 @@ class ReportStateResults(models.AbstractModel):
         if porcentaje:
             for p in porcentaje:
                 porcentajeacum+=p.porcent_per_month
-        else:
-            porcentajeacum=0
 
         return porcentajeacum
 
@@ -169,13 +160,13 @@ class ReportStateResults(models.AbstractModel):
                     if g.negative:
                         signo=-1
 
-                    if g.group_finantial_id:
+                    if g.group_id:
 
-                        balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                        balance_prev_month=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                        balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                        balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                        balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                        balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to) )._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_prev_month=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                        balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_from)+relativedelta(months=1,years=-1)+timedelta(days=-1))._balance_initial(options,line_id,str(g.group_id.id))
                         if balance:
                             groups_real[g.code]=balance[0]
                         if balance_prev_month:
@@ -591,8 +582,8 @@ class ReportStateResults(models.AbstractModel):
                 #
                 #         if g.caculate_especial_cventa:
                 #
-                #             # balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                #             # balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                #             # balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                #             # balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))._balance_initial(options,line_id,str(g.group_id.id))
                 #             porcentaje=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)),('date_to','<=',fields.Date.from_string(date_to))])
                 #             porcent_prev_month=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(months=-1)),('date_to','<=',fields.Date.from_string(date_from)+timedelta(days=-1))])
                 #             porcent_prev_year=self.env['porcent.cost.sale'].search(['&','&',('name','=',g.costo_venta_id.id),('date_from','>=',fields.Date.from_string(date_from)+relativedelta(years=-1)),('date_to','<=',fields.Date.from_string(date_to)+relativedelta(years=-1))])
@@ -759,12 +750,12 @@ class ReportStateResults(models.AbstractModel):
                 #                 ],
                 #                 })
                 #         else:
-                #             if g.group_finantial_id:
-                #                 balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                #                 balance_prev_month=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                #                 balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1) )._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                #                 balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_finantial_id.id))
-                #                 balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))._balance_initial(options,line_id,str(g.group_finantial_id.id))
+                #             if g.group_id:
+                #                 balance=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to) )._balance_initial(options,line_id,str(g.group_id.id))
+                #                 balance_prev_month=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(months=-1), date_to=fields.Date.from_string(date_from)+timedelta(days=-1) )._balance_initial(options,line_id,str(g.group_id.id))
+                #                 balance_prev_year=self.with_context(date_from=fields.Date.from_string(date_from)+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1) )._balance_initial(options,line_id,str(g.group_id.id))
+                #                 balance_acumulado=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from'], date_to=fields.Date.from_string(date_to))._balance_initial(options,line_id,str(g.group_id.id))
+                #                 balance_acumulado_month=self.with_context(date_from=self.env.user.company_id.compute_fiscalyear_dates(fields.Date.from_string(date_from))['date_from']+relativedelta(years=-1), date_to=fields.Date.from_string(date_to)+relativedelta(years=-1))._balance_initial(options,line_id,str(g.group_id.id))
                 #                 if balance:
                 #                     groups_real[g.code]=balance[0]
                 #                 if balance_prev_month:

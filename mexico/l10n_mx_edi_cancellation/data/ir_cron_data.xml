@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+
+    <record id="ir_cron_cancellation_invoices_open_to_cancel" model="ir.cron">
+        <field name="name">Cancellation: Invoices open and to-cancel</field>
+        <field name="model_id" ref="account.model_account_invoice"/>
+        <field name="state">code</field>
+        <field name="code">
+# Searches all the invoices not canceled in Odoo, but marked as to cancel in the PAC or previously canceled in the PAC.
+invoices = env['account.invoice'].search([('state', '!=', 'cancel'), '|', ('l10n_mx_edi_pac_status', '=', 'to_cancel'), ('l10n_mx_edi_sat_status', '=', 'cancelled')])
+for inv in invoices:
+    inv.message_post(body='This invoice already was cancelled in the SAT, now will try to cancel in Odoo.')
+invoices.l10n_mx_edi_cancellation()
+        </field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"/>
+    </record>
+
+    <record id="ir_cron_cancellation_invoices_cancel_signed_sat" model="ir.cron">
+        <field name="name">Cancellation: Invoices canceled and signed in SAT</field>
+        <field name="model_id" ref="account.model_account_invoice"/>
+        <field name="state">code</field>
+        <field name="code">
+# Searches all the invoices canceled in Odoo, but valid in the SAT system and return to open in Odoo.
+invoices = env['account.invoice'].search([('state', '=', 'cancel'), '|', ('l10n_mx_edi_pac_status', '=', 'signed'), ('l10n_mx_edi_sat_status', '=', 'valid')])
+invoices.l10n_mx_edi_update_sat_status()
+for inv in invoices.filtered(lambda i: i.l10n_mx_edi_is_required() and i.l10n_mx_edi_sat_status == 'valid'):
+  if not inv.move_id:
+    inv.write({'state': 'draft'})
+    inv.action_move_create()
+    inv.invoice_validate()
+    inv.message_post(body='This invoice was returned to open because the CFDI is signed in the SAT system.')
+    continue
+  else:
+    inv.move_id.reverse_entry_id.button_cancel()
+    inv.message_post(body='The reverted move in the journal entry of this invoice was cancelled because the CFDI is signed in the SAT system.')
+        </field>
+        <field name="active" eval="False"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="True"/>
+    </record>
+</odoo>

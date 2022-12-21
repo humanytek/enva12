@@ -19,6 +19,7 @@
          <field name="name">Requisicion de Compra</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">purchase.requisition</field>
+         <field name="view_type">form</field>
          <field name="view_mode">tree,form</field>
          <field name="domain">[('maintenance_request_id','=',active_id)]</field>
          <field name="context">{"default_maintenance_request_id":active_id}</field>
@@ -51,6 +52,7 @@
          <field name="name">Request for Maintenance</field>
          <field name="type">ir.actions.act_window</field>
          <field name="res_model">maintenance.request</field>
+         <field name="view_type">form</field>
          <field name="view_mode">tree,form</field>
          <field name="domain">[('mantto_requisition_id','=',active_id)]</field>
          <field name="context">{"default_mantto_requisition_id":active_id}</field>
@@ -138,17 +140,12 @@
 
     <record model="ir.actions.act_window" id="maintenance_requisition_list_action">
       <field name="name">Requisicion de Mantenimiento</field>
-      <field name="type">ir.actions.act_window</field>
       <field name="res_model">maintenance.requisition</field>
+      <field name="view_type">form</field>
       <field name="view_mode">tree,form</field>
       <field name="help" type="html">
-        <p class="o_view_nocontent_smiling_face">
-                 No Work Receipt found. Let's create one!
-               </p>
-               <p>
-                 Las requisiciones de mantenimiento son documentos para realizar trabajos internos. Una vez asignado el mantenimiento se podra realizar el trabajo.
-               </p>
-        
+        <p class="oe_view_nocontent_create">Crea tu primera Requisicion de Mantenimiento
+        </p>
       </field>
     </record>
 
@@ -190,6 +187,7 @@
     <record model="ir.actions.act_window" id="maintenance_area_list_action">
       <field name="name">Areas de Mantenimiento</field>
       <field name="res_model">maintenance.area</field>
+      <field name="view_type">form</field>
       <field name="view_mode">tree,form</field>
       <field name="help" type="html">
         <p class="oe_view_nocontent_create">Crea tu primera Area de Mantenimiento

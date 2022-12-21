@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Chain of Custody',
-    'author': 'EMPAQUES NOVA',
+    'author': 'EMPAQUES NOVA, ING.JESUS CHULIM',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Product',
     'version': '1.0.0',

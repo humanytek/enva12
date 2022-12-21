@@ -5,8 +5,7 @@ from odoo.exceptions import UserError
 
 class BudgetNova(models.Model):
     _name = 'budget.nova'
-    _description = "Budget Nova"
-    
+
     name = fields.Char(
         'Nombre Presupuesto Nova',
         required = True,

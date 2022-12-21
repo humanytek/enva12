@@ -21,7 +21,6 @@ NAME_MONTH=[
 
 class BussinesDays(models.Model):
     _name = 'bussines.days'
-    _description = "Bussines Days"
 
 
     name = fields.Selection(
@@ -42,7 +41,7 @@ class BussinesDays(models.Model):
         required=True,
         store = True,
     )
-
+    
     year = fields.Char(
         string = 'Año',
         required= True,

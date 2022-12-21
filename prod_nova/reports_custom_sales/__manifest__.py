@@ -3,7 +3,7 @@
 
 {
     'name': 'Sale Reports - Custom Sale Reports',
-    'author': 'EMPAQUES NOVA',
+    'author': 'ING.JESUS CHULIM',
     'version': '1.5.0',
     'category': 'reporting',
     'description': """
