@@ -20,14 +20,16 @@ class ProductTemplateNova(models.Model):
     fsc = fields.Selection(
     FSC,
     'FSC',
-    track_visibility='onchange',
+    tracking=True,
+    # required=True,
     copy=False,
     default='no_aplica'
     )
 
+
     fsc_tipo = fields.Selection(
     FSC_TIPO,
     'Tipo',
-    track_visibility='onchange',
+    tracking=True,
     copy=False,
     )

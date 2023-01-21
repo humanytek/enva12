@@ -12,7 +12,7 @@ class AsmtockLocation(models.Model):
 
     valuation_analytic_account_id = fields.Many2one(
         'account.analytic.account',
-        string='Analytic Account',
+        string='Cuenta Analitica',
         )
 
 
@@ -21,15 +21,15 @@ class ASMStockPicking(models.Model):
 
     analytic_account_id = fields.Many2one(
         'account.analytic.account',
-        string='Analytic Account')
+        string='Cuenta Analitica')
 
 
-    @api.multi
+
     def check_analytic(self):
         self.ensure_one()
         product=self.move_ids_without_package
         if self.picking_type_code == 'outgoing':
-            if self.location_id.id != 21:
+            if self.location_id.id != 21 or self.location_id.id != 8 or self.location_id.id != 63 or self.location_id.id != 28:
                 for r in product:
                     if not r.analytic_account_id:
                         msg = 'No tiene Cuentas analiticas '
@@ -37,7 +37,7 @@ class ASMStockPicking(models.Model):
 
 
 
-    @api.multi
+
     def action_confirm(self):
         res = super(ASMStockPicking, self).action_confirm()
         for order in self:
@@ -50,12 +50,12 @@ class StockMove(models.Model):
 
     analytic_account_id = fields.Many2one(
         'account.analytic.account',
-        string='Analytic Account',
+        string='Cuenta Analitica',
         )
 
     analytic_product_id = fields.Many2one(
         related='product_id.analytic_account_id',
-        string='Analytic Account',
+        string='Cuenta Analitica',
         )
 
 
@@ -87,13 +87,22 @@ class StockMove(models.Model):
 
 
 # pylint: disable=R0913
-    def _prepare_account_move_line(self, qty, cost, credit_account_id, debit_account_id):
-        res = super(StockMove, self)._prepare_account_move_line(qty, cost, credit_account_id, debit_account_id)
+    def _prepare_account_move_line(self, qty, cost, credit_account_id, debit_account_id, description):
+
+        res = super(StockMove, self)._prepare_account_move_line(qty, cost, credit_account_id, debit_account_id, description)
         if res and res[0] and res[1][2]:
             analytic_acc = self._get_analytic_acc_from_move()
             res[1][2]['analytic_account_id'] = analytic_acc
 
         return res
+    #version odoo 12
+    # def _prepare_account_move_line(self, qty, cost, credit_account_id, debit_account_id):
+    #     res = super(StockMove, self)._prepare_account_move_line(qty, cost, credit_account_id, debit_account_id)
+    #     if res and res[0] and res[1][2]:
+    #         analytic_acc = self._get_analytic_acc_from_move()
+    #         res[1][2]['analytic_account_id'] = analytic_acc
+    #
+    #     return res
 
 class ProductTemplate(models.Model):
     _inherit='product.template'
@@ -103,6 +112,8 @@ class ProductTemplate(models.Model):
         string='Analytic Account',
         )
 
+
+#wizard anula la accion para autoconfirmar "modificar si la original ha cambiado"
 class ReturnPicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
@@ -117,7 +128,7 @@ class ReturnPicking(models.TransientModel):
             'move_lines': [],
             'picking_type_id': picking_type_id,
             'state': 'draft',
-            'origin': _("Return of %s") % self.picking_id.name,
+            'origin': _("Return of %s", self.picking_id.name),
             'location_id': self.picking_id.location_dest_id.id,
             'location_dest_id': self.location_id.id})
         new_picking.message_post_with_view('mail.message_origin_link',
@@ -141,12 +152,27 @@ class ReturnPicking(models.TransientModel):
                 # |       return pick(Add as dest)          return toLink                    return ship(Add as orig)
                 # +--------------------------------------------------------------------------------------------------------+
                 move_orig_to_link = return_line.move_id.move_dest_ids.mapped('returned_move_ids')
+                # link to original move
+                move_orig_to_link |= return_line.move_id
+                # link to siblings of original move, if any
+                move_orig_to_link |= return_line.move_id\
+                    .mapped('move_dest_ids').filtered(lambda m: m.state not in ('cancel'))\
+                    .mapped('move_orig_ids').filtered(lambda m: m.state not in ('cancel'))
                 move_dest_to_link = return_line.move_id.move_orig_ids.mapped('returned_move_ids')
-                vals['move_orig_ids'] = [(4, m.id) for m in move_orig_to_link | return_line.move_id]
+                # link to children of originally returned moves, if any. Note that the use of
+                # 'return_line.move_id.move_orig_ids.returned_move_ids.move_orig_ids.move_dest_ids'
+                # instead of 'return_line.move_id.move_orig_ids.move_dest_ids' prevents linking a
+                # return directly to the destination moves of its parents. However, the return of
+                # the return will be linked to the destination moves.
+                move_dest_to_link |= return_line.move_id.move_orig_ids.mapped('returned_move_ids')\
+                    .mapped('move_orig_ids').filtered(lambda m: m.state not in ('cancel'))\
+                    .mapped('move_dest_ids').filtered(lambda m: m.state not in ('cancel'))
+                vals['move_orig_ids'] = [(4, m.id) for m in move_orig_to_link]
                 vals['move_dest_ids'] = [(4, m.id) for m in move_dest_to_link]
                 r.write(vals)
         if not returned_lines:
             raise UserError(_("Please specify at least one non-zero quantity."))
+
 
         return new_picking.id, picking_type_id
         super(ReturnPicking, self)._create_returns()

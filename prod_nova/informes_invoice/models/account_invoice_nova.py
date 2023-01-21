@@ -1,41 +1,36 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from odoo import api, fields, models
+from odoo import api, fields, models, tools, _
 from odoo.exceptions import Warning, UserError
-from odoo.tools.float_utils import float_compare
+from odoo.tools.float_utils import float_compare, float_repr
+from odoo.exceptions import ValidationError, UserError
 
+import base64
+import requests
+
+from lxml import etree
+from lxml.objectify import fromstring
+from pytz import timezone
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+
+CFDI_XSLT_CADENA = 'l10n_mx_edi/data/3.3/cadenaoriginal.xslt'
+CFDI_XSLT_CADENA_TFD = 'l10n_mx_edi/data/xslt/3.3/cadenaoriginal_TFD_1_1.xslt'
 
 class Account_invoice_nova(models.Model):
-    _inherit = 'account.invoice'
+    _inherit = 'account.move'
 
-    order_purchase_id = fields.Char(
-        string='Purchase Order Customer',
-        store=True,
-    )
 
     type_currency = fields.Monetary(
+        digits = (8,6),
         # string='Type Currency',
         compute='_get_type_currency',
-        digits=(8,6),
-        store=True,
-        index=True,
+
+
     )
-    payment_name=fields.Char(
-        related='payment_ids.name',
-        string='Referencia de Pago',
-    )
-    payment_amount=fields.Monetary(
-        related='payment_ids.amount',
-        string='Monto Pagado',
-    )
-    payment_date=fields.Date(
-        related='payment_ids.payment_date',
-        string='Fecha de Pago',
-    )
-    dias_transcurridos=fields.Integer(
-        compute='_diferencia',
-        string='Dias Transcurridos',
-    )
+
+
     transfer_ids=fields.Many2many(
     comodel_name='stock.picking',
     relation='invoice_transfer_rel',
@@ -69,61 +64,96 @@ class Account_invoice_nova(models.Model):
         index=True,
         copy=False)
 
-    @api.depends('origin','sale_id')
-    def _get_sale_id(self):
-        for r in self:
-            if r.origin:
-                r.sale_id=r.env['sale.order'].search([('name','=',r.origin)])
-            else:
-                r.sale_id=False
 
 
-    sale_id = fields.Many2one(
-    comodel_name='sale.order',
-    string='Sale order',
-    compute='_get_sale_id',
-    )
-
-    @api.depends('date_invoice','payment_date')
-    def _diferencia(self):
-        for r in self:
-            if r.payment_date and r.date_invoice:
-                r.dias=r.payment_date-r.date_invoice
-                r.dias_transcurridos=r.dias.days
-            else:
-                r.dias_transcurridos=0
-
-    @api.multi
-    def action_invoice_open(self):
-        # lots of duplicate calls to action_invoice_open, so we remove those already open
-        to_open_invoices = self.filtered(lambda inv: inv.state != 'open')
-        if to_open_invoices.filtered(lambda inv: not inv.partner_id):
-            raise UserError(_("The field Vendor is required, please complete it to validate the Vendor Bill."))
-        if to_open_invoices.filtered(lambda inv: inv.state != 'draft'):
-            raise UserError(_("Invoice must be in draft state in order to validate it."))
-        if to_open_invoices.filtered(lambda inv: float_compare(inv.amount_total, 0.0, precision_rounding=inv.currency_id.rounding) == -1):
-            raise UserError(_("You cannot validate an invoice with a negative total amount. You should create a credit note instead."))
-        if to_open_invoices.filtered(lambda inv: not inv.account_id):
-            raise UserError(_('No account was found to create the invoice, be sure you have installed a chart of account.'))
-        to_open_invoices.action_date_assign()
-        to_open_invoices.action_move_create()
+    def _post(self, soft=True):
         self.write({'date_applied': fields.Date.context_today(self)})
-        return to_open_invoices.invoice_validate()
-        super(Account_invoice_nova, self).action_invoice_open()
+        return super()._post(soft=soft)
 
 
-    @api.depends('amount_total_company_signed', 'amount_total_signed')
+    @api.depends('amount_total_signed', 'amount_total')
     def _get_type_currency(self):
         for r in self:
-            if r.amount_total_company_signed > 0 :
-                r.type_currency = r.amount_total_company_signed / r.amount_total_signed
+            if r.amount_total_signed > 0 and r.amount_total > 0:
+                r.type_currency = r.amount_total_signed / r.amount_total
+            else:
+                r.type_currency = 0
 
-    tax_company = fields.Float(
-        compute='_get_tax_company',
-        store=True,
-    )
 
-    @api.depends('amount_total_company_signed', 'amount_untaxed_signed')
-    def _get_tax_company(self):
-        for r in self:
-            r.tax_company = r.amount_total_company_signed - r.amount_untaxed_signed
+    def _l10n_mx_edi_decode_cfdi(self, cfdi_data=None):
+        ''' Helper to extract relevant data from the CFDI to be used, for example, when printing the invoice.
+        :param cfdi_data:   The optional cfdi data.
+        :return:            A python dictionary.
+        '''
+        self.ensure_one()
+
+        def get_node(cfdi_node, attribute, namespaces):
+            if hasattr(cfdi_node, 'Complemento'):
+                node = cfdi_node.Complemento.xpath(attribute, namespaces=namespaces)
+                return node[0] if node else None
+            else:
+                return None
+
+        def get_cadena(cfdi_node, template):
+            if cfdi_node is None:
+                return None
+            cadena_root = etree.parse(tools.file_open(template))
+            return str(etree.XSLT(cadena_root)(cfdi_node))
+
+        def is_purchase_move(move):
+            return move.move_type in move.get_purchase_types() \
+                    or move.payment_id.reconciled_bill_ids
+
+        # Find a signed cfdi.
+        if not cfdi_data:
+            signed_edi = self._get_l10n_mx_edi_signed_edi_document()
+            if signed_edi:
+                cfdi_data = base64.decodebytes(signed_edi.attachment_id.with_context(bin_size=False).datas)
+            if not signed_edi and is_purchase_move(self):
+                attachment = self._get_l10n_mx_edi_cfdi_attachment()
+                if attachment:
+                    cfdi_data = base64.decodebytes(attachment.with_context(bin_size=False).datas)
+
+        # Nothing to decode.
+        if not cfdi_data:
+            return {}
+
+        try:
+            cfdi_node = fromstring(cfdi_data)
+            emisor_node = cfdi_node.Emisor
+            receptor_node = cfdi_node.Receptor
+        except etree.XMLSyntaxError:
+            # Not an xml
+            return {}
+        except AttributeError:
+            # Not a CFDI
+            return {}
+
+        tfd_node = get_node(
+            cfdi_node,
+            'tfd:TimbreFiscalDigital[1]',
+            {'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'},
+        )
+
+        return {
+            'uuid': ({} if tfd_node is None else tfd_node).get('UUID'),
+            'supplier_rfc': cfdi_node.Emisor.get('Rfc', cfdi_node.Emisor.get('rfc')),
+            'customer_rfc': cfdi_node.Receptor.get('Rfc', cfdi_node.Receptor.get('rfc')),
+            'id_fiscal': cfdi_node.Receptor.get('NumRegIdTrib'),
+            'tipo_cambio': cfdi_node.get('TipoCambio'),
+            'amount_total': cfdi_node.get('Total', cfdi_node.get('total')),
+            'cfdi_node': cfdi_node,
+            'usage': cfdi_node.Receptor.get('UsoCFDI'),
+            'payment_method': cfdi_node.get('formaDePago', cfdi_node.get('MetodoPago')),
+            'bank_account': cfdi_node.get('NumCtaPago'),
+            'sello': cfdi_node.get('sello', cfdi_node.get('Sello', 'No identificado')),
+            'sello_sat': tfd_node is not None and tfd_node.get('selloSAT', tfd_node.get('SelloSAT', 'No identificado')),
+            'cadena': tfd_node is not None and get_cadena(tfd_node, CFDI_XSLT_CADENA_TFD) or get_cadena(cfdi_node, CFDI_XSLT_CADENA),
+            'certificate_number': cfdi_node.get('noCertificado', cfdi_node.get('NoCertificado')),
+            'certificate_sat_number': tfd_node is not None and tfd_node.get('NoCertificadoSAT'),
+            'expedition': cfdi_node.get('LugarExpedicion'),
+            'fiscal_regime': cfdi_node.Emisor.get('RegimenFiscal', ''),
+            'emission_date_str': cfdi_node.get('fecha', cfdi_node.get('Fecha', '')).replace('T', ' '),
+            'stamp_date': tfd_node is not None and tfd_node.get('FechaTimbrado', '').replace('T', ' '),
+        }
+        return super()._l10n_mx_edi_decode_cfdi(self, cfdi_data=None)

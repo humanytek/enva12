@@ -37,14 +37,13 @@ class Customers(models.Model):
         string='Ultima venta'
     )
 
-    @api.one
+    # @api.one
     # @api.depends('invoice_ids')
     def _get_aux(self):
         alfa = datetime.date(2004,1,21)
         for a in self:
             lista = a.invoice_ids
             for aa in lista:
-                if aa.date_invoice:
-                    if aa.date_invoice > alfa:
-                        alfa = aa.date_invoice
-                    a.aux = alfa
+                if aa.date_invoice > alfa:
+                    alfa = aa.date_invoice
+                a.aux = alfa

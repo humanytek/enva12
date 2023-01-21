@@ -4,12 +4,15 @@
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Account',
-    'version': '1.3.0',
+    'version': '14.0.1.4.0',
     'depends': [
         'account',
         'sale',
         'account_reports',
         'account_accountant',
+        'l10n_mx',
+        'l10n_mx_edi',
+        'web',
     ],
     'data': [
         'reports/invoice_reports_sale.xml',

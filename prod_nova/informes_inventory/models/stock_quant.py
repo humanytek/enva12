@@ -14,7 +14,7 @@ class stock_quant_nova(models.Model):
     valuation = fields.Float(
         compute='_get_value',
         string='Valuacion',
-
+        
     )
 
     @api.depends('quantity', 'standard_price')

@@ -39,17 +39,20 @@
 
 
  .encabezado_derecho{
-  width: 30rem;
+  width: 25rem;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 6px;
 }
 .pintar {
   font-weight: bold;
   font-size: 25px;
 }
 #imglogo{
-  width: 230px;
+  max-height: 150px;
+  max-width: 230px;
   height: 150px;
+  width: 230px;
+  margin-right: 16px;
 }
 
 
@@ -60,14 +63,9 @@
 .table td, .table th {
   border-top: none;
 } */
-h2 {
-    color: #7a6191;
-}
 
-.table th  {
-  background-color: black;
-  color: white;
-}
+
+
 
 
 
