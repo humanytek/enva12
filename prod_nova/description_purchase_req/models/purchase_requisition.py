@@ -17,6 +17,7 @@ class PurchaseOrder(models.Model):
         if not self.requisition_id:
             return
 
+        self = self.with_company(self.company_id)
         requisition = self.requisition_id
         if self.partner_id:
             partner = self.partner_id
@@ -26,15 +27,19 @@ class PurchaseOrder(models.Model):
         currency = partner.property_purchase_currency_id or requisition.company_id.currency_id
 
         FiscalPosition = self.env['account.fiscal.position']
-        fpos = FiscalPosition.get_fiscal_position(partner.id)
-        fpos = FiscalPosition.browse(fpos)
+        fpos = FiscalPosition.with_company(self.company_id).get_fiscal_position(partner.id)
 
         self.partner_id = partner.id
         self.fiscal_position_id = fpos.id
         self.payment_term_id = payment_term.id,
         self.company_id = requisition.company_id.id
         self.currency_id = currency.id
-        self.origin = requisition.name
+        if not self.origin or requisition.name not in self.origin.split(', '):
+            if self.origin:
+                if requisition.name:
+                    self.origin = self.origin + ', ' + requisition.name
+            else:
+                self.origin = requisition.name
         self.partner_ref = requisition.name # to control vendor bill based on agreement reference
         self.notes = requisition.description
         self.date_order = requisition.date_end or fields.Datetime.now()
@@ -59,10 +64,7 @@ class PurchaseOrder(models.Model):
                 name += '\n' + product_lang.description_purchase
 
             # Compute taxes
-            if fpos:
-                taxes_ids = fpos.map_tax(line.product_id.supplier_taxes_id.filtered(lambda tax: tax.company_id == requisition.company_id)).ids
-            else:
-                taxes_ids = line.product_id.supplier_taxes_id.filtered(lambda tax: tax.company_id == requisition.company_id).ids
+            taxes_ids = fpos.map_tax(line.product_id.supplier_taxes_id.filtered(lambda tax: tax.company_id == requisition.company_id)).ids
 
             # Compute quantity and price_unit
             if line.product_uom_id != line.product_id.uom_po_id:
