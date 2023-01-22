@@ -201,6 +201,26 @@
                                        </td>
                                    </t>
                                </tr>
+                               <t t-if="line.product_id.fsc != 'no_aplica'">
+                               <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                          <t t-if="line.product_id.fsc_tipo == 'papel'">
+                          <td class="text-left" colspan="99">
+                              <span >FSC RECICLADO 100% NC-COC-067107 – Papel Kraft</span>
+                          </td>
+
+                        </t>
+                        <t t-if="line.product_id.fsc_tipo == 'lamina'">
+                        <td class="text-left" colspan="99">
+                            <span >FSC RECICLADO 100% NC-COC-067107 – Láminas de cartón</span>
+                        </td>
+                      </t>
+                      <t t-if="line.product_id.fsc_tipo == 'caja'">
+                      <td class="text-left" colspan="99">
+                          <span >FSC RECICLADO 100% NC-COC-067107 – Empaques de cartón</span>
+                      </td>
+                    </t>
+                  </tr>
+                         </t>
                                <t t-foreach="line.tax_ids" t-as="tax_ids">
 
                                <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
