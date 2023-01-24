@@ -58,10 +58,10 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_product pp ON pp.id=aml.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_move am ON am.id=aml.move_id
-                    LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                    LEFT JOIN res_partner rp ON rp.id=am.partner_id
                     WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
                     AND (am.not_accumulate=False OR am.not_accumulate is NULL )
-                    AND aml.partner_id="""+partner_id+"""
+                    AND am.partner_id="""+partner_id+"""
                     AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                     AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)
                     AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%'
@@ -94,9 +94,9 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_product pp ON pp.id=aml.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_move am ON am.id=aml.move_id
-                    LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                    LEFT JOIN res_partner rp ON rp.id=am.partner_id
                     WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
-                    AND aml.partner_id="""+partner_id+""" AND am.date_applied >= '"""+date_f+"""' AND am.date_applied <= '"""+date_t+"""'
+                    AND am.partner_id="""+partner_id+""" AND am.date_applied >= '"""+date_f+"""' AND am.date_applied <= '"""+date_t+"""'
                     AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)
                     AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%'
                     AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
@@ -130,9 +130,9 @@ class ReportsSales(models.AbstractModel):
                     LEFT JOIN product_product pp ON pp.id=aml.product_id
                     LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                     LEFT JOIN account_move am ON am.id=aml.move_id
-                    LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                    LEFT JOIN res_partner rp ON rp.id=am.partner_id
                     WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
-                    AND (am.not_accumulate=False OR am.not_accumulate is NULL ) AND aml.partner_id="""+partner_id+""" AND am.date_applied >= '"""+str(df)+"""'
+                    AND (am.not_accumulate=False OR am.not_accumulate is NULL ) AND am.partner_id="""+partner_id+""" AND am.date_applied >= '"""+str(df)+"""'
                     AND am.date_applied <= '"""+str(dt)+"""'
                     AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)
                     AND pt.name not ilike 'ANTICIPO DE CLIENTE%'
@@ -184,7 +184,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN product_product pp ON pp.id=aml.product_id
                 LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                 LEFT JOIN account_move am ON am.id=aml.move_id
-                LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                LEFT JOIN res_partner rp ON rp.id=am.partner_id
                 WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
                 AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
@@ -253,7 +253,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN product_product pp ON pp.id=aml.product_id
                 LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                 LEFT JOIN account_move am ON am.id=aml.move_id
-                LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                LEFT JOIN res_partner rp ON rp.id=am.partner_id
                 WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
                 AND rp.id in (SELECT pm.name FROM partner_maquila pm)
@@ -312,7 +312,7 @@ class ReportsSales(models.AbstractModel):
                 LEFT JOIN product_product pp ON pp.id=aml.product_id
                 LEFT JOIN product_template pt ON pt.id=pp.product_tmpl_id
                 LEFT JOIN account_move am ON am.id=aml.move_id
-                LEFT JOIN res_partner rp ON rp.id=aml.partner_id
+                LEFT JOIN res_partner rp ON rp.id=am.partner_id
                 WHERE am.state!='draft' AND am.state!='cancel' AND am.move_type='out_invoice'
                 AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                 AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)
