@@ -79,9 +79,8 @@ class ReportsReceivables(models.AbstractModel):
                      invoice.id as invoice_id,
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
-                     iline.id as iaml_id,
                      invoice.ref as referencia,
-                     iline.name as iaml_name,
+                     (SELECT name from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_name,
                      part.amount/(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.date AND rcr.currency_id=ap.currency_id AND rcr.company_id=am.company_id)) as amount_currency
                      FROM account_payment ap
                      JOIN account_move am ON am.id=ap.move_id
@@ -97,13 +96,11 @@ class ReportsReceivables(models.AbstractModel):
                          OR
                          part.credit_move_id = counterpart_line.id
                      JOIN account_move invoice ON invoice.id = counterpart_line.move_id
-                     JOIN account_move_line iline ON iline.move_id = invoice.id
                      JOIN account_account account ON account.id = line.account_id
 
                      WHERE ap.id = """+aml_id+"""
                      AND line.id != counterpart_line.id
                      AND am.state in ('posted') AND ap.partner_type in ('customer')
-                     AND iline.exclude_from_invoice_tab = False
                                 """
 
 
@@ -174,13 +171,13 @@ class ReportsReceivables(models.AbstractModel):
                 debe=0
                 if aml:
                     for f in aml:
-                        aml_id=f[5]
+                        aml_id=f[1]
                         caret_type = 'account.move'
                         factura=str(f[3])
                         fecha_factura=str(f[4])
-                        referencia=str(f[6])
-                        producto=str(f[7])
-                        amount_currency=f[8]
+                        referencia=str(f[5])
+                        producto=str(f[6])
+                        amount_currency=f[7]
                         lines.append({
                         'id':aml_id,
                         'name': str(p['fecha_pago']),
