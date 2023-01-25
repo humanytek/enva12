@@ -73,6 +73,7 @@
 	<table style="width:100%" class="table table-sm table-condensed">
 		<thead class="thead-dark">
 			<tr>
+							<th>#</th>
 	            <th>Descripción</th>
 	            <th>Fecha req.</th>
 	            <th>Cant/U med.</th>
@@ -82,13 +83,16 @@
 	      	</tr>
 		</thead>
           <t t-if="doc.order_line">
-
+						<t t-set="counter" t-value="0"/>
             <t t-foreach="doc.order_line" t-as="product">
+							<t  t-set="counter" t-value="counter + 1"/>
 				<tbody>
 					<tr>
+										<td><span t-esc="counter"></span></td>
 		                <td><span t-field="product.product_id"/> - <span t-field="product.name"/></td>
 		                <td><span t-field="product.date_order"/></td>
-		                <td><span t-field="product.product_uom"/></td>
+		                <td> <span t-field="product.product_qty"/>
+										<span t-field="product.product_uom"/></td>
 		                <td><span t-field="product.price_unit"/></td>
 		                <td><span t-field="product.taxes_id"/></td>
 		                <td><span t-field="product.price_subtotal"/></td>

@@ -12,9 +12,9 @@ from odoo.addons.web.controllers.main import clean_action
 _logger = logging.getLogger(__name__)
 
 
-class ReportsPayments(models.AbstractModel):
-    _name = "report.payments.nova"
-    _description = "Reports Payments"
+class ReportsReceivables(models.AbstractModel):
+    _name = "report.receivable.nova"
+    _description = "Reports Recivables"
     _inherit = 'account.report'
 
     filter_date = {'mode': 'range', 'filter':'custom','date_from': '2023-01-02', 'date_to': '2023-01-06'}
@@ -24,7 +24,7 @@ class ReportsPayments(models.AbstractModel):
         return [
         {'name': _('FECHA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('FOLIO'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
-        {'name': _('PROVEEDOR'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
+        {'name': _('CLIENTE'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('MONTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MONTO PAGO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MONEDA'), 'class': 'number', 'style': 'white-space:nowrap;'},
@@ -55,7 +55,7 @@ class ReportsPayments(models.AbstractModel):
                     JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
-                    AND am.state in ('posted') AND ap.partner_type in ('supplier')
+                    AND am.state in ('posted') AND ap.partner_type in ('customer')
                     ORDER BY partner asc
         """
         self.env.cr.execute(sql_query)
@@ -102,7 +102,7 @@ class ReportsPayments(models.AbstractModel):
 
                      WHERE ap.id = """+aml_id+"""
                      AND line.id != counterpart_line.id
-                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
+                     AND am.state in ('posted') AND ap.partner_type in ('customer')
                      AND iline.exclude_from_invoice_tab = False
                                 """
 
@@ -279,4 +279,4 @@ class ReportsPayments(models.AbstractModel):
 
     @api.model
     def _get_report_name(self):
-        return _('Reportes de Pagos')
+        return _('Reportes de Cobranza')
