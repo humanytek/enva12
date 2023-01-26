@@ -26,7 +26,6 @@ class ReportsPayments(models.AbstractModel):
         {'name': _('FOLIO'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('PROVEEDOR'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('MONTO'), 'class': 'number', 'style': 'white-space:nowrap;'},
-        {'name': _('MONTO PAGO'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('MONEDA'), 'class': 'number', 'style': 'white-space:nowrap;'},
         {'name': _('FACTURA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('FECHA FACTURA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
@@ -52,7 +51,7 @@ class ReportsPayments(models.AbstractModel):
                     rc.name as moneda
                     FROM account_payment ap
                     JOIN account_move am ON am.id=ap.move_id
-                    JOIN res_partner rp ON rp.id=ap.partner_id
+                    LEFT JOIN res_partner rp ON rp.id=ap.partner_id
                     JOIN res_currency rc ON rc.id=ap.currency_id
                     WHERE am.date >= '"""+date_from+"""' AND am.date <= '"""+date_to+"""'
                     AND am.state in ('posted') AND ap.partner_type in ('supplier')
@@ -80,11 +79,12 @@ class ReportsPayments(models.AbstractModel):
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
                      invoice.ref as referencia,
-                     (SELECT name from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_name,
-                     part.amount/(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.date AND rcr.currency_id=ap.currency_id AND rcr.company_id=am.company_id)) as amount_currency
+                     (SELECT iline.name from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_name,
+                     part.amount/(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.date AND rcr.currency_id=ap.currency_id AND rcr.company_id=am.company_id)) as amount_currency,
+                     (SELECT iline.id from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_id
                      FROM account_payment ap
-                     JOIN account_move am ON am.id=ap.move_id
                      JOIN res_partner rp ON rp.id=ap.partner_id
+                     JOIN account_move am ON am.id=ap.move_id
                      JOIN res_currency rc ON rc.id=ap.currency_id
                      JOIN account_move_line line ON line.move_id = am.id
                      JOIN account_partial_reconcile part ON
@@ -172,7 +172,7 @@ class ReportsPayments(models.AbstractModel):
                 debe=0
                 if aml:
                     for f in aml:
-                        aml_id=f[1]
+                        aml_id=f[8]
                         caret_type = 'account.move'
                         factura=str(f[3])
                         fecha_factura=str(f[4])
@@ -189,37 +189,14 @@ class ReportsPayments(models.AbstractModel):
                         'columns':[
                                 {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                                 {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
-                                {'name':self.format_value(p['monto'])},
                                 {'name':self.format_value(amount_currency)},
                                 {'name':str(p['moneda'])},
                                 {'name':factura},
                                 {'name':fecha_factura},
                                 {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
                                 {'name':producto},
-                                # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
-
-                                # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
-                                # {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
-
-                                # {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
-                                # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
                         ],
-
-                # if aml:
-                #     aml_id=p['aml_id']
-                #     caret_type = 'account.move'
-                #     # factura=str(aml[0][3])
-                #     # fecha_factura=str(aml[0][4])
-                #     # referencia=str(aml[0][6])
-                #     # producto=str(aml[0][7])
-                #     # debe = aml[0][8]
-                # else:
-                #     aml_id=p['aml_id']
-                #     caret_type = 'account.payment'
-
-
-
 
 
                 })
@@ -238,36 +215,14 @@ class ReportsPayments(models.AbstractModel):
                             {'name':str(p['referencia_pago']), 'style': 'text-align: left; white-space:nowrap;'},
                             {'name':str(p['partner']), 'style': 'text-align: left; white-space:nowrap;'},
                             {'name':self.format_value(p['monto'])},
-                            {'name':self.format_value(debe)},
                             {'name':str(p['moneda'])},
                             {'name':factura},
                             {'name':fecha_factura},
                             {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
                             {'name':producto},
-                            # # {'name':self.format_value(monto) if p['factura'] != None else self.format_value(p['monto'])},
 
-                            # {'name':str(p['factura']) if p['factura'] != None else '' , 'style': 'text-align: left; white-space:nowrap;'},
-                            # {'name':str(p['fecha_factura']) if p['factura'] != None else '', 'style': 'text-align: left; white-space:nowrap;'},
-
-                            # {'name':str(p['descripcion']), 'style': 'text-align: left; white-space:nowrap;'},
-                            # {'name':str(p['descripcion']) if ail else '', 'style': 'text-align: left; white-space:nowrap;'},
 
                     ],
-
-            # if aml:
-            #     aml_id=p['aml_id']
-            #     caret_type = 'account.move'
-            #     # factura=str(aml[0][3])
-            #     # fecha_factura=str(aml[0][4])
-            #     # referencia=str(aml[0][6])
-            #     # producto=str(aml[0][7])
-            #     # debe = aml[0][8]
-            # else:
-            #     aml_id=p['aml_id']
-            #     caret_type = 'account.payment'
-
-
-
 
 
             })
