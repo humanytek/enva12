@@ -19,6 +19,7 @@ Also it is posstible to enter analytic account on Stock Picking form.
     'demo': [],
     'data': [
             'views/analytic_stock_view.xml',
+            'report/report_deliveryship_nova.xml',
         ],
     'installable': True,
     'application': True,
