@@ -153,12 +153,11 @@ class rh_requisition(models.Model):
     )
 
     duration_incapacity = fields.Char(
-        string='Duracion',
+        string='Duracion Incapacidad',
         store=True,
     )
     duration_contract = fields.Char(
-        string='Duracion',
-
+        string='Duracion Contrato',
         store=True,
     )
     others = fields.Char(
