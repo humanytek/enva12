@@ -79,7 +79,7 @@ class ReportsPayments(models.AbstractModel):
                      invoice.name as invoice_name,
                      invoice.invoice_date as fecha_factura,
                      invoice.ref as referencia,
-                     (SELECT iline.name from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_name,
+                     (SELECT iline.name from account_move_line iline where iline.move_id = invoice.id AND iline.exclude_from_invoice_tab = False limit 1) as iaml_name,
                      part.amount/(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.date AND rcr.currency_id=ap.currency_id AND rcr.company_id=am.company_id)) as amount_currency,
                      (SELECT iline.id from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_id
                      FROM account_payment ap

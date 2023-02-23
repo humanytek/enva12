@@ -56,8 +56,8 @@ class PurchaseOrder(models.Model):
                 'lang': partner.lang,
                 'partner_id': partner.id,
             })
-            if line.description and line.description != '':
-                name = line.description
+            if line.product_description_variants and line.product_description_variants != '':
+                name = line.product_description_variants
             else:
                 name = product_lang.display_name
             if product_lang.description_purchase:
