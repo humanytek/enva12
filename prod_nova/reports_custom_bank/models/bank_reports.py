@@ -670,7 +670,32 @@ class ReportsBanks(models.AbstractModel):
         {'name':self.format_value(balance_final10[0]),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
-
+        
+        balance_init11=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from) + timedelta(days=-1))._balance_initial(options,line_id,str('103.01.002'))
+        balance_final11=self.with_context(date_from=False, date_to=fields.Date.from_string(date_from) )._balance_initial(options,line_id,str('103.01.002'))
+        pagos11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._payments(options,line_id,str('103.01.002'))
+        ingresos11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._receivables(options,line_id,str('103.01.002'))
+        transfer_in11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._transfer_in(options,line_id,str('103.01.002'))
+        transfer_out11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._transfer_out(options,line_id,str('103.01.002'))
+        comision11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._comision(options,line_id,str('103.01.002'))
+        interes11=self.with_context(date_from=fields.Date.from_string(date_from), date_to=fields.Date.from_string(date_to))._interes(options,line_id,str('103.01.002'))
+        lines.append({
+        'id': '103.01.002',
+        'name': 'MULTIVA PAGARÉ',
+        'level':0,
+        'style': 'border-style: none;',
+        'class': 'cuentas',
+        'columns':[
+        {'name':self.format_value(balance_init11[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(abs(transfer_out11[0]+comision11[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(transfer_in11[0]+interes11[0]),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(ingresos11[0]),'style': 'text-align: right; white-space:nowrap;'},
+        # {'name':self.format_value(balance_init10[0]+ingresos10[0]+comision10[0]+transfer_out10[0]+transfer_in10[0])},
+        {'name':self.format_value(abs(pagos11[0])),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(balance_final11[0]),'style': 'text-align: right; white-space:nowrap;'},
+        ],
+        })
+        
         lines.append({
         'id': 'TOTAL',
         'name': '',
@@ -761,7 +786,7 @@ class ReportsBanks(models.AbstractModel):
         {'name':''},
         {'name':''},
         {'name':'TOTAL EN M.N. DISP:','style': 'text-align: right; white-space:nowrap;'},
-        {'name':self.format_value(total_mxn+balance_final10[0]+total_usd_to_mxn+total_euro_to_mxn),'style': 'text-align: right; white-space:nowrap;'},
+        {'name':self.format_value(total_mxn+balance_final10[0]+balance_final11[0]+total_usd_to_mxn+total_euro_to_mxn),'style': 'text-align: right; white-space:nowrap;'},
         ],
         })
         # lines.append({
