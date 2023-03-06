@@ -274,7 +274,7 @@ class ReportAccountAgedReceivable(models.Model):
 class ReportAccountAgedPayable(models.Model):
     _name = "nova.account.aged.payable"
     _description = "Aged Payable"
-    _inherit = "account.aged.partner"
+    _inherit = "nova.account.aged.partner"
     _auto = False
 
     @api.model
