@@ -40,7 +40,6 @@ class report_account_aged_partner(models.AbstractModel):
     date_maturity = fields.Date(group_operator='max')
     date_move = fields.Date(group_operator='max')
     invoice_date = fields.Date(group_operator='max')
-    date_maturity = fields.Date(group_operator='max')
     amount_total = fields.Monetary(string='Monto')
     invoice_origin = fields.Char(string='Pedido')
     currency_name = fields.Char(string='Moneda')
@@ -167,7 +166,7 @@ class report_account_aged_partner(models.AbstractModel):
                 AND account_tr.type = 'model'
                 AND account_tr.lang = %(lang)s
             )
-            WHERE account.code NOT IN ('105.01.800','105.02.800','105.02.810','107.01.001','206.01.201','206.02.201','206.02.202') AND account.internal_type = %(account_type)s
+            WHERE account.code NOT IN ('105.01.800','105.02.800','105.02.810','107.01.001','206.01.201','206.02.201','206.02.202','206.05.101','206.05.102') AND account.internal_type = %(account_type)s
             GROUP BY account_move_line.id, partner.id, trust_property.id, journal.id, move.id, account.id,
                      period_table.period_index, currency_table.rate, currency_table.precision, account_name, rc.name
             HAVING ROUND(account_move_line.balance - COALESCE(SUM(part_debit.amount), 0) + COALESCE(SUM(part_credit.amount), 0), currency_table.precision) != 0
@@ -194,12 +193,10 @@ class report_account_aged_partner(models.AbstractModel):
             self._header_column(),
             self._field_column('journal_code', name=_("Journal")),
             self._field_column('account_name', name=_("Account")),
-            self._field_column('report_date'),
             self._field_column('invoice_date',name=_("Fecha Factura")),
             self._field_column('date_move',name=_("Fecha Contable")),
             self._field_column('date_maturity',name=_("Fecha Vencimiento")),
-            self._field_column('expected_pay_date',name=_("Fecha Esperada")),
-            self._field_column('amount_total',name=_("Monto")),
+            self._field_column('amount_total',name=_("Monto Original")),
             self._field_column('currency_name',name=_("Moneda")),
             self._field_column('rate_currency',name=_("TC")),
             self._field_column('invoice_origin',name=_("Origen")),
@@ -210,7 +207,7 @@ class report_account_aged_partner(models.AbstractModel):
             self._field_column('period4', sortable=True),
             self._field_column('period5', sortable=True),
             self._custom_column(  # Avoid doing twice the sub-select in the view
-                name=_('Total'),
+                name=_('Total MXN'),
                 classes=['number'],
                 formatter=self.format_value,
                 getter=(lambda v: v['period0'] + v['period1'] + v['period2'] + v['period3'] + v['period4'] + v['period5']),
@@ -272,4 +269,28 @@ class ReportAccountAgedReceivable(models.Model):
         # OVERRIDE
         templates = super(ReportAccountAgedReceivable, self)._get_templates()
         templates['line_template'] = 'account_reports.line_template_aged_receivable_report'
+        return templates
+
+class ReportAccountAgedPayable(models.Model):
+    _name = "nova.account.aged.payable"
+    _description = "Aged Payable"
+    _inherit = "account.aged.partner"
+    _auto = False
+
+    @api.model
+    def _get_options(self, previous_options=None):
+        # OVERRIDE
+        options = super(ReportAccountAgedPayable, self)._get_options(previous_options=previous_options)
+        options['filter_account_type'] = 'payable'
+        return options
+
+    @api.model
+    def _get_report_name(self):
+        return _("Aged Payable")
+
+    @api.model
+    def _get_templates(self):
+        # OVERRIDE
+        templates = super(ReportAccountAgedPayable, self)._get_templates()
+        templates['line_template'] = 'account_reports.line_template_aged_payable_report'
         return templates
