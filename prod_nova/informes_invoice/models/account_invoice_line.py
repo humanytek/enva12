@@ -28,7 +28,7 @@ class Invoice_line(models.Model):
     invoice_origin = fields.Char('Pedido', readonly=True)
     reference = fields.Char('Referencia', readonly=True)
     move_name = fields.Char('Folio', readonly=True)
-    quantity = fields.Float('Cantidad', readonly=True)
+    quantity = fields.Float('Cantidad', readonly=True,digits="Product Unit of Measure")
     weight = fields.Float('Peso', readonly=True)
     total_weight = fields.Float('Peso Total', readonly=True)
     price_per_kg = fields.Float('Precio x Kg', readonly=True)
