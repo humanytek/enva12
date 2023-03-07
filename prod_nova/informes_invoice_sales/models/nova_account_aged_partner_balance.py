@@ -41,9 +41,10 @@ class report_account_aged_partner(models.AbstractModel):
     date_move = fields.Date(group_operator='max')
     invoice_date = fields.Date(group_operator='max')
     amount_total = fields.Monetary(string='Monto')
+    amount_total_signed = fields.Monetary(string='Monto MXN')
     invoice_origin = fields.Char(string='Pedido')
     currency_name = fields.Char(string='Moneda')
-    rate_currency = fields.Monetary(string='TC')
+    rate_currency = fields.Monetary(string='TC',group_operator='max')
 
 
     @api.model
@@ -117,6 +118,7 @@ class report_account_aged_partner(models.AbstractModel):
                 move.invoice_date AS invoice_date,
                 account_move_line.date_maturity as date_maturity,
                 move.amount_total AS amount_total,
+                move.amount_total_signed AS amount_total_signed,
                   (CASE
                       WHEN move.amount_total >= 1  THEN %(sign)s *(move.amount_total_signed/move.amount_total)
                       WHEN move.amount_total = 0 THEN 0
@@ -199,6 +201,7 @@ class report_account_aged_partner(models.AbstractModel):
             self._field_column('amount_total',name=_("Monto Original")),
             self._field_column('currency_name',name=_("Moneda")),
             self._field_column('rate_currency',name=_("TC")),
+            self._field_column('amount_total_signed',name=_("Monto MXN")),
             self._field_column('invoice_origin',name=_("Origen")),
             self._field_column('period0', name=_("As of: %s") % format_date(self.env, options['date']['date_to'])),
             self._field_column('period1', sortable=True),
@@ -232,6 +235,9 @@ class report_account_aged_partner(models.AbstractModel):
     def _format_partner_id_line(self, res, value_dict, options):
         res['name'] = value_dict['partner_name'][:128] if value_dict['partner_name'] else _('Unknown Partner')
         res['trust'] = value_dict['partner_trust']
+        res['colspan'] = 9
+        res['columns'] = res['columns'][4:]
+        
 
     def _format_id_line(self, res, value_dict, options):
         res['name'] = value_dict['move_name']
@@ -243,8 +249,8 @@ class report_account_aged_partner(models.AbstractModel):
 
     def _format_total_line(self, res, value_dict, options):
         res['name'] = _('Total')
-        res['colspan'] = 5
-        res['columns'] = res['columns'][4:]
+        res['colspan'] = 9
+        res['columns'] = res['columns'][8:]
 
 
 class ReportAccountAgedReceivable(models.Model):
