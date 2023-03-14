@@ -65,7 +65,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%'
                         AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id in (SELECT pm.name FROM partner_maquila pm)
 
 
 
@@ -86,7 +86,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.date_applied >= '"""+str(new_date_from)+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
 
 
 
@@ -124,7 +124,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id in (SELECT pm.name FROM partner_maquila pm)
 
 
 
@@ -145,7 +145,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
 
 
 
@@ -190,7 +190,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY rusp.name,am.invoice_user_id
                         ORDER BY rusp.name ASC
 
@@ -218,7 +218,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY rusp.name,am.invoice_user_id
                         ORDER BY rusp.name ASC
 
@@ -263,7 +263,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY rp.name,aml.partner_id
                         ORDER BY rp.name ASC
 
@@ -291,7 +291,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY rp.name,aml.partner_id
                         ORDER BY rp.name ASC
 
@@ -337,7 +337,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3) AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY pp.default_code,pt.name
                         ORDER BY pp.default_code ASC
 
@@ -365,7 +365,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         AND aml.exclude_from_invoice_tab=False
                         AND am.move_type='out_invoice' AND am.date_applied >= '"""+date_from+"""' AND am.date_applied <= '"""+date_to+"""'
                         AND pt.categ_id IN (65,66,67,68,139,147) AND aml.product_uom_id not in (24,3)AND pt.name not ilike 'ANTICIPO DE CLIENTE%' AND pt.name not ilike 'TRANSPORTACION%' AND pt.name not ilike 'CHATARRA%' AND pt.name not ilike 'PUB GRAL VTA CHATARRA%'
-                        AND rp.name not in ('ARCHIMEX CORRUGADOS Y ETIQUETAS S.A. DE C.V.','AJEMEX S.A. DE C.V.','EMPACADORA SAN MARCOS S.A DE C.V.','PAKTON S. DE R.L. DE C.V.')
+                        AND rp.id not in (SELECT pm.name FROM partner_maquila pm)
                         GROUP BY pp.default_code,pt.name
                         ORDER BY pp.default_code ASC
 
@@ -516,7 +516,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 })
         lines.append({
         'id': 'TONELAJE',
-        'name': 'ARCHIMEX', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
+        'name': 'MAQUILA', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
         'level': 0,
         'class': 'vendedor',
         'columns':[
