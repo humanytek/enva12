@@ -81,32 +81,7 @@
     <tr><td colspan='7'> </td></tr>
     <tr><td colspan='7'> </td></tr>
     <tr><td colspan='7'> </td></tr>
-    <tr>
-      <td colspan='7'>  <b>Saldo inicial:</b> O de apertura, son los valores de inicio del día y corresponden a saldos al cierre del día anterior.</td>
 
-    </tr>
-    <tr>
-      <td colspan='7'>  <b>Cargos:</b> Disminución del saldo correspondiente a traspasos interbancarios, comisiones bancarias y cargos de retención ISR.
-</td>
-
-    </tr>
-    <tr>
-      <td  colspan='7'> <b> Abonos:</b> Aumento del saldo correspondiente a traspasos interbancarios, devoluciones de proveedor, intereses ganados.</td>
-
-    </tr>
-    <tr>
-      <td  colspan='7'> <b>Ingresos:</b> Aumento del saldo derivado del cobro de créditos otorgados a los clientes.</td>
-
-    </tr>
-
-    <tr>
-      <td  colspan='7'> <b>Pagos contado/cartera:</b> Disminución del saldo correspondiente al pago por la adquisición de bienes, servicios o prestaciones laborales realizado a través de
-      cheque o transferencia electrónica.</td>
-    </tr>
-    <tr>
-      <td  colspan='7'><b>Saldo disponible:</b> Valores al final del día que corresponden a la diferencia entre los movimientos de cargos y abonos de una cuenta bancaria.</td>
-
-    </tr>
 
 
 
@@ -120,7 +95,32 @@
       </record>
       <menuitem id="menu_action_report_bank_nova" name="Relación de Saldos Bancarios" action="action_report_bank_nova" parent="account.account_reports_management_menu" groups="account.group_account_user"/>
 
+      <record model="ir.ui.view" id="bank_balance_nova_tree_view">
+        <field name="name">Balance Inicial Bancario</field>
+        <field name="model">bank.balance.nova</field>
+        <field name="arch" type="xml">
+          <tree string="Presupuesto Ventas">
+            <field name="name"/>
+            <field name="bank"/>
+            <field name="account"/>
+            <field name="initial_balance"/>
+          </tree>
+        </field>
+      </record>
 
+
+      <record model="ir.actions.act_window" id="bank_balance_nova_list_action">
+        <field name="name">Balance Inicial Bancario</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bank.balance.nova</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">Crea tu balance inicial bancario
+          </p>
+        </field>
+      </record>
+
+      <menuitem id="menu_bank_balance_nova_list_action" name="Balance Inicial Bancario" action="bank_balance_nova_list_action" parent="account.account_reports_management_menu" groups="account.group_account_user"/>
 
     </data>
 </odoo>
