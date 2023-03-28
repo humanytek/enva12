@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<menuitem  name="Reportes"
+      id="main_reports_menu_nova"
+      web_icon="reports_menu_nova,static/src/img/grafic_nova.png"
+      sequence="25" />
+   <menuitem id="reports_menu_nova" name="Reportes"
+     parent="main_reports_menu_nova" sequence="1"/>
+
+    
+    <menuitem id="menu_action_account_report_aged_receivable_nova_menu" name="Cartera de clientes" action="informes_invoice_sales.action_account_report_ar_nova" parent="reports_menu_nova" sequence="1"/>
+    <menuitem id="menu_action_account_report_aged_payable_nova_menu" name="Antigüedad de saldos" action="informes_invoice_sales.action_account_report_ap_nova" parent="reports_menu_nova" sequence="2"/>
+    <menuitem id="menu_action_report_ton_corrug_nova_menu" name="Reporte Toneladas" action="reports_custom_sales.action_report_ton_corrug_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="3"/>
+    <menuitem id="menu_action_report_bank_nova_menu" name="Relación de Saldos Bancarios" action="reports_custom_bank.action_report_bank_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="4"/>
+    <menuitem id="menu_action_reports_receipts_nova_menu" name="Reporte de Ingresos Corrugado" action="reports_custom_receivable.action_reports_receipts_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="60"/>
+    <menuitem id="menu_action_reports_receipts_nova_paper_menu" name="Reporte de Ingresos Papel" action="reports_custom_receivable.action_reports_receipts_nova_paper" parent="reports_menu_nova" groups="account.group_account_user" sequence="61"/>
+    <menuitem id="menu_action_reports_receipts_nova_acum_menu" name="Reporte de Ingresos Acumulados" action="reports_custom_receivable.action_reports_receipts_nova_acum" parent="reports_menu_nova" groups="account.group_account_user" sequence="62"/>
+    <menuitem id="menu_action_report_fibers_nova_menu" name="Consumo de Fibras" action="reports_fibers.action_report_fibers_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="63"/>
+    <menuitem id="menu_action_report_indicators_nova_menu"
+              name="Reporte Indicadores"
+              action="informes_indicators.action_report_indicators_nova"
+              parent="reports_menu_nova" sequence="64"/>
+    <menuitem id="menu_action_account_invoice_line_reports" name="Lineas de Facturas" parent="reports_menu_nova" action="informes_invoice.account_invoice_line_action_form2" sequence="65"/>
+</odoo>
