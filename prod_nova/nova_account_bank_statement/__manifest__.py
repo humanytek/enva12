@@ -2,19 +2,18 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'Bank Reports - Custom Bank Reports',
+    'name': 'Custom Bank Statements',
     'author': 'EMPAQUES NOVA',
     'version': '1.0.0',
-    'category': 'reporting',
+    'category': 'accounting',
     'description': """
-        A custom report to get Bank Reports Empaques Nova
+        A custom report to get Bank Statements Empaques Nova
     """,
     'depends': [
-        'account_reports',
-        'nova_account_bank_statement'
+        'account',
     ],
     'data': [
-        'views/bank_reports.xml',
+        'views/account_bank_statement_views.xml'
     ],
     'installable': True,
     'auto_install': False,

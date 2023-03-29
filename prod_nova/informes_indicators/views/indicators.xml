@@ -36,7 +36,6 @@
                             <field name="tons_shipment" />
                             <field name="ton_lam" />
                             <field name="other_receipts" />
-                            <field name="project" />
                             <field name="price_lam" />
                         </group>
                     </group>
@@ -72,7 +71,6 @@
                 <field name="tons_shipment" />
                 <field name="ton_lam" />
                 <field name="other_receipts" />
-                <field name="project" />
                 <field name="price_lam" />
             </tree>
         </field>

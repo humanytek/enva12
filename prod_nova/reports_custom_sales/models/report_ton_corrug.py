@@ -588,7 +588,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':"{:,}".format(v['cantidad'])},
-                        {'name':"{:,}".format(v['total_weight'])},
+                        {'name':"{:,.3f}".format(v['total_weight']/1000)},
                         {'name':0 if v['total_weight']==0 else self.format_value(v['subtotal']/v['total_weight'])},
                 ],
                 })
@@ -603,7 +603,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         'class': 'vendedor',
                         'columns':[
                                 {'name':"{:,}".format(c['cantidad'])},
-                                {'name':"{:,}".format(c['total_weight'])},
+                                {'name':"{:,.3f}".format(c['total_weight']/1000)},
                                 {'name':0 if c['total_weight']==0 else self.format_value(c['subtotal']/c['total_weight'])},
                         ],
                         })
@@ -618,7 +618,7 @@ class ReportsTonCorrug(models.AbstractModel):
                                 'class': 'producto',
                                 'columns':[
                                         {'name':"{:,}".format(p['cantidad'])},
-                                        {'name':"{:,}".format(p['total_weight'])},
+                                        {'name':"{:,.3f}".format(p['total_weight']/1000)},
                                         {'name':0 if p['total_weight']==0 else self.format_value(p['subtotal']/p['total_weight'])},
                                 ],
                                 })
@@ -647,7 +647,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':"{:,}".format(v['cantidad'])},
-                        {'name':"{:,}".format(v['total_weight'])},
+                        {'name':"{:,.3f}".format(v['total_weight']/1000)},
                         {'name':0 if v['total_weight']==0 else self.format_value(v['subtotal']/v['total_weight'])},
                 ],
                 })
@@ -662,7 +662,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         'class': 'vendedor',
                         'columns':[
                                 {'name':"{:,}".format(c['cantidad'])},
-                                {'name':"{:,}".format(c['total_weight'])},
+                                {'name':"{:,.3f}".format(c['total_weight']/1000)},
                                 {'name':0 if c['total_weight']==0 else self.format_value(c['subtotal']/c['total_weight'])},
                         ],
                         })
@@ -677,7 +677,7 @@ class ReportsTonCorrug(models.AbstractModel):
                                 'class': 'producto',
                                 'columns':[
                                         {'name':"{:,}".format(p['cantidad'])},
-                                        {'name':"{:,}".format(p['total_weight'])},
+                                        {'name':"{:,.3f}".format(p['total_weight']/1000)},
                                         {'name':0 if p['total_weight']==0 else self.format_value(p['subtotal']/p['total_weight'])},
                                 ],
                                 })
@@ -707,7 +707,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'columns':[
                         {'name':''},
                         # {'name':"{:,}".format(v['cantidad'])},
-                        {'name':"{:,}".format(cp['cantidad'])},
+                        {'name':"{:,.3f}".format(cp['cantidad']/1000)},
                         {'name':0 if cp['cantidad']==0 else self.format_value(cp['subtotal']/cp['cantidad'])},
                 ],
                 })
@@ -723,7 +723,7 @@ class ReportsTonCorrug(models.AbstractModel):
                         'columns':[
                                 {'name':''},
                                 # {'name':"{:,}".format(c['cantidad'])},
-                                {'name':"{:,}".format(c['cantidad'])},
+                                {'name':"{:,.3f}".format(c['cantidad']/1000)},
                                 {'name':0 if c['cantidad']==0 else self.format_value(c['subtotal']/c['cantidad'])},
                         ],
                         })
@@ -739,7 +739,7 @@ class ReportsTonCorrug(models.AbstractModel):
                                 'columns':[
                                         {'name':''},
                                         # {'name':"{:,}".format(p['cantidad'])},
-                                        {'name':"{:,}".format(p['cantidad'])},
+                                        {'name':"{:,.3f}".format(p['cantidad']/1000)},
                                         {'name':0 if p['cantidad']==0 else self.format_value(p['subtotal']/p['cantidad'])},
                                 ],
                                 })
@@ -767,7 +767,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(t['total_weight'])if t['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(t['total_weight']/1000)if t['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })
@@ -780,7 +780,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(t['total_weight'])if t['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(t['total_weight']/1000)if t['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })
@@ -805,7 +805,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(ta['total_weight']) if ta['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(ta['total_weight']/1000) if ta['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })
@@ -818,7 +818,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(ta['total_weight']) if ta['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(ta['total_weight']/1000) if ta['total_weight'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })
@@ -845,7 +845,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(tp['cantidad']) if tp['cantidad'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(tp['cantidad']/1000) if tp['cantidad'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })
@@ -858,7 +858,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 'class': 'vendedor',
                 'columns':[
                         {'name':''},
-                        {'name':"{:,}".format(tp['cantidad']) if tp['cantidad'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
+                        {'name':"{:,.3f}".format(tp['cantidad']/1000) if tp['cantidad'] else 0, 'style': 'white-space:nowrap; color:#1e3c64; font-size:25px;'},
                         {'name':''},
                 ],
                 })

@@ -431,7 +431,8 @@ class ReportsBanks(models.AbstractModel):
 
         sql_query = """
             SELECT \"account_move_line\".date, rp.name as cliente,\"account_move_line\".name as etiqueta, COALESCE(\"account_move_line\".amount_currency,0) as balance,
-                    'Cartera' as tipo
+                    case when \"account_move_line\".term_payment_nova = 'contado' then 'Contado' when \"account_move_line\".term_payment_nova = 'credito' then 'Crédito' 
+                    when \"account_move_line\".term_payment_nova = '' then '' end as tipo
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
                 LEFT JOIN res_partner rp on rp.id=\"account_move_line\".partner_id   
@@ -439,6 +440,7 @@ class ReportsBanks(models.AbstractModel):
                 AND (\"account_move_line\".partner_id is not Null )
                 AND (\"account_move_line\".partner_id != 1)
                 AND \"account_move_line\".partner_id NOT IN (SELECT partner_id FROM res_partner_category rpc left join res_partner_res_partner_category_rel rpcr ON rpcr.category_id = rpc.id WHERE rpc.name='BANCO' AND rpcr.partner_id=\"account_move_line\".partner_id LIMIT 1)
+                order by \"account_move_line\".term_payment_nova asc
         """
         params = [str(arg)] + where_params
 
@@ -456,7 +458,8 @@ class ReportsBanks(models.AbstractModel):
 
         sql_query = """
             SELECT \"account_move_line\".date, rp.name as cliente,\"account_move_line\".name as etiqueta, COALESCE(\"account_move_line\".balance,0) as balance,
-                    'Cartera' as tipo
+                    case when \"account_move_line\".term_payment_nova = 'contado' then 'Contado'  when \"account_move_line\".term_payment_nova = 'credito' then 'Crédito' 
+                    when \"account_move_line\".term_payment_nova = '' then '' end as tipo
                 FROM """+tables+"""
                 LEFT JOIN account_account aa on aa.id=\"account_move_line\".account_id
                 LEFT JOIN res_partner rp on rp.id=\"account_move_line\".partner_id   
@@ -464,6 +467,7 @@ class ReportsBanks(models.AbstractModel):
                 AND (\"account_move_line\".partner_id is not Null )
                 AND (\"account_move_line\".partner_id != 1)
                 AND \"account_move_line\".partner_id NOT IN (SELECT partner_id FROM res_partner_category rpc left join res_partner_res_partner_category_rel rpcr ON rpcr.category_id = rpc.id WHERE rpc.name='BANCO' AND rpcr.partner_id=\"account_move_line\".partner_id LIMIT 1)
+                order by \"account_move_line\".term_payment_nova asc
         """
         params = [str(arg)] + where_params
 
