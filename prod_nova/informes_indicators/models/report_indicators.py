@@ -94,7 +94,7 @@ class ReportIndicartors(models.AbstractModel):
             campo = "((coalesce (ton_lam,0) * coalesce( price_lam,0 )) * 1000) as tons_lam_real"
 
         elif campo == 'total':
-            campo = "(paca_waste/paper_weight) * 100 as total"
+            campo = " case when paper_weight = 0 then 0 when paper_weight > 0 then (coalesce(paca_waste,0)/coalesce(paper_weight,0)*100)  end as total"
         else:
             campo = """coalesce(""" + str(campo)+""",0) as """ + str(campo)+""
 
@@ -116,7 +116,7 @@ class ReportIndicartors(models.AbstractModel):
         elif campo == 'price_lam':
             campo = "case when sum(coalesce (ton_lam ,0)) = 0 then 0 when sum(coalesce (ton_lam ,0)) > 0 then coalesce(sum(coalesce( price_lam,0 )) /  (sum(coalesce (ton_lam ,0)) * 1000),0) end as price_lam "
         elif campo == 'total':
-            campo = "coalesce(sum((paca_waste/paper_weight) * 100),0) as total"
+            campo = "coalesce(sum((case when paper_weight = 0 then 0 when paper_weight > 0 then paca_waste/paper_weight end) * 100),0)  as total"
         else:
             campo = """coalesce(sum(coalesce(""" + str(campo) + \
                 """,0)),0) as """ + str(campo)+""

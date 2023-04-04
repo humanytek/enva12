@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend_nova"
+                  name="nova_dashboard_assets"
+                  inherit_id="izi_dashboard.assets_backend">
+            <xpath expr="//link[@href='/izi_dashboard/static/src/css/component/general/izi_layout.css']"
+                   position="replace" >
+
+                <link rel="stylesheet" href="/custom_dashboard_nova/static/src/css/component/general/izi_layout.css"/>
+ 
+            </xpath>
+        </template>
+    </data>
+</odoo>

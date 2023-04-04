@@ -9,6 +9,6 @@
         'izi_data',
 ],
     'data': [
-        
+        'views/assets.xml',
     ],
 }
