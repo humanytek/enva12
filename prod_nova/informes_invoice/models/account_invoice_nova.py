@@ -80,80 +80,80 @@ class Account_invoice_nova(models.Model):
                 r.type_currency = 0
 
 
-    # def _l10n_mx_edi_decode_cfdi(self, cfdi_data=None):
-    #     ''' Helper to extract relevant data from the CFDI to be used, for example, when printing the invoice.
-    #     :param cfdi_data:   The optional cfdi data.
-    #     :return:            A python dictionary.
-    #     '''
-    #     self.ensure_one()
+    def _l10n_mx_edi_decode_cfdi(self, cfdi_data=None):
+        ''' Helper to extract relevant data from the CFDI to be used, for example, when printing the invoice.
+        :param cfdi_data:   The optional cfdi data.
+        :return:            A python dictionary.
+        '''
+        self.ensure_one()
 
-    #     def get_node(cfdi_node, attribute, namespaces):
-    #         if hasattr(cfdi_node, 'Complemento'):
-    #             node = cfdi_node.Complemento.xpath(attribute, namespaces=namespaces)
-    #             return node[0] if node else None
-    #         else:
-    #             return None
+        def get_node(cfdi_node, attribute, namespaces):
+            if hasattr(cfdi_node, 'Complemento'):
+                node = cfdi_node.Complemento.xpath(attribute, namespaces=namespaces)
+                return node[0] if node else None
+            else:
+                return None
 
-    #     def get_cadena(cfdi_node, template):
-    #         if cfdi_node is None:
-    #             return None
-    #         cadena_root = etree.parse(tools.file_open(template))
-    #         return str(etree.XSLT(cadena_root)(cfdi_node))
+        def get_cadena(cfdi_node, template):
+            if cfdi_node is None:
+                return None
+            cadena_root = etree.parse(tools.file_open(template))
+            return str(etree.XSLT(cadena_root)(cfdi_node))
 
-    #     def is_purchase_move(move):
-    #         return move.move_type in move.get_purchase_types() \
-    #                 or move.payment_id.reconciled_bill_ids
+        def is_purchase_move(move):
+            return move.move_type in move.get_purchase_types() \
+                    or move.payment_id.reconciled_bill_ids
 
-    #     # Find a signed cfdi.
-    #     if not cfdi_data:
-    #         signed_edi = self._get_l10n_mx_edi_signed_edi_document()
-    #         if signed_edi:
-    #             cfdi_data = base64.decodebytes(signed_edi.attachment_id.with_context(bin_size=False).datas)
-    #         if not signed_edi and is_purchase_move(self):
-    #             attachment = self._get_l10n_mx_edi_cfdi_attachment()
-    #             if attachment:
-    #                 cfdi_data = base64.decodebytes(attachment.with_context(bin_size=False).datas)
+        # Find a signed cfdi.
+        if not cfdi_data:
+            signed_edi = self._get_l10n_mx_edi_signed_edi_document()
+            if signed_edi:
+                cfdi_data = base64.decodebytes(signed_edi.attachment_id.with_context(bin_size=False).datas)
+            if not signed_edi and is_purchase_move(self):
+                attachment = self._get_l10n_mx_edi_cfdi_attachment()
+                if attachment:
+                    cfdi_data = base64.decodebytes(attachment.with_context(bin_size=False).datas)
 
-    #     # Nothing to decode.
-    #     if not cfdi_data:
-    #         return {}
+        # Nothing to decode.
+        if not cfdi_data:
+            return {}
 
-    #     try:
-    #         cfdi_node = fromstring(cfdi_data)
-    #         emisor_node = cfdi_node.Emisor
-    #         receptor_node = cfdi_node.Receptor
-    #     except etree.XMLSyntaxError:
-    #         # Not an xml
-    #         return {}
-    #     except AttributeError:
-    #         # Not a CFDI
-    #         return {}
+        try:
+            cfdi_node = fromstring(cfdi_data)
+            emisor_node = cfdi_node.Emisor
+            receptor_node = cfdi_node.Receptor
+        except etree.XMLSyntaxError:
+            # Not an xml
+            return {}
+        except AttributeError:
+            # Not a CFDI
+            return {}
 
-    #     tfd_node = get_node(
-    #         cfdi_node,
-    #         'tfd:TimbreFiscalDigital[1]',
-    #         {'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'},
-    #     )
+        tfd_node = get_node(
+            cfdi_node,
+            'tfd:TimbreFiscalDigital[1]',
+            {'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'},
+        )
 
-    #     return {
-    #         'uuid': ({} if tfd_node is None else tfd_node).get('UUID'),
-    #         'supplier_rfc': cfdi_node.Emisor.get('Rfc', cfdi_node.Emisor.get('rfc')),
-    #         'customer_rfc': cfdi_node.Receptor.get('Rfc', cfdi_node.Receptor.get('rfc')),
-    #         'id_fiscal': cfdi_node.Receptor.get('NumRegIdTrib'),
-    #         'tipo_cambio': cfdi_node.get('TipoCambio'),
-    #         'amount_total': cfdi_node.get('Total', cfdi_node.get('total')),
-    #         'cfdi_node': cfdi_node,
-    #         'usage': cfdi_node.Receptor.get('UsoCFDI'),
-    #         'payment_method': cfdi_node.get('formaDePago', cfdi_node.get('MetodoPago')),
-    #         'bank_account': cfdi_node.get('NumCtaPago'),
-    #         'sello': cfdi_node.get('sello', cfdi_node.get('Sello', 'No identificado')),
-    #         'sello_sat': tfd_node is not None and tfd_node.get('selloSAT', tfd_node.get('SelloSAT', 'No identificado')),
-    #         'cadena': tfd_node is not None and get_cadena(tfd_node, CFDI_XSLT_CADENA_TFD) or get_cadena(cfdi_node, CFDI_XSLT_CADENA),
-    #         'certificate_number': cfdi_node.get('noCertificado', cfdi_node.get('NoCertificado')),
-    #         'certificate_sat_number': tfd_node is not None and tfd_node.get('NoCertificadoSAT'),
-    #         'expedition': cfdi_node.get('LugarExpedicion'),
-    #         'fiscal_regime': cfdi_node.Emisor.get('RegimenFiscal', ''),
-    #         'emission_date_str': cfdi_node.get('fecha', cfdi_node.get('Fecha', '')).replace('T', ' '),
-    #         'stamp_date': tfd_node is not None and tfd_node.get('FechaTimbrado', '').replace('T', ' '),
-    #     }
-    #     return super()._l10n_mx_edi_decode_cfdi(self, cfdi_data=None)
+        return {
+            'uuid': ({} if tfd_node is None else tfd_node).get('UUID'),
+            'supplier_rfc': cfdi_node.Emisor.get('Rfc', cfdi_node.Emisor.get('rfc')),
+            'customer_rfc': cfdi_node.Receptor.get('Rfc', cfdi_node.Receptor.get('rfc')),
+            'id_fiscal': cfdi_node.Receptor.get('NumRegIdTrib'),
+            'tipo_cambio': cfdi_node.get('TipoCambio'),
+            'amount_total': cfdi_node.get('Total', cfdi_node.get('total')),
+            'cfdi_node': cfdi_node,
+            'usage': cfdi_node.Receptor.get('UsoCFDI'),
+            'payment_method': cfdi_node.get('formaDePago', cfdi_node.get('MetodoPago')),
+            'bank_account': cfdi_node.get('NumCtaPago'),
+            'sello': cfdi_node.get('sello', cfdi_node.get('Sello', 'No identificado')),
+            'sello_sat': tfd_node is not None and tfd_node.get('selloSAT', tfd_node.get('SelloSAT', 'No identificado')),
+            'cadena': tfd_node is not None and get_cadena(tfd_node, CFDI_XSLT_CADENA_TFD) or get_cadena(cfdi_node, CFDI_XSLT_CADENA),
+            'certificate_number': cfdi_node.get('noCertificado', cfdi_node.get('NoCertificado')),
+            'certificate_sat_number': tfd_node is not None and tfd_node.get('NoCertificadoSAT'),
+            'expedition': cfdi_node.get('LugarExpedicion'),
+            'fiscal_regime': cfdi_node.Emisor.get('RegimenFiscal', ''),
+            'emission_date_str': cfdi_node.get('fecha', cfdi_node.get('Fecha', '')).replace('T', ' '),
+            'stamp_date': tfd_node is not None and tfd_node.get('FechaTimbrado', '').replace('T', ' '),
+        }
+        return super()._l10n_mx_edi_decode_cfdi(self, cfdi_data=None)
