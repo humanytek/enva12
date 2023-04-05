@@ -1,8 +1,8 @@
 <template>
-    <div t-name="IZIViewDashboardBlock" class="izi_dashboard_block_item" t-att-data-id="widget.id">
+    <div t-name="IZIViewDashboardBlock" class="izi_dashboard_block_item" t-att-data-id="widget.id" >
         <div class="izi_dashboard_block_header">
             <div class="izi_block_left izi_dropdown dropdown">
-                <h4 class="izi_dashboard_block_title dropdown-toggle" data-toggle="dropdown" t-esc="widget.analysis_name"/>
+                <h4 class="izi_dashboard_block_title dropdown-toggle" data-toggle="dropdown" t-esc="widget.analysis_name" groups="base.group_system"/>
                 <div class="dropdown-menu">
                     <a class="dropdown-item izi_action_open_analysis">Open Analysis</a>
                     <a class="dropdown-item izi_action_edit_analysis">Edit Analysis</a>

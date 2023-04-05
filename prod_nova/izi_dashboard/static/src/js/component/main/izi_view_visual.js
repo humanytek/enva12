@@ -2,7 +2,7 @@ odoo.define('izi_dashboard.IZIViewVisual', function (require) {
     "use strict";
 
     var Widget = require('web.Widget');
-
+    var session = require('web.session');
     var IZIViewVisual = Widget.extend({
         template: 'IZIViewVisual',
         events: {
@@ -157,42 +157,108 @@ odoo.define('izi_dashboard.IZIViewVisual', function (require) {
                 }
             }
             else if (visual_type == 'pie') {
+                    session.user_has_group('base.group_system').then(function(has_group) {
+                        if(!has_group) {
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                        }
+                    });
+                                    
                 visual.makePieChart();
             }
             else if (visual_type == 'radar') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeRadarChart();
             }
             else if (visual_type == 'flower') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeFlowerChart();
             }
             else if (visual_type == 'radialBar') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeRadialBarChart();
             }
             else if (visual_type == 'bar') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeBarChart();
             }
             else if (visual_type == 'row') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeRowChart();
             }
             else if (visual_type == 'bullet_bar') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeBulletBarChart();
             }
             else if (visual_type == 'bullet_row') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeBulletRow();
             }
             else if (visual_type == 'row_line') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeRowLine();
             }
             else if (visual_type == 'bar_line') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeBarLineChart();
             }
             else if (visual_type == 'line') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeLineChart();
             }
             else if (visual_type == 'scatter') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeScatterChart();
             }
             else if (visual_type == 'heatmap_geo') {
+                session.user_has_group('base.group_system').then(function(has_group) {
+                    if(!has_group) {
+                        self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    }
+                });
                 visual.makeHeatmapGeo();
             }
             else if (visual_type == 'scrcard_basic') {
@@ -203,7 +269,16 @@ odoo.define('izi_dashboard.IZIViewVisual', function (require) {
                     self.$el.addClass('izi_view_scrcard_container');
                 }else{ // layout ketika di block Dashboard 
                     self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").text("");
-                    self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");                    
+                    session.user_has_group('base.group_system').then(function(has_group) {
+
+                        if(has_group) {
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");    
+                        }else{
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_hide_config"); 
+                        }
+                    
+                    });
+                                    
                 }
                 visual.makeScorecardBasic();
             }
@@ -215,7 +290,15 @@ odoo.define('izi_dashboard.IZIViewVisual', function (require) {
                     self.$el.addClass('izi_view_scrcard_container');
                 }else{ // layout ketika di block Dashboard 
                     self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").text("");
-                    self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");                    
+                    session.user_has_group('base.group_system').then(function(has_group) {
+
+                        if(has_group) {
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");    
+                        }else{
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_hide_config"); 
+                        }
+                    
+                    });
                 }
                 visual.makeScorecardTrend();
             }
@@ -227,7 +310,15 @@ odoo.define('izi_dashboard.IZIViewVisual', function (require) {
                     self.$el.addClass('izi_view_scrcard_container');
                 }else{ // layout ketika di block Dashboard 
                     self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").text("");
-                    self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");                    
+                    session.user_has_group('base.group_system').then(function(has_group) {
+
+                        if(has_group) {
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_btn_config");    
+                        }else{
+                            self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_header").addClass("izi_dashboard_block_hide_config"); 
+                        }
+                    
+                    });                   
                 }
                 visual.makeScorecardProgress();
             }

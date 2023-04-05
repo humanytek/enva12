@@ -5,7 +5,7 @@ odoo.define('izi_dashboard.IZIConfigDashboard', function (require) {
     var core = require('web.core');
     var _t = core._t;
     var datepicker = require('web.datepicker');
-    
+    var session = require('web.session');
     var IZISelectDashboard = require('izi_dashboard.IZISelectDashboard');
     var IZIAddAnalysis = require('izi_dashboard.IZIAddAnalysis');
     var IZIAutocomplete = require('izi_dashboard.IZIAutocomplete');
@@ -82,6 +82,16 @@ odoo.define('izi_dashboard.IZIConfigDashboard', function (require) {
             self.filterDateFormat = {};
             self.filterDateFormat.elm = self.$('#izi_dashboard_filter_date_format');
             self.filterDateFormat.values = null;
+
+            session.user_has_group('base.group_system').then(function(has_group) {
+                if(!has_group) {
+                    //self.$el.parents(".izi_dashboard_block_item").find(".izi_dashboard_block_title").removeClass("dropdown-toggle").removeAttr('data-toggle'); 
+                    $('.izi_edit_layout').hide();
+                    $('.izi_add_analysis').hide();
+                    $('#palette').addClass("d-none")
+                    $('.izi_delete_dashboard').hide();
+                }
+            });
             
             // Load
             self._loadThemes();

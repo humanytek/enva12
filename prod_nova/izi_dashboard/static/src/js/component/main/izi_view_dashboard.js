@@ -102,6 +102,8 @@ odoo.define('izi_dashboard.IZIViewDashboard', function (require) {
                             var $block = new IZIViewDashboardBlock(self, args);
                             $block.appendTo($(`.grid-stack-item[gs-id="${block.id}"] .grid-stack-item-content`));
                             self.$blocks.push($block);
+
+                          
                         }
                     });
                 });

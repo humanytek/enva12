@@ -62,7 +62,7 @@
             <div style="display:none;" class="izi_auto_layout izi_btn izi_btn_purple" title="Auto Arrange">
                 <span class="material-icons izi_btn_icon_left">flip_to_front</span> Auto Arrange
             </div>
-            <div class="izi_edit_layout izi_btn izi_btn_purple" title="Edit Layout">
+            <div class="izi_edit_layout izi_btn izi_btn_purple" title="Edit Layout"  >
                 <span class="material-icons izi_btn_icon_left">edit</span> Edit Layout
             </div>
             <div style="display:none;" class="izi_save_layout izi_btn izi_btn_green" title="Save Layout">
@@ -72,7 +72,7 @@
                 <span class="material-icons-outlined izi_btn_icon_left">add</span> Add Analysis
             </div>
 
-            <div class="izi_dropdown dropdown izi_inline">
+            <div class="izi_dropdown dropdown izi_inline" id="palette">
                 <div class="izi_btn izi_btn_wlp dropdown-toggle mr-3" data-toggle="dropdown" title="Select Themes">
                     <span class="material-icons-outlined izi_btn_icon_left">palette</span>
                 </div>

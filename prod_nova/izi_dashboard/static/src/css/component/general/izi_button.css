@@ -187,6 +187,9 @@
     background-color: white !important;
     border-color: white !important;
 }
+.izi_hide{
+    display: none;
+}
 .izi_btn {
     color: black;
     text-transform: initial;

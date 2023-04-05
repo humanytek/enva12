@@ -31,6 +31,10 @@
     top:-5px;
 }
 
+.izi_dashboard_block_hide_config{
+    display: none;
+}
+
 .izi_dashboard_block_btn_config .dropdown-menu{
     left: -100px;
 }
