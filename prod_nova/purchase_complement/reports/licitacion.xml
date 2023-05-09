@@ -10,7 +10,7 @@
 		      </xpath>
 
           <xpath expr="//span[@t-field='line_ids.product_id.name']" position="after">
-              - <span t-field="line_ids.description"/>
+              - <span t-field="line_ids.product_description_variants"/>
          </xpath>
 
 		</template>
