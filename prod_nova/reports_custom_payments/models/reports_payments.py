@@ -31,6 +31,8 @@ class ReportsPayments(models.AbstractModel):
         {'name': _('FECHA FACTURA'), 'class': 'number', 'style': 'text-align: left; white-space:nowrap;'},
         {'name': _('CIRCULAR'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
         {'name': _('DESCRIPCION'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('C. CUENTA ANALITICA'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
+        {'name': _('CUENTA ANALITICA'), 'class': 'number', 'style': 'text-align: left;white-space:nowrap;'},
 
         ]
 
@@ -81,7 +83,11 @@ class ReportsPayments(models.AbstractModel):
                      invoice.ref as referencia,
                      (SELECT iline.name from account_move_line iline where iline.move_id = invoice.id AND iline.exclude_from_invoice_tab = False limit 1) as iaml_name,
                      part.amount/(1/(SELECT rcr.rate FROM res_currency_rate rcr WHERE rcr.name=am.date AND rcr.currency_id=ap.currency_id AND rcr.company_id=am.company_id)) as amount_currency,
-                     (SELECT iline.id from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_id
+                     (SELECT iline.id from account_move_line iline where iline.move_id = invoice.id limit 1) as iaml_id,
+                     (SELECT analytic.name from account_move_line iline 
+                     left join account_analytic_account analytic ON analytic.id=iline.analytic_account_id where iline.move_id = invoice.id AND iline.exclude_from_invoice_tab = False limit 1) as analytic_name,
+                     (SELECT analytic.code from account_move_line iline 
+                     left join account_analytic_account analytic ON analytic.id=iline.analytic_account_id where iline.move_id = invoice.id AND iline.exclude_from_invoice_tab = False limit 1) as analytic_code
                      FROM account_payment ap
                      JOIN res_partner rp ON rp.id=ap.partner_id
                      JOIN account_move am ON am.id=ap.move_id
@@ -168,6 +174,8 @@ class ReportsPayments(models.AbstractModel):
                 fecha_factura = ''
                 referencia = ''
                 producto = ''
+                analytic = ''
+                c_analytic = ''
                 debe=0
                 if aml:
                     for f in aml:
@@ -178,6 +186,8 @@ class ReportsPayments(models.AbstractModel):
                         referencia=str(f[5])
                         producto=str(f[6])
                         amount_currency=f[7]
+                        analytic=str(f[9])
+                        c_analytic=str(f[10])
                         lines.append({
                         'id':aml_id,
                         'name': str(p['fecha_pago']),
@@ -193,7 +203,9 @@ class ReportsPayments(models.AbstractModel):
                                 {'name':factura},
                                 {'name':fecha_factura},
                                 {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                                {'name':producto},
+                                {'name':str(producto[0:80])},
+                                {'name':c_analytic},
+                                {'name':analytic},
 
                         ],
 
@@ -218,7 +230,9 @@ class ReportsPayments(models.AbstractModel):
                             {'name':factura},
                             {'name':fecha_factura},
                             {'name':str(p['circular']), 'style': 'text-align: left; white-space:nowrap;'},
-                            {'name':producto},
+                            {'name':str(producto[0:80])},
+                            {'name':c_analytic},
+                            {'name':analytic},
 
 
                     ],
