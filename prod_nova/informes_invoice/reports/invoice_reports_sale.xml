@@ -20,17 +20,27 @@
 
                    <div class="float-left company_address encabezado_derecho">
                        <div class="info float-left">
-                           <span class="pintar" t-field="company.partner_id.name"/>
-                           <span class="datoscoorp" t-field="company.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: true}"/>
-                           <span class="datoscoorp">Corporativo Bosques de Duraznos 65-902 Col. Bosques de las lomas C.P.11700 México.</span> <br/>
-                            <span class="datoscoorp">Tel. (0155) 5596-1038 Fax:(0155) 5251-6383 R.F.C. ENO-000725-1B5</span>
+                          <span class="pintar" t-field="company.partner_id.name"/><br/>
+                          <div class="row row_matriz">
+                          <div class="col-12">
+                          <!-- <span  class="t_matriz">MATRIZ:</span> <br/> -->
+                          <span>SN KM 15.5 CARRETERA MERIDA-UMAN 97390 UMAN, YUCATAN, MEXICO </span></div>
+                           <!-- <div class="col-6"> 
+                          <span  class="t_matriz">SUCURSAL:</span> <br/>
+                           <span>CARRETERA FEDERAL MEXICO-PUEBLA KM 98.5 72750 SAN JUAN TLAUTLA, SAN PEDRO CHOLULA, PUEBLA, MEXICO </span>
+                           </div> -->
+                          </div>
+                          
+                          <span class="datoscoorp">Corporativo Bosques de Duraznos 65-902 Col. Bosques de las lomas C.P.11700 México.</span> <br/>
+                          <span class="datoscoorp">Tel. (0155) 5596-1038 Fax:(0155) 5251-6383 R.F.C. ENO-000725-1B5</span>  
                         </div>
 
                    </div>
                    <div class="info float-left" >
-                     FR-FC-04 <br />
-                     REV-01 <br />
-                     Fecha de emisión 01/08/2009<br />
+                      V-01<br />
+                      JUN23 <br />
+                      FR-AD-04 <br />
+                     
                    </div>
                    <div class="clearfix mb8"/>
 
@@ -65,6 +75,37 @@
      <template id="report_invoice_document_nova" inherit_id="account.report_invoice_document">
 
 
+        <xpath expr="//t[@t-set='address']" position="replace">
+        <div class="row">
+                <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
+                    <div class="col-4" name="shipping_address_block">
+                        <strong>Dirección de Entrega:</strong>
+                        <div t-field="o.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    </div>
+                
+            </t>
+                <div class="col-4">
+                <address t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                <div t-if="o.partner_id.vat" class="mt16">
+                        <t t-if="o.company_id.country_id.vat_label" t-esc="o.company_id.country_id.vat_label" id="inv_tax_id_label"/>
+                        <t t-else="">Tax ID</t>: <span t-field="o.partner_id.vat"/></div>
+                        
+                </div>
+                <t t-if="o.journal_id.name=='Venta Puebla'">
+                <div class="col-4">
+                <span  class="t_matriz">SUCURSAL:</span> <br/>
+                <span>CARRETERA FEDERAL MEXICO-PUEBLA KM 98.5 72750 SAN JUAN TLAUTLA, SAN PEDRO CHOLULA, PUEBLA, MEXICO </span>
+                </div>
+                </t>
+                 <t t-if="o.journal_id.name=='Customer Invoices'">
+                <div class="col-4">
+                <span  class="t_matriz">MATRIZ:</span> <br/>
+                <span>SN KM 15.5 CARRETERA MERIDA-UMAN 97390 UMAN, YUCATAN, MEXICO </span>
+                </div>
+                </t>
+
+                 </div>
+        </xpath>
 
        <xpath expr="//div[@t-if='o.partner_id.vat']" position="replace">
            <div>
@@ -84,6 +125,7 @@
         </xpath>
 
         <xpath expr="//div[@id='informations']" position="after">
+       
            <div id="informations2" class="row mt32 mb32">
          <div name="agente" class="col-auto col-3 mw-100 mb-2" t-if="o.user_id">
              <strong>Vendedor:</strong>
@@ -101,7 +143,12 @@
              <p class="m-0" t-esc="cfdi_vals.get('tipo_cambio')[:7] if cfdi_vals.get('tipo_cambio') else '1.00'"/>
 
          </div>
+         <div name="expedition" class="col-auto col-3 mw-100 mb-2" t-if="cfdi_vals.get('expedition')">
+          <strong>Lugar de Expedición:</strong>
+          <p class="m-0" t-esc="cfdi_vals.get('expedition')"/>
+         </div>
        </t>
+       
          <!-- <div name="type_currency" class="col-auto" t-if="o.x_studio_tc_jerzees and o.partner_id.id == 143">
              <strong>T.C:</strong>
              <p t-esc="o.x_studio_tc_jerzees"/>

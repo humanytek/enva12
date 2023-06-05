@@ -47,6 +47,12 @@
   font-weight: bold;
   font-size: 25px;
 }
+.t_matriz{
+  font-weight: bold;
+}
+.row_matriz{
+  padding-bottom: 0.5rem;
+}
 #imglogo{
   max-height: 150px;
   max-width: 230px;
