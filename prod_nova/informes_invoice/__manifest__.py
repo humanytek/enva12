@@ -4,7 +4,7 @@
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Account',
-    'version': '14.0.1.4.0',
+    'version': '14.0.1.5.0',
     'depends': [
         'account',
         'sale',
