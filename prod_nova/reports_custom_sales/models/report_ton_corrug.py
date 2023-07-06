@@ -569,7 +569,7 @@ class ReportsTonCorrug(models.AbstractModel):
         if vendedores:
             lines.append({
                 'id': 'TONELAJE',
-                'name': 'CARTÓN', 
+                'name': 'CARTÓN -NOVA MÉRIDA', 
                 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
                 'level': 0,
                 'class': 'vendedor',
@@ -628,7 +628,7 @@ class ReportsTonCorrug(models.AbstractModel):
         if vendedoresa:
             lines.append({
                     'id': 'TONELAJE',
-                    'name': 'MAQUILA', 
+                    'name': 'CARTÓN - NOVA PUEBLA', 
                     'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
                     'level': 0,
                     'class': 'vendedor',
