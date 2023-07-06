@@ -27,6 +27,7 @@
         <field name="price_total"/>
         <field name="credit"/>
         <field name="aml_date_maturity"/>
+        <field name="date_applied"/>
       </tree>
     </field>
   </record>

@@ -748,7 +748,7 @@ class ReportsTonCorrug(models.AbstractModel):
         
         lines.append({
         'id': 'TONELAJE',
-        'name': 'CARTÓN', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
+        'name': 'CARTÓN - NOVA MÉRIDA', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
         'level': 0,
         'class': 'vendedor',
         'columns':[
@@ -786,7 +786,7 @@ class ReportsTonCorrug(models.AbstractModel):
                 })
         lines.append({
         'id': 'TONELAJE',
-        'name': 'MAQUILA', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
+        'name': 'CARTÓN - NOVA PUEBLA', 'style': 'white-space:nowrap; color:#1e3c64; font-size:30px;' ,
         'level': 0,
         'class': 'vendedor',
         'columns':[

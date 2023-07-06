@@ -15,6 +15,7 @@ class Invoice_line(models.Model):
 
 
     aml_date = fields.Date('Fecha', readonly=True)
+    date_applied = fields.Date('Fecha Aplicada', readonly=True)
     etiqueta = fields.Char('Etiqueta', readonly=True)
     aml_date_maturity = fields.Date('Fecha Vencimiento', readonly=True)
     move_id = fields.Many2one('account.move', 'Asiento Contable', readonly=True)
@@ -52,6 +53,7 @@ class Invoice_line(models.Model):
                     aml.move_name,
                     am.ref as reference,
                     aml.date as aml_date,
+                    am.date_applied as date_applied, 
                     aml.date_maturity as aml_date_maturity,
                     aml.partner_id as partner_id,
                     am.invoice_user_id as customer_id,
