@@ -2,12 +2,7 @@
 <odoo>
     <data>
 
-      <!-- <template id="account_reports_main_template_inherit" inherit_id="account_reports.main_template">
-        <xpath expr="//div[@class='container o_account_reports_page o_account_reports_no_print']" position="attributes">
-            <attribute name="style">max-width:1850px;</attribute>
-        </xpath>
-
-    </template> -->
+    
     <menuitem id="menu_reports_sales_nova_account" name="Reportes Ventas" parent="account.menu_finance_receivables" groups="account.group_account_user"/>
       <record id="action_report_sales_nova" model="ir.actions.client">
           <field name="name">Tendencia de Ventas</field>
@@ -15,6 +10,13 @@
           <field name="context" eval="{'model': 'report.sales.nova'}" />
       </record>
       <menuitem id="menu_action_report_sales_nova" name="Tendencia de Ventas" action="action_report_sales_nova" parent="reports_custom_sales.menu_reports_sales_nova_account" groups="account.group_account_user" sequence="1"/>
+
+      <record id="action_report_sales_custom_nova" model="ir.actions.client">
+          <field name="name">Tendencia de Ventas</field>
+          <field name="tag">account_report</field>
+          <field name="context" eval="{'model': 'report.sales.custom.nova'}" />
+      </record>
+      <menuitem id="menu_action_report_sales_custom_nova" name="Tendencia de Ventas 2" action="action_report_sales_custom_nova" parent="board.menu_board_my_dash" groups="account.group_account_user" sequence="4"/>
 
       <record id="action_reports_sales_corrug_nova" model="ir.actions.client">
           <field name="name">Estimacion de Ventas Corrugado</field>
