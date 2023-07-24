@@ -4,7 +4,7 @@
     'author': 'EMPAQUES NOVA',
     'website': 'http://www.empaquesnova.com.mx',
     'category': 'Product',
-    'version': '1.0.0',
+    'version': '1.0.1',
     'summary': """
     add selectable button for FSC customization EmpaquesNova
     """

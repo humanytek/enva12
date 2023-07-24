@@ -10,6 +10,7 @@
                   <group>
                     <field name="fsc" />
                     <field name="fsc_tipo" />
+                    <field name="porcent_mixto" attrs="{'invisible': [('fsc','!=','mixto')]}" />
                 </group>
                 </page>
             </xpath>
