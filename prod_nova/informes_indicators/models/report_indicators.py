@@ -12,6 +12,7 @@ from odoo.addons.web.controllers.main import clean_action
 _logger = logging.getLogger(__name__)
 
 
+
 class ReportIndicartors(models.AbstractModel):
     _name = "report.indicators.nova"
     _description = "Report Indicators"
@@ -86,6 +87,7 @@ class ReportIndicartors(models.AbstractModel):
         ]
 
         return [header1, header2]
+    
 
     def _get_indicators_line(self, options, date_from, campo):
         # date_from = options['date']['date_from']
@@ -305,7 +307,7 @@ class ReportIndicartors(models.AbstractModel):
 
         if campo == 'kg_carton':
             sql_query = """SELECT
-                    coalesce(avg((aml.credit/(aml.quantity*p.weight))),0) as kg_carton
+                    coalesce((sum(aml.credit)/sum(aml.quantity*p.weight)),0) as kg_carton
                     FROM
             account_move_line aml
             join account_move am on aml.move_id=am.id
@@ -329,7 +331,7 @@ class ReportIndicartors(models.AbstractModel):
 
         if campo == 'kg_puebla':
             sql_query = """SELECT
-                    coalesce(avg((aml.credit/(aml.quantity*p.weight))),0) as kg_puebla
+                    coalesce((sum(aml.credit)/sum(aml.quantity*p.weight)),0) as kg_puebla
                     FROM
             account_move_line aml
             join account_move am on aml.move_id=am.id
@@ -351,9 +353,10 @@ class ReportIndicartors(models.AbstractModel):
                 AND aml.date = '""" + str(date_from)+"""'
                 group by aml.date"""
 
+
         if campo == 'kg_papel':
             sql_query = """SELECT
-                    coalesce(avg((aml.credit/aml.quantity)),0) as kg_papel
+                    coalesce((sum(aml.credit)/sum(aml.quantity)),0) as kg_papel
                     FROM
             account_move_line aml
             join account_move am on aml.move_id=am.id
@@ -419,7 +422,7 @@ class ReportIndicartors(models.AbstractModel):
                 and acl.term_payment_nova = 'credito'
                 and acl.is_project is not true
                 group by euro.rate ) AS results """
-
+                
         if campo == 'contado':
             sql_query = """SELECT COALESCE(SUM(results.balance),0) as contado
                 FROM (
