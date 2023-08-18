@@ -13,6 +13,7 @@
         'informes_indicators',
         'informes_invoice_sales',
         'reports_fibers',
+        'reports_custom_inventory',
     ],
     'data': [
        'data/menu_nova_reports.xml'
