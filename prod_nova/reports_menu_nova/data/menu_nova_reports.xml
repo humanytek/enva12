@@ -21,5 +21,5 @@
               action="informes_indicators.action_report_indicators_nova"
               parent="reports_menu_nova" sequence="64"/>
     <menuitem id="menu_action_account_invoice_line_reports" name="Lineas de Facturas" parent="reports_menu_nova" action="informes_invoice.account_invoice_line_action_form2" sequence="65"/>
-     <menuitem id="menu_action_report_custom_inv_customer_menu" name="Inventario de Clientes con Stock" action="action_report_custom_inv_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="66"/>
+    <menuitem id="menu_action_report_custom_inv_customer_menu" name="Inventario de Clientes con Stock" action="reports_custom_inventory.action_report_custom_inv_nova" parent="reports_menu_nova" groups="account.group_account_user" sequence="66"/>
 </odoo>
