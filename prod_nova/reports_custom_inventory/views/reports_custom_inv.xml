@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+    <record id="action_report_custom_inv_nova" model="ir.actions.client">
+        <field name="name">Inventario de Clientes con Stock</field>
+        <field name="tag">account_report</field>
+        <field name="context" eval="{'model': 'report.custom.inv.customer'}" />
+    </record>
+    <menuitem id="menu_action_report_custom_inv_customer" name="Inventario de Clientes con Stock" action="action_report_custom_inv_nova" parent="account.account_reports_management_menu" groups="account.group_account_user"/>
+
+</data>
+</odoo>
