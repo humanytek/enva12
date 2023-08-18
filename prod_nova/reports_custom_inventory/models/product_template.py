@@ -7,7 +7,7 @@ class ProductTemplateNova(models.Model):
     _inherit = 'product.template'
 
     partner_cus_id= fields.Many2one(
-        comodel_name = 'res.partner',
+        'res.partner',
         string = 'Cliente',
-        store = True,
+        domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",
     )

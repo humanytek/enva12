@@ -61,6 +61,35 @@ class ReportsCustomInvCustomer(models.AbstractModel):
 
         return result
 
+    def _weight_line_totalcst(self,options,line_id):
+
+
+
+        sql_query= """
+                        SELECT 
+                            COALESCE(sum(sq.quantity * pp.weight),0) as toneladas
+                            from stock_quant sq
+                            left join product_product pp on pp.id = sq.product_id
+                            left join product_template pt on pt.id = pp.product_tmpl_id
+                            left join stock_location sl on sl.id = sq.location_id
+                            where sl.usage = 'internal'
+                            and pt.categ_id IN (65,66,67,68,139,147)
+                            and pt.sale_ok is true
+                            and sl.id not in (39,52,35)
+                            and pt.partner_cus_id in (select id from res_partner where stock_whp='True')
+                            and sq.quantity > 0
+                            
+        """    
+
+
+
+        self.env.cr.execute(sql_query)
+        result = self.env.cr.dictfetchall()
+        # if result==None:
+        #     result=(0,)
+
+        return result
+
     def _weight_line_st(self,options,line_id):
 
 
@@ -125,20 +154,24 @@ class ReportsCustomInvCustomer(models.AbstractModel):
         # clientes_stock=self.env['res.partner'].search([('stock_whp','=',True)])
         total_weight=self._weight_line(options,line_id)
         total_weight_t=self._weight_line_t(options,line_id)
+        total_weight_totalcst=self._weight_line_totalcst(options,line_id)
         subtotalweight=0
         subtotalwporct=0
-        lines.append({
-        'id': 'cliente',
-        'name': 'CLIENTES CON STOCK',
-        'style': 'white-space:nowrap; color:#1e3c64; font-size:21px;',
-        'level': 0,
-        'class': 'cliente',
-        'columns':[
-                {'name':''},
-                {'name':''},
-               
-        ],
-        })
+        if total_weight_totalcst:
+
+            lines.append({
+            'id': 'cliente',
+            'name': 'CLIENTES CON STOCK',
+            'style': 'white-space:nowrap; color:#1e3c64; font-size:21px;',
+            'level': 0,
+            'class': 'cliente',
+            'columns':[
+                    {'name':"{:,.3f}".format((total_weight_totalcst[0]['toneladas'])/1000) if total_weight_totalcst else 0 },
+                    {'name':"{:.0%}".format(((total_weight_totalcst[0]['toneladas'])/1000)/((total_weight_t[0]['toneladas'])/1000)) if total_weight_totalcst else 0 },
+                
+                
+            ],
+            })
         if total_weight:
            for tw in total_weight:
                 subtotalweight+=tw['toneladas']
@@ -156,17 +189,17 @@ class ReportsCustomInvCustomer(models.AbstractModel):
                 ],
                 })
 
-        lines.append({
-                'id': 'total',
-                'name': 'SUBTOTAL',
-                'style': 'white-space:nowrap; color:#1e3c64; font-size:19px;',
-                'level': 0,
-                'class': 'total',
-                'columns':[
-                            {'name':"{:,.3f}".format((subtotalweight)/1000)},
-                            {'name':"{:.0%}".format(subtotalwporct)  },
-                ],
-                })
+        # lines.append({
+        #         'id': 'total',
+        #         'name': 'SUBTOTAL',
+        #         'style': 'white-space:nowrap; color:#1e3c64; font-size:19px;',
+        #         'level': 0,
+        #         'class': 'total',
+        #         'columns':[
+        #                     {'name':"{:,.3f}".format((subtotalweight)/1000)},
+        #                     {'name':"{:.0%}".format(subtotalwporct)  },
+        #         ],
+        #         })
 
         lines.append({
         'id': 'cliente',
