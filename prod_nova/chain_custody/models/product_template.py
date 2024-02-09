@@ -6,6 +6,7 @@ FSC = [
     ('no_aplica', 'No Aplica'),
     ('reciclado', 'FSC RECICLADO 100%'),
     ('mixto', 'FSC MIXTO'),
+    ('mixto_credit', 'FSC MIXTO CREDITO'),
 ]
 
 FSC_TIPO = [
